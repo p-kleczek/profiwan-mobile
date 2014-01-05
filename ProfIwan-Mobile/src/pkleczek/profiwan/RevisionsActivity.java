@@ -20,15 +20,15 @@ public class RevisionsActivity extends Activity {
 		// Show the Up button in the action bar.
 		// getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		mCustomKeyboard = new RussianKeyboard(this, R.id.keyboardview,
+		mCustomKeyboard = new RussianKeyboard(this, R.id.revisions_kbd,
 				R.xml.kbd_rus);
 
-		mCustomKeyboard.registerEditText(R.id.editText1);
+		mCustomKeyboard.registerEditText(R.id.revisions_edit_revisedLanguage);
 
 		Keyboard mKeyboard = new Keyboard(this, R.xml.kbd_rus);
 
 		// Lookup the KeyboardView
-		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.keyboardview);
+		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.revisions_kbd);
 		// Attach the keyboard to the view
 		mKeyboardView.setKeyboard(mKeyboard);
 		// Do not show the preview balloons

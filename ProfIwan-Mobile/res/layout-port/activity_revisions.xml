@@ -7,20 +7,20 @@
     tools:context=".RevisionsActivity" >
 
     <TableRow
-        android:id="@+id/tableRow1"
+        android:id="@+id/tableRowKnownLanguage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/revisionRow_margin" >
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/revisions_imgview_knownLanguageFlag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/flag_pl" />
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/revisions_text_knownLanguage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -29,20 +29,20 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/tableRow2"
+        android:id="@+id/tableRowRevisedLanguage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/revisionRow_margin" >
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/revisions_imgview_revisedLanguageFlag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/flag_rus" />
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/revisions_edit_revisedLanguage"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -50,17 +50,17 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/tableRow3"
+        android:id="@+id/tableRowButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/revisions_btn_EnterRevision"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/revisionRow_margin"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="Enter" />
     </TableRow>
 
     <TableRow
@@ -70,7 +70,7 @@
         android:layout_weight="1" >
 
         <android.inputmethodservice.KeyboardView
-            android:id="@+id/keyboardview"
+            android:id="@+id/revisions_kbd"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_span="2"
