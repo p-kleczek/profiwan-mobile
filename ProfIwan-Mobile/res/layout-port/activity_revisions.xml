@@ -3,7 +3,10 @@
     android:id="@+id/TableLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/revisions"
+    android:background="@color/revisions_background"
+    android:clickable="false"
+    android:longClickable="false"
+    android:scrollbarAlwaysDrawVerticalTrack="false"
     tools:context=".RevisionsActivity" >
 
     <TableRow
@@ -21,11 +24,14 @@
 
         <TextView
             android:id="@+id/revisions_text_knownLanguage"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Medium Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/revisions_text"
+            android:textSize="@dimen/revisions_dim_knownLanguageText" />
+
     </TableRow>
 
     <TableRow
@@ -46,7 +52,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10" />
+            android:ems="10"
+            android:maxLines="1" />
+
     </TableRow>
 
     <TableRow
@@ -64,7 +72,7 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/tableRow4"
+        android:id="@+id/tableRowKeyboard"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1" >

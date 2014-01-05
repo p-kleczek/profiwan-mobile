@@ -83,7 +83,7 @@ public abstract class CustomKeyboard {
 			public boolean onTouch(View v, MotionEvent event) {
 				EditText edittext = (EditText) v;
 				int inType = edittext.getInputType(); // Backup the input type
-				edittext.setInputType(InputType.TYPE_NULL); // Disable standard
+//				edittext.setInputType(InputType.TYPE_NULL); // Disable standard
 															// keyboard
 				edittext.onTouchEvent(event); // Call native handler
 				edittext.setInputType(inType); // Restore input type

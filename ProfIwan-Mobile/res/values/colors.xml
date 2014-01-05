@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="revisions">#505050</color>
-
+    <color name="revisions_background">#505050</color>
+    <color name="revisions_text">#ffffff</color>
+    
 </resources>

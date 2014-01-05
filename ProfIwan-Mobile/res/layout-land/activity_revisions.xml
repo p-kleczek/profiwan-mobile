@@ -3,7 +3,7 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/revisions"
+    android:background="@color/revisions_background"
     tools:context=".RevisionsActivity" >
 
     <TableLayout
@@ -33,7 +33,9 @@
                 android:layout_marginLeft="@dimen/revisionRow_margin"
                 android:layout_weight="1"
                 android:text="Medium Text"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/revisions_text"
+                android:textSize="@dimen/revisions_dim_knownLanguageText" />
 
         </TableRow>
 
@@ -57,10 +59,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/revisionRow_margin"
                 android:layout_weight="1"
-                android:ems="10" >
-
-                <requestFocus />
-            </EditText>
+                android:ems="10"
+                android:maxLines="1" />
         </TableRow>
     </TableLayout>
 

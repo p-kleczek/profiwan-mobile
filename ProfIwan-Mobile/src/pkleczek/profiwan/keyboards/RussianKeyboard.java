@@ -5,14 +5,8 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.text.Editable;
-import android.text.InputType;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
-import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 public final class RussianKeyboard extends CustomKeyboard {
@@ -20,15 +14,7 @@ public final class RussianKeyboard extends CustomKeyboard {
 	/** The key (code) handler. */
 	private OnKeyboardActionListener mOnKeyboardActionListener = new OnKeyboardActionListener() {
 
-		public final static int CodeDelete = -5; // Keyboard.KEYCODE_DELETE
 		public final static int CodeCancel = -3; // Keyboard.KEYCODE_CANCEL
-		public final static int CodePrev = 55000;
-		public final static int CodeAllLeft = 55001;
-		public final static int CodeLeft = 55002;
-		public final static int CodeRight = 55003;
-		public final static int CodeAllRight = 55004;
-		public final static int CodeNext = 55005;
-		public final static int CodeClear = 55006;
 
 		@Override
 		public void onKey(int primaryCode, int[] keyCodes) {
@@ -46,32 +32,19 @@ public final class RussianKeyboard extends CustomKeyboard {
 			// Apply the key to the edittext
 			if (primaryCode == CodeCancel) {
 				hideCustomKeyboard();
-			} else if (primaryCode == CodeDelete) {
+			} else if (primaryCode == Keyboard.KEYCODE_DELETE) {
 				if (editable != null && start > 0)
 					editable.delete(start - 1, start);
-			} else if (primaryCode == CodeClear) {
-				if (editable != null)
-					editable.clear();
-			} else if (primaryCode == CodeLeft) {
-				if (start > 0)
-					edittext.setSelection(start - 1);
-			} else if (primaryCode == CodeRight) {
-				if (start < edittext.length())
-					edittext.setSelection(start + 1);
-			} else if (primaryCode == CodeAllLeft) {
-				edittext.setSelection(0);
-			} else if (primaryCode == CodeAllRight) {
-				edittext.setSelection(edittext.length());
-			} else if (primaryCode == CodePrev) {
-				View focusNew = edittext.focusSearch(View.FOCUS_BACKWARD);
-				if (focusNew != null)
-					focusNew.requestFocus();
-			} else if (primaryCode == CodeNext) {
-				View focusNew = edittext.focusSearch(View.FOCUS_FORWARD);
-				if (focusNew != null)
-					focusNew.requestFocus();
+			} else if (primaryCode == Keyboard.KEYCODE_SHIFT) {
+				mKeyboardView.setShifted(!(mKeyboardView.isShifted()));
 			} else { // insert character
-				editable.insert(start, Character.toString((char) primaryCode));
+				char c = (char) primaryCode;
+				if (Character.isLetter(c)) {
+					c = mKeyboardView.isShifted() ? Character.toUpperCase(c)
+							: Character.toLowerCase(c);
+				}
+
+				editable.insert(start, Character.toString(c));
 			}
 		}
 
