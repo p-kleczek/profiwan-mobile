@@ -26,7 +26,6 @@
             android:layout_weight="1"
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-
     </TableRow>
 
     <TableRow
@@ -48,7 +47,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10" />
-
     </TableRow>
 
     <TableRow
@@ -63,6 +61,23 @@
             android:layout_margin="@dimen/revisionRow_margin"
             android:layout_weight="1"
             android:text="Button" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow4"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1" >
+
+        <android.inputmethodservice.KeyboardView
+            android:id="@+id/keyboardview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="2"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:visibility="gone" />
 
     </TableRow>
 
