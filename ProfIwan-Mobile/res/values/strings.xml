@@ -6,5 +6,6 @@
     <string name="title_activity_revisions">MainActivity</string>
     <string name="title_activity_revisions_entered">MainActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_revisions_edit">Edit Revision</string>
 
 </resources>

@@ -1,35 +1,42 @@
-package pkleczek.profiwan;
+package pkleczek.profiwan.revisions;
 
-import pkleczek.profiwan.revisions.RevisionsActivity;
+import pkleczek.profiwan.R;
+import pkleczek.profiwan.keyboards.CustomKeyboard;
+import pkleczek.profiwan.keyboards.RussianKeyboard;
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Paint;
+import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
 
-public class RevisionsEnteredActivity extends Activity {
+public class RevisionsEditActivity extends Activity {
 
+	CustomKeyboard mCustomKeyboard;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_revisions_entered);
+		setContentView(R.layout.activity_revisions_edit);
 		// Show the Up button in the action bar.
 //		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		Intent intent = getIntent();
-		String enteredPhrase = intent.getStringExtra(RevisionsActivity.ENTERED_PHRASE);
-		
-		TextView enteredText = (TextView) findViewById(R.id.revisions_entered_text_entered);
-		enteredText.setText(enteredPhrase);
-		enteredText.setPaintFlags(enteredText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+		mCustomKeyboard = new RussianKeyboard(this, R.id.revisions_kbd,
+				R.xml.kbd_rus);
+
+		mCustomKeyboard.registerEditText(R.id.revisions_edit_revisedLanguage);
+
+		Keyboard mKeyboard = new Keyboard(this, R.xml.kbd_rus);
+		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.revisions_kbd);
+		mKeyboardView.setKeyboard(mKeyboard);
+		mKeyboardView.setPreviewEnabled(false);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_revisions_entered, menu);
+		getMenuInflater().inflate(R.menu.activity_revisions_edit, menu);
 		return true;
 	}
 
@@ -50,4 +57,8 @@ public class RevisionsEnteredActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	public void acceptChanges(View view) {
+		// TODO: save
+		this.finish();
+	}
 }

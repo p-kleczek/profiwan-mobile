@@ -1,7 +1,6 @@
 package pkleczek.profiwan.revisions;
 
 import pkleczek.profiwan.R;
-import pkleczek.profiwan.RevisionsEnteredActivity;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
 import pkleczek.profiwan.keyboards.RussianKeyboard;
 import android.app.Activity;
@@ -32,14 +31,9 @@ public class RevisionsActivity extends Activity {
 		mCustomKeyboard.registerEditText(R.id.revisions_edit_revisedLanguage);
 
 		Keyboard mKeyboard = new Keyboard(this, R.xml.kbd_rus);
-
-		// Lookup the KeyboardView
 		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.revisions_kbd);
-		// Attach the keyboard to the view
 		mKeyboardView.setKeyboard(mKeyboard);
-		// Do not show the preview balloons
 		mKeyboardView.setPreviewEnabled(false);
-
 	}
 
 	@Override
@@ -76,5 +70,6 @@ public class RevisionsActivity extends Activity {
 		intent.putExtra(ENTERED_PHRASE, enteredPhrase);
 
 		startActivity(intent);
+		this.finish();
 	}
 }

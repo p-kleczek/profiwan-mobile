@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/revisions_background"
-    tools:context=".RevisionsActivity" >
+    tools:context=".RevisionsEditActivity" >
 
     <TableRow
         android:id="@+id/tableRow1"
@@ -62,8 +62,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/revisionRow_margin"
             android:layout_weight="1"
-            android:text="Enter"
-            android:onClick="enterPhrase" />
+            android:onClick="acceptChanges"
+            android:text="Accept" />
+
     </TableRow>
 
     <TableRow

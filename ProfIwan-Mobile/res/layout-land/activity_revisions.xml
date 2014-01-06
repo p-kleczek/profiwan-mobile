@@ -10,7 +10,7 @@
         android:id="@+id/tableLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/revisions_btn_EnterRevision" >
+        android:layout_toLeftOf="@+id/revisions_edit_btn_accept" >
 
         <TableRow
             android:id="@+id/tableRow1"
@@ -65,7 +65,7 @@
     </TableLayout>
 
     <Button
-        android:id="@+id/revisions_entered_btn_next"
+        android:id="@+id/revisions_edit_btn_accept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tableLayout1"

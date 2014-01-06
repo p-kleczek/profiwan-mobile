@@ -13,6 +13,7 @@ public final class R {
     public static final class color {
         public static final int revisions_background=0x7f050000;
         public static final int revisions_text=0x7f050001;
+        public static final int revisions_text_correct=0x7f050002;
     }
     public static final class dimen {
         public static final int mainMenu_margin=0x7f060000;
@@ -26,36 +27,45 @@ public final class R {
     }
     public static final class id {
         public static final int LinearLayout1=0x7f0a0000;
-        public static final int RelativeLayout1=0x7f0a0003;
-        public static final int TableLayout1=0x7f0a000c;
+        public static final int RelativeLayout1=0x7f0a000d;
+        public static final int TableLayout1=0x7f0a0003;
         public static final int button2=0x7f0a0002;
-        public static final int menu_settings=0x7f0a0011;
-        public static final int revisions_btn_EnterRevision=0x7f0a0001;
-        public static final int revisions_edit_revisedLanguage=0x7f0a000a;
-        public static final int revisions_imgview_knownLanguageFlag=0x7f0a0006;
-        public static final int revisions_imgview_revisedLanguageFlag=0x7f0a0009;
-        public static final int revisions_kbd=0x7f0a000b;
-        public static final int revisions_text_knownLanguage=0x7f0a0007;
-        public static final int tableLayout1=0x7f0a0004;
-        public static final int tableRow1=0x7f0a0005;
-        public static final int tableRow2=0x7f0a0008;
-        public static final int tableRowButtons=0x7f0a000f;
-        public static final int tableRowKeyboard=0x7f0a0010;
-        public static final int tableRowKnownLanguage=0x7f0a000d;
-        public static final int tableRowRevisedLanguage=0x7f0a000e;
+        public static final int menu_settings=0x7f0a0013;
+        public static final int revisions_edit_btn_accept=0x7f0a0001;
+        public static final int revisions_edit_revisedLanguage=0x7f0a0009;
+        public static final int revisions_entered_btn_accept=0x7f0a0011;
+        public static final int revisions_entered_btn_edit=0x7f0a0012;
+        public static final int revisions_entered_text_correct=0x7f0a0010;
+        public static final int revisions_entered_text_entered=0x7f0a000f;
+        public static final int revisions_imgview_knownLanguageFlag=0x7f0a0005;
+        public static final int revisions_imgview_revisedLanguageFlag=0x7f0a0008;
+        public static final int revisions_kbd=0x7f0a000c;
+        public static final int revisions_text_knownLanguage=0x7f0a0006;
+        public static final int tableLayout1=0x7f0a000e;
+        public static final int tableRow1=0x7f0a0004;
+        public static final int tableRow2=0x7f0a0007;
+        public static final int tableRow3=0x7f0a000a;
+        public static final int tableRow4=0x7f0a000b;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_revisions=0x7f030001;
+        public static final int activity_revisions_edit=0x7f030002;
+        public static final int activity_revisions_entered=0x7f030003;
     }
     public static final class menu {
         public static final int activity_main=0x7f090000;
         public static final int activity_revisions=0x7f090001;
+        public static final int activity_revisions_edit=0x7f090002;
+        public static final int activity_revisions_entered=0x7f090003;
     }
     public static final class string {
         public static final int app_name=0x7f070000;
+        public static final int hello_world=0x7f070004;
         public static final int menu_settings=0x7f070001;
         public static final int title_activity_revisions=0x7f070002;
+        public static final int title_activity_revisions_edit=0x7f070005;
+        public static final int title_activity_revisions_entered=0x7f070003;
     }
     public static final class style {
         /** 
