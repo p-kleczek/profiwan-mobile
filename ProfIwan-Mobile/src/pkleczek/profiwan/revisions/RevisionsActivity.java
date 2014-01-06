@@ -1,17 +1,23 @@
-package pkleczek.profiwan;
+package pkleczek.profiwan.revisions;
 
+import pkleczek.profiwan.R;
+import pkleczek.profiwan.RevisionsEnteredActivity;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
 import pkleczek.profiwan.keyboards.RussianKeyboard;
 import android.app.Activity;
+import android.content.Intent;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 public class RevisionsActivity extends Activity {
 
 	CustomKeyboard mCustomKeyboard;
+	public static final String ENTERED_PHRASE = "pkleczek.profiwan.revisions.ENTERED_PHRASE";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,4 +67,14 @@ public class RevisionsActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	public void enterPhrase(View view) {
+		Intent intent = new Intent(this, RevisionsEnteredActivity.class);
+
+		// TODO: pass parameter
+		EditText editText = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
+		String enteredPhrase = editText.getText().toString();
+		intent.putExtra(ENTERED_PHRASE, enteredPhrase);
+
+		startActivity(intent);
+	}
 }

@@ -3,5 +3,6 @@
 
     <color name="revisions_background">#505050</color>
     <color name="revisions_text">#ffffff</color>
+    <color name="revisions_text_correct">#ff8080</color>
     
 </resources>

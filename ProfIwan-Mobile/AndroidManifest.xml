@@ -23,8 +23,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pkleczek.profiwan.RevisionsActivity"
+            android:name="pkleczek.profiwan.revisions.RevisionsActivity"
             android:label="@string/title_activity_revisions" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pkleczek.profiwan.MainActivity" />
+        </activity>
+        <activity
+            android:name="pkleczek.profiwan.RevisionsEnteredActivity"
+            android:label="@string/title_activity_revisions_entered" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pkleczek.profiwan.MainActivity" />

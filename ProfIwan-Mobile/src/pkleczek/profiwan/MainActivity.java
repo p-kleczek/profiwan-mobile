@@ -1,5 +1,6 @@
 package pkleczek.profiwan;
 
+import pkleczek.profiwan.revisions.RevisionsActivity;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;

@@ -1,0 +1,90 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/revisions_background"
+    tools:context=".RevisionsEnteredActivity" >
+
+    <ImageView
+        android:id="@+id/revisions_imgview_knownLanguageFlag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/revisionRow_margin"
+        android:src="@drawable/flag_pl" />
+
+    <ImageView
+        android:id="@+id/revisions_imgview_revisedLanguageFlag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/revisions_imgview_knownLanguageFlag"
+        android:layout_below="@+id/revisions_imgview_knownLanguageFlag"
+        android:layout_marginBottom="@dimen/revisionRow_margin"
+        android:layout_marginRight="@dimen/revisionRow_margin"
+        android:layout_marginTop="@dimen/revisionRow_margin"
+        android:src="@drawable/flag_rus" />
+
+    <TextView
+        android:id="@+id/revisions_text_knownLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/revisions_imgview_knownLanguageFlag"
+        android:layout_toRightOf="@+id/revisions_imgview_knownLanguageFlag"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/revisions_text" />
+
+    <TextView
+        android:id="@+id/revisions_entered_text_entered"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/revisions_imgview_revisedLanguageFlag"
+        android:layout_toRightOf="@+id/revisions_imgview_revisedLanguageFlag"
+        android:text="-entered-"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/revisions_text" />
+
+    <TextView
+        android:id="@+id/revisions_entered_text_correct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/revisions_entered_text_entered"
+        android:layout_below="@+id/revisions_imgview_revisedLanguageFlag"
+        android:layout_marginBottom="@dimen/revisionRow_margin"
+        android:text="-correct-"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/revisions_text_correct" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/revisions_entered_text_correct"
+        android:layout_marginTop="14dp" >
+
+        <Button
+            android:id="@+id/revisions_entered_btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:text="Next" />
+
+        <Button
+            android:id="@+id/revisions_entered_btn_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:text="Accept" />
+
+        <Button
+            android:id="@+id/revisions_entered_btn_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:text="Edit" />
+
+    </LinearLayout>
+
+</RelativeLayout>
