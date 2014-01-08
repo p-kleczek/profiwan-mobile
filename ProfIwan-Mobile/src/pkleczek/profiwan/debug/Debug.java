@@ -9,6 +9,7 @@ import org.joda.time.DateTime;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry.RevisionEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
+import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -102,7 +103,7 @@ public class Debug {
 	}
 
 	public ArrayList<String[]> getDbTableDetails(DatabaseHelper dbHelper) {
-		Cursor c = dbHelper.getReadableDatabase().rawQuery(
+		Cursor c = ((DatabaseHelperImpl) dbHelper).getReadableDatabase().rawQuery(
 				"SELECT name FROM sqlite_master WHERE type='table'", null);
 		ArrayList<String[]> result = new ArrayList<String[]>();
 		int i = 0;

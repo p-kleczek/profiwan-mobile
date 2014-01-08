@@ -3,6 +3,7 @@ package pkleczek.profiwan;
 import pkleczek.profiwan.debug.Debug;
 import pkleczek.profiwan.revisions.RevisionsActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
+import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -18,10 +19,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		dbHelper = DatabaseHelper.getInstance(this);
+		dbHelper = DatabaseHelperImpl.getInstance(this);
 		
 		// debug
-		dbHelper.clearDB();
+		((DatabaseHelperImpl) dbHelper).clearDB();
 		Debug.populateDB(dbHelper);
 		startRevisions(null);
 	}

@@ -7,6 +7,7 @@ import pkleczek.profiwan.keyboards.RussianKeyboard;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionsSession;
 import pkleczek.profiwan.utils.DatabaseHelper;
+import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -63,7 +64,7 @@ public class RevisionsActivity extends Activity {
 		mKeyboardView.setPreviewEnabled(false);
 
 		revisionsSession = new RevisionsSession(
-				DatabaseHelper.getInstance(this));
+				DatabaseHelperImpl.getInstance(this));
 		revisionsSession.prepareRevisions();
 		setupViewsForNextPhrase();
 	}
@@ -183,7 +184,7 @@ public class RevisionsActivity extends Activity {
 					correctText.setText(newText);
 				}
 
-				DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+				DatabaseHelper dbHelper = DatabaseHelperImpl.getInstance(this);
 				dbHelper.updatePhrase(revisionsSession.getCurrentPhrase());
 			}
 			break;
