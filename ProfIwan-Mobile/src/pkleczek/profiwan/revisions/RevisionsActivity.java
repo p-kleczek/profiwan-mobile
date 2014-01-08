@@ -1,26 +1,53 @@
 package pkleczek.profiwan.revisions;
 
+import pkleczek.profiwan.MainActivity;
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
 import pkleczek.profiwan.keyboards.RussianKeyboard;
+import pkleczek.profiwan.model.PhraseEntry;
+import pkleczek.profiwan.model.RevisionsSession;
+import pkleczek.profiwan.utils.DatabaseHelper;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 public class RevisionsActivity extends Activity {
 
+	enum State {
+		USER_INPUT, ANSWER
+	}
+
+	private State state = State.USER_INPUT;
+
 	CustomKeyboard mCustomKeyboard;
-	public static final String ENTERED_PHRASE = "pkleczek.profiwan.revisions.ENTERED_PHRASE";
+	PopupWindow popupWindow = null;
+
+	public static final String EDITED_PHRASE = "pkleczek.profiwan.revisions.EDITED_PHRASE";
+	public static final int EDIT_ACTIVITY = 1;
+
+	private RevisionsSession revisionsSession;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_revisions);
 		// Show the Up button in the action bar.
 		// getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -34,6 +61,11 @@ public class RevisionsActivity extends Activity {
 		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.revisions_kbd);
 		mKeyboardView.setKeyboard(mKeyboard);
 		mKeyboardView.setPreviewEnabled(false);
+
+		revisionsSession = new RevisionsSession(
+				DatabaseHelper.getInstance(this));
+		revisionsSession.prepareRevisions();
+		setupViewsForNextPhrase();
 	}
 
 	@Override
@@ -61,15 +93,127 @@ public class RevisionsActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void enterPhrase(View view) {
-		Intent intent = new Intent(this, RevisionsEnteredActivity.class);
+	private void setupViewsForNextPhrase() {
+		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
 
-		// TODO: pass parameter
+		// TODO: set flags
+
+		TextView tvKnownLanguage = (TextView) findViewById(R.id.revisions_text_knownLanguage);
+		tvKnownLanguage.setText(phrase.getLangAText());
+
+		EditText etRevisedLanguage = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
+		etRevisedLanguage.setText("");
+		etRevisedLanguage.requestFocus();
+	}
+
+	public void enterPhrase(View view) {
+		state = State.ANSWER;
+
 		EditText editText = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
 		String enteredPhrase = editText.getText().toString();
-		intent.putExtra(ENTERED_PHRASE, enteredPhrase);
 
-		startActivity(intent);
-		this.finish();
+		setContentView(R.layout.activity_revisions_entered);
+
+		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
+
+		TextView tvKnownLanguage = (TextView) findViewById(R.id.revisions_text_knownLanguage);
+		tvKnownLanguage.setText(phrase.getLangAText());
+
+		TextView enteredText = (TextView) findViewById(R.id.revisions_entered_text_entered);
+		enteredText.setText(enteredPhrase);
+		enteredText.setPaintFlags(enteredText.getPaintFlags()
+				| Paint.STRIKE_THRU_TEXT_FLAG);
+
+		boolean enteredCorrectly = revisionsSession
+				.processTypedWord(enteredPhrase);
+
+		Button btnAccept = (Button) findViewById(R.id.revisions_entered_btn_accept);
+
+		TextView tvCorrect = (TextView) findViewById(R.id.revisions_entered_text_correct);
+		if (enteredCorrectly) {
+			tvCorrect.setText("Correct!");
+			btnAccept.setEnabled(false);
+		} else {
+			tvCorrect.setText(phrase.getLangBText());
+			btnAccept.setEnabled(true);
+		}
 	}
+
+	public void editPhrase(View view) {
+		Intent intent = new Intent(this, RevisionsEditActivity.class);
+		intent.putExtra(EDITED_PHRASE, revisionsSession.getCurrentPhrase());
+		startActivityForResult(intent, EDIT_ACTIVITY);
+	}
+
+	public void nextPhrase(View view) {
+		tryNextPhrase();
+	}
+
+	public void acceptPhrase(View view) {
+		revisionsSession.acceptRevision();
+		tryNextPhrase();
+	}
+	
+	private void tryNextPhrase() {
+		revisionsSession.nextWord();
+		if (!revisionsSession.hasRevisions()) {
+			showStats();
+		} else {
+			setContentView(R.layout.activity_revisions);
+			setupViewsForNextPhrase();
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		switch (requestCode) {
+		case (EDIT_ACTIVITY): {
+			if (resultCode == Activity.RESULT_OK) {
+				String newText = data.getStringExtra(EDITED_PHRASE);
+
+				revisionsSession.getCurrentPhrase().setLangBText(newText);
+
+				TextView enteredText = (TextView) findViewById(R.id.revisions_entered_text_entered);
+				if (revisionsSession.isEnteredCorrectly(enteredText.getText())) {
+					enteredText.setText(newText);
+				} else {
+					TextView correctText = (TextView) findViewById(R.id.revisions_entered_text_correct);
+					correctText.setText(newText);
+				}
+
+				DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+				dbHelper.updatePhrase(revisionsSession.getCurrentPhrase());
+			}
+			break;
+		}
+		}
+	}
+
+	private void showStats() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+		// set title
+		alertDialogBuilder.setTitle("Stats");
+
+		String message = String
+				.format("words                = %4d\ncorrect words    = %4d\ntotal revisions   = %4d",
+						revisionsSession.getWordsNumber(),
+						revisionsSession.getCorrectWordsNumber(),
+						revisionsSession.getRevisionsNumber());
+
+		// set dialog message
+		alertDialogBuilder.setMessage(message).setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						RevisionsActivity.this.finish();
+					}
+				});
+
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		alertDialog.show();
+	}
+
 }

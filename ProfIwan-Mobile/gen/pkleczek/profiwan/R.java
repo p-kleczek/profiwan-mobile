@@ -30,16 +30,22 @@ public final class R {
         public static final int RelativeLayout1=0x7f0a000d;
         public static final int TableLayout1=0x7f0a0003;
         public static final int button2=0x7f0a0002;
-        public static final int menu_settings=0x7f0a0013;
+        public static final int menu_settings=0x7f0a0019;
+        public static final int popup_element=0x7f0a0014;
         public static final int revisions_edit_btn_accept=0x7f0a0001;
+        public static final int revisions_edit_btn_next=0x7f0a0011;
         public static final int revisions_edit_revisedLanguage=0x7f0a0009;
-        public static final int revisions_entered_btn_accept=0x7f0a0011;
-        public static final int revisions_entered_btn_edit=0x7f0a0012;
+        public static final int revisions_entered_btn_accept=0x7f0a0012;
+        public static final int revisions_entered_btn_edit=0x7f0a0013;
         public static final int revisions_entered_text_correct=0x7f0a0010;
         public static final int revisions_entered_text_entered=0x7f0a000f;
         public static final int revisions_imgview_knownLanguageFlag=0x7f0a0005;
         public static final int revisions_imgview_revisedLanguageFlag=0x7f0a0008;
         public static final int revisions_kbd=0x7f0a000c;
+        public static final int revisions_stats_btn_ok=0x7f0a0018;
+        public static final int revisions_stats_text_ncorrect=0x7f0a0016;
+        public static final int revisions_stats_text_nrevisions=0x7f0a0017;
+        public static final int revisions_stats_text_nwords=0x7f0a0015;
         public static final int revisions_text_knownLanguage=0x7f0a0006;
         public static final int tableLayout1=0x7f0a000e;
         public static final int tableRow1=0x7f0a0004;
@@ -52,6 +58,7 @@ public final class R {
         public static final int activity_revisions=0x7f030001;
         public static final int activity_revisions_edit=0x7f030002;
         public static final int activity_revisions_entered=0x7f030003;
+        public static final int dialog_revisions_stats=0x7f030004;
     }
     public static final class menu {
         public static final int activity_main=0x7f090000;

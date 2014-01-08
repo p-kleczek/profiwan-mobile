@@ -3,17 +3,23 @@ package pkleczek.profiwan.revisions;
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
 import pkleczek.profiwan.keyboards.RussianKeyboard;
+import pkleczek.profiwan.model.PhraseEntry;
+import pkleczek.profiwan.utils.DatabaseHelper;
 import android.app.Activity;
+import android.content.Intent;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class RevisionsEditActivity extends Activity {
 
 	CustomKeyboard mCustomKeyboard;
+	private PhraseEntry editedPhrase;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,14 @@ public class RevisionsEditActivity extends Activity {
 		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.revisions_kbd);
 		mKeyboardView.setKeyboard(mKeyboard);
 		mKeyboardView.setPreviewEnabled(false);
+		
+		editedPhrase = getIntent().getExtras().getParcelable(RevisionsActivity.EDITED_PHRASE);
+		
+		TextView enteredText = (TextView) findViewById(R.id.revisions_text_knownLanguage);
+		enteredText.setText(editedPhrase.getLangAText());
+
+		EditText etRevisedText = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
+		etRevisedText.setText(editedPhrase.getLangBText());
 	}
 
 	@Override
@@ -58,7 +72,13 @@ public class RevisionsEditActivity extends Activity {
 	}
 
 	public void acceptChanges(View view) {
-		// TODO: save
+		EditText etRevisedText = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
+		String newText = etRevisedText.getText().toString();
+		
+		Intent resultIntent = new Intent();
+		resultIntent.putExtra(RevisionsActivity.EDITED_PHRASE, newText);
+		setResult(Activity.RESULT_OK, resultIntent);
+		
 		this.finish();
 	}
 }

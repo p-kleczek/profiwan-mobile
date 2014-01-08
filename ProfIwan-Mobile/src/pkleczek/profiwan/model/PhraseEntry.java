@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * The <code>PhraseEntry</code> class stores all the information about a phrase
  * (ie. translations, revisions).
@@ -12,7 +15,7 @@ import org.joda.time.DateTime;
  * @author Pawel
  * 
  */
-public class PhraseEntry {
+public class PhraseEntry implements Parcelable {
 
 	/**
 	 * Maximum number of days between two consecutive revisions.
@@ -66,6 +69,12 @@ public class PhraseEntry {
 
 		public boolean isToContinue() {
 			return (date.isAfter(DateTime.now().withTimeAtStartOfDay()) && mistakes < 0);
+		}
+
+		@Override
+		public String toString() {
+			return String.format("%s [%d]\n", date.toString(), //$NON-NLS-1$
+					mistakes);
 		}
 
 	}
@@ -169,7 +178,7 @@ public class PhraseEntry {
 		DateTime nextRevisionDate = lastRevision.date.plusDays(freq)
 				.withTimeAtStartOfDay();
 		DateTime todayMidnight = DateTime.now().withTimeAtStartOfDay();
-		
+
 		return !nextRevisionDate.isAfter(todayMidnight);
 	}
 
@@ -220,11 +229,11 @@ public class PhraseEntry {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("id=%d %s=\'%s\' %s=\'%s\' [%s]\n", getId(), //$NON-NLS-1$
-				getLangA(), getLangAText(), getLangB(), getLangBText(), getCreationDate()));
+				getLangA(), getLangAText(), getLangB(), getLangBText(),
+				getCreationDate()));
 
 		for (RevisionEntry re : revisions) {
-			sb.append(String.format("\t%s [%d]\n", re.date.toString(), //$NON-NLS-1$
-					re.mistakes));
+			sb.append("   " + re.toString() + "\n");
 		}
 
 		return sb.toString();
@@ -244,6 +253,41 @@ public class PhraseEntry {
 
 	public void setLangB(String langB) {
 		this.langB = langB;
+	}
+
+	public static final Parcelable.Creator<PhraseEntry> CREATOR = new Parcelable.Creator<PhraseEntry>() {
+		public PhraseEntry createFromParcel(Parcel in) {
+			PhraseEntry pe = new PhraseEntry();
+			pe.setId(in.readLong());
+			pe.setLangA(in.readString());
+			pe.setLangB(in.readString());
+			pe.setLangAText(in.readString());
+			pe.setLangBText(in.readString());
+			pe.setLabel(in.readString());
+			pe.setCreationDate(new DateTime(in.readLong()));
+
+			return pe;
+		}
+
+		public PhraseEntry[] newArray(int size) {
+			return new PhraseEntry[size];
+		}
+	};
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeLong(getId());
+		dest.writeString(getLangA());
+		dest.writeString(getLangB());
+		dest.writeString(getLangAText());
+		dest.writeString(getLangBText());
+		dest.writeString(getLabel());
+		dest.writeLong(getCreationDate().getMillis());
 	}
 
 }

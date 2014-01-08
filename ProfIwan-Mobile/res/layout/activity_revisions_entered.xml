@@ -65,10 +65,11 @@
         android:layout_marginTop="14dp" >
 
         <Button
-            android:id="@+id/revisions_edit_btn_accept"
+            android:id="@+id/revisions_edit_btn_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
+            android:onClick="nextPhrase"
             android:text="Next" />
 
         <Button
@@ -76,6 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
+            android:onClick="acceptPhrase"
             android:text="Accept" />
 
         <Button

@@ -54,6 +54,10 @@ public class RevisionsSession {
 
 		wordsNumber = pendingRevisions.size();
 		pendingRevisionsIterator = pendingRevisions.listIterator();
+		
+		if (hasRevisions()) {
+			currentRevision = getNextWord();
+		}
 	}
 
 	private RevisionEntry prepareRevisionEntry(PhraseEntry phrase) {
@@ -75,10 +79,14 @@ public class RevisionsSession {
 	public boolean hasRevisions() {
 		return !pendingRevisions.isEmpty();
 	}
+	
+	public boolean isEnteredCorrectly(CharSequence input) {
+		return currentRevision.getLangBText().equals(input);
+	}
 
 	public boolean processTypedWord(String input) {
 		currentRevision = pendingRevisionsIterator.next();
-		enteredCorrectly = currentRevision.getLangBText().equals(input);
+		enteredCorrectly = isEnteredCorrectly(input);
 
 		RevisionEntry re = revisionEntries.get(currentRevision.getId());
 		if (re.mistakes == 0) {
@@ -144,6 +152,8 @@ public class RevisionsSession {
 		if (!pendingRevisionsIterator.hasNext()) {
 			pendingRevisionsIterator = pendingRevisions.listIterator();
 		}
+		
+		currentRevision = pendingRevisionsIterator.next();
 
 		revisionsNumber++;
 	}
