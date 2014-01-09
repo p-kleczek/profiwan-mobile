@@ -9,13 +9,12 @@ import java.util.Map;
 
 import org.joda.time.DateTime;
 
-import pkleczek.profiwan.model.PhraseEntry.RevisionEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
 
 public class RevisionsSession {
 
 	private static final String TAG = RevisionsSession.class.getName();
-	
+
 	/**
 	 * List of pending revisions.
 	 */
@@ -33,7 +32,7 @@ public class RevisionsSession {
 	private int wordsNumber = 0;
 	private int correctWordsNumber = 0;
 	private int revisionsNumber = 1;
-	
+
 	private DatabaseHelper dbHelper;
 
 	public RevisionsSession(DatabaseHelper dbHelper) {
@@ -54,7 +53,7 @@ public class RevisionsSession {
 
 		wordsNumber = pendingRevisions.size();
 		pendingRevisionsIterator = pendingRevisions.listIterator();
-		
+
 		if (hasRevisions()) {
 			currentRevision = getNextWord();
 		}
@@ -62,7 +61,7 @@ public class RevisionsSession {
 
 	private RevisionEntry prepareRevisionEntry(PhraseEntry phrase) {
 		RevisionEntry revision = new RevisionEntry();
-		revision.date = DateTime.now();
+		revision.setDate(DateTime.now());
 
 		List<RevisionEntry> revisions = phrase.getRevisions();
 		if (!revisions.isEmpty()) {
@@ -79,25 +78,25 @@ public class RevisionsSession {
 	public boolean hasRevisions() {
 		return !pendingRevisions.isEmpty();
 	}
-	
+
 	public boolean isEnteredCorrectly(CharSequence input) {
 		return currentRevision.getLangBText().equals(input);
 	}
 
 	public boolean processTypedWord(String input) {
-		currentRevision = getNextWord();//pendingRevisionsIterator.next();
+		currentRevision = getNextWord();// pendingRevisionsIterator.next();
 		enteredCorrectly = isEnteredCorrectly(input);
 
 		RevisionEntry re = revisionEntries.get(currentRevision.getId());
-		if (re.mistakes == 0) {
+		if (re.getMistakes() == 0) {
 			dbHelper.createRevision(re, currentRevision.getId());
 		}
 
 		if (enteredCorrectly) {
-			re.mistakes = -re.mistakes;
+			re.setMistakes(-re.getMistakes());
 			confirmRevision(currentRevision);
 		} else {
-			re.mistakes--;
+			re.setMistakes(re.getMistakes() - 1);
 		}
 
 		dbHelper.updateRevision(re);
@@ -152,7 +151,7 @@ public class RevisionsSession {
 		if (!pendingRevisionsIterator.hasNext()) {
 			pendingRevisionsIterator = pendingRevisions.listIterator();
 		}
-		
+
 		currentRevision = pendingRevisionsIterator.next();
 
 		revisionsNumber++;
@@ -162,12 +161,12 @@ public class RevisionsSession {
 		if (pendingRevisions.isEmpty()) {
 			return null;
 		}
-			
+
 		if (pendingRevisionsIterator.hasNext()) {
 			return pendingRevisions.get(pendingRevisionsIterator.nextIndex());
 		} else {
 			return pendingRevisions.get(0);
 		}
-		
+
 	}
 }

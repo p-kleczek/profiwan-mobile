@@ -5,9 +5,6 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * The <code>PhraseEntry</code> class stores all the information about a phrase
  * (ie. translations, revisions).
@@ -15,7 +12,7 @@ import android.os.Parcelable;
  * @author Pawel
  * 
  */
-public class PhraseEntry implements Parcelable {
+public class PhraseEntry {
 
 	/**
 	 * Maximum number of days between two consecutive revisions.
@@ -49,36 +46,6 @@ public class PhraseEntry implements Parcelable {
 	 */
 	private static double COUNTER_STACKING_FACTOR = 0.1;
 
-	/**
-	 * The <code>RevisionEntry</code> class stores all information about a
-	 * revision relevant for generation of further revisions.
-	 * 
-	 * @author Pawel
-	 * 
-	 */
-	public static class RevisionEntry {
-
-		public long id;
-
-		public DateTime date = null;
-
-		/**
-		 * How many times a mistake was made during the given revision.
-		 */
-		public int mistakes;
-
-		public boolean isToContinue() {
-			return (date.isAfter(DateTime.now().withTimeAtStartOfDay()) && mistakes < 0);
-		}
-
-		@Override
-		public String toString() {
-			return String.format("%s [%d]\n", date.toString(), //$NON-NLS-1$
-					mistakes);
-		}
-
-	}
-
 	private long id;
 
 	/**
@@ -93,15 +60,15 @@ public class PhraseEntry implements Parcelable {
 
 	private String langAText = ""; //$NON-NLS-1$
 	private String langBText = ""; //$NON-NLS-1$
-	private DateTime creationDate = null;
+	private DateTime createdAt = null;
 	private String label = ""; //$NON-NLS-1$
 
-	public DateTime getCreationDate() {
-		return creationDate;
+	public DateTime getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreationDate(DateTime creationDate) {
-		this.creationDate = creationDate;
+	public void setCreatedAt(DateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public String getLabel() {
@@ -175,7 +142,7 @@ public class PhraseEntry implements Parcelable {
 		freq = Math.max(freq, MIN_REVISION_INTERVAL);
 		freq = Math.min(freq, MAX_REVISION_INTERVAL);
 
-		DateTime nextRevisionDate = lastRevision.date.plusDays(freq)
+		DateTime nextRevisionDate = lastRevision.getDate().plusDays(freq)
 				.withTimeAtStartOfDay();
 		DateTime todayMidnight = DateTime.now().withTimeAtStartOfDay();
 
@@ -190,7 +157,7 @@ public class PhraseEntry implements Parcelable {
 		for (int i = 0; i < revisions.size(); i++) {
 			RevisionEntry e = revisions.get(i);
 
-			if (e.mistakes == 0) {
+			if (e.getMistakes() == 0) {
 				if (isInitialStreak) {
 					freq += FREQUENCY_DECAY;
 				}
@@ -230,7 +197,7 @@ public class PhraseEntry implements Parcelable {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("id=%d %s=\'%s\' %s=\'%s\' [%s]\n", getId(), //$NON-NLS-1$
 				getLangA(), getLangAText(), getLangB(), getLangBText(),
-				getCreationDate()));
+				getCreatedAt()));
 
 		for (RevisionEntry re : revisions) {
 			sb.append("   " + re.toString() + "\n");
@@ -253,41 +220,6 @@ public class PhraseEntry implements Parcelable {
 
 	public void setLangB(String langB) {
 		this.langB = langB;
-	}
-
-	public static final Parcelable.Creator<PhraseEntry> CREATOR = new Parcelable.Creator<PhraseEntry>() {
-		public PhraseEntry createFromParcel(Parcel in) {
-			PhraseEntry pe = new PhraseEntry();
-			pe.setId(in.readLong());
-			pe.setLangA(in.readString());
-			pe.setLangB(in.readString());
-			pe.setLangAText(in.readString());
-			pe.setLangBText(in.readString());
-			pe.setLabel(in.readString());
-			pe.setCreationDate(new DateTime(in.readLong()));
-
-			return pe;
-		}
-
-		public PhraseEntry[] newArray(int size) {
-			return new PhraseEntry[size];
-		}
-	};
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeLong(getId());
-		dest.writeString(getLangA());
-		dest.writeString(getLangB());
-		dest.writeString(getLangAText());
-		dest.writeString(getLangBText());
-		dest.writeString(getLabel());
-		dest.writeLong(getCreationDate().getMillis());
 	}
 
 }

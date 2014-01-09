@@ -1,17 +1,15 @@
 package pkleczek.profiwan.debug;
 
-import java.sql.SQLData;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
 
 import pkleczek.profiwan.model.PhraseEntry;
-import pkleczek.profiwan.model.PhraseEntry.RevisionEntry;
+import pkleczek.profiwan.model.RevisionEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 public class Debug {
@@ -28,20 +26,20 @@ public class Debug {
 		e.setLangB("rus");
 		e.setLangAText("a");
 		e.setLangBText("b");
-		e.setCreationDate(DateTime.now());
+		e.setCreatedAt(DateTime.now());
 		e.setLabel("rand");
 		e.setInRevisions(true);
 		dbHelper.createPhrase(e);
 		
 		re = new RevisionEntry();
-		re.date = new DateTime(2013, 12, 5, 10, 15, 8);
-		re.mistakes = 3;
+		re.setDate(new DateTime(2013, 12, 5, 10, 15, 8));
+		re.setMistakes(3);
 		e.getRevisions().add(re);
 		dbHelper.createRevision(re, e.getId());
 
 		re = new RevisionEntry();
-		re.date = new DateTime(2014, 1, 2, 10, 15, 8);
-		re.mistakes = 2;
+		re.setDate(new DateTime(2014, 1, 2, 10, 15, 8));
+		re.setMistakes(2);
 		e.getRevisions().add(re);
 		dbHelper.createRevision(re, e.getId());
 		

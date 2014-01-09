@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pkleczek.profiwan.model.PhraseEntry;
-import pkleczek.profiwan.model.PhraseEntry.RevisionEntry;
+import pkleczek.profiwan.model.RevisionEntry;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,11 +12,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelper {
+public class DatabaseHelperImpl extends SQLiteOpenHelper implements
+		DatabaseHelper {
 
 	private static int DATABASE_VERSION = 1;
-	
-  
+
 	private static DatabaseHelper instance;
 
 	public static DatabaseHelper getInstance(Context context) {
@@ -32,22 +32,22 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
 		// XXX: debug!
 		// clearDB();
 	}
- 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_PHRASE);
-        db.execSQL(CREATE_TABLE_REVISION);
-    }
- 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_PHRASE);
-        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_REVISION);
- 
-        onCreate(db);
-    }
 
-    public long createPhrase(PhraseEntry phrase) {
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		db.execSQL(CREATE_TABLE_PHRASE);
+		db.execSQL(CREATE_TABLE_REVISION);
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_PHRASE);
+		db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_REVISION);
+
+		onCreate(db);
+	}
+
+	public long createPhrase(PhraseEntry phrase) {
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_PHRASE_LANG1, phrase.getLangA());
@@ -57,7 +57,7 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
 		values.put(KEY_PHRASE_LABEL, phrase.getLabel());
 		values.put(KEY_PHRASE_IN_REVISION, phrase.isInRevisions());
 		values.put(KEY_CREATED_AT,
-				DBUtils.getIntFromDateTime(phrase.getCreationDate()));
+				DBUtils.getIntFromDateTime(phrase.getCreatedAt()));
 
 		// insert row
 		long phrase_id = 0;
@@ -101,7 +101,7 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
 					pe.setLabel(c.getString(c.getColumnIndex(KEY_PHRASE_LABEL)));
 					pe.setInRevisions(c.getInt(c
 							.getColumnIndex(KEY_PHRASE_IN_REVISION)) != 0);
-					pe.setCreationDate(DBUtils.getDateTimeFromInt(c.getInt(c
+					pe.setCreatedAt(DBUtils.getDateTimeFromInt(c.getInt(c
 							.getColumnIndex(KEY_CREATED_AT))));
 
 					phrases.add(pe);
@@ -152,12 +152,13 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(KEY_REVISION_MISTAKES, revision.mistakes);
+		values.put(KEY_REVISION_MISTAKES, revision.getMistakes());
 		values.put(KEY_REVISION_PHRASE_ID, phrase_id);
-		values.put(KEY_CREATED_AT, DBUtils.getIntFromDateTime(revision.date));
+		values.put(KEY_CREATED_AT,
+				DBUtils.getIntFromDateTime(revision.getDate()));
 
 		long revision_id = db.insert(TABLE_REVISION, null, values);
-		revision.id = revision_id;
+		revision.setId(revision_id);
 
 		return revision_id;
 	}
@@ -165,14 +166,14 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
 	public int updateRevision(RevisionEntry revision) {
 
 		ContentValues values = new ContentValues();
-		values.put(KEY_REVISION_MISTAKES, revision.mistakes);
+		values.put(KEY_REVISION_MISTAKES, revision.getMistakes());
 
 		int ret = 0;
 
 		try {
 			SQLiteDatabase db = this.getWritableDatabase();
 			ret = db.update(TABLE_REVISION, values, KEY_ID + " = ?",
-					new String[] { String.valueOf(revision.id) });
+					new String[] { String.valueOf(revision.getId()) });
 		} finally {
 			closeDB();
 		}
@@ -193,11 +194,11 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
 				do {
 					RevisionEntry re = new RevisionEntry();
 
-					re.id = c.getInt(c.getColumnIndex(KEY_ID));
-					re.mistakes = c.getInt(c
-							.getColumnIndex(KEY_REVISION_MISTAKES));
-					re.date = DBUtils.getDateTimeFromInt(c.getInt(c
-							.getColumnIndex(KEY_CREATED_AT)));
+					re.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+					re.setMistakes(c.getInt(c
+							.getColumnIndex(KEY_REVISION_MISTAKES)));
+					re.setDate(DBUtils.getDateTimeFromInt(c.getInt(c
+							.getColumnIndex(KEY_CREATED_AT))));
 
 					revisions.add(re);
 				} while (c.moveToNext());

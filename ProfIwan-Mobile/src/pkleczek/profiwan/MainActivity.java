@@ -4,9 +4,9 @@ import pkleczek.profiwan.debug.Debug;
 import pkleczek.profiwan.revisions.RevisionsActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 
@@ -17,6 +17,9 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		System.setProperty("org.joda.time.DateTimeZone.Provider", "org.joda.time.tz.UTCProvider");
+		
 		setContentView(R.layout.activity_main);
 		
 		dbHelper = DatabaseHelperImpl.getInstance(this);

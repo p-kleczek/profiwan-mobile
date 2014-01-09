@@ -3,7 +3,7 @@ package pkleczek.profiwan.utils;
 import java.util.List;
 
 import pkleczek.profiwan.model.PhraseEntry;
-import pkleczek.profiwan.model.PhraseEntry.RevisionEntry;
+import pkleczek.profiwan.model.RevisionEntry;
 import pkleczek.profiwan.model.RevisionsSession;
 
 public interface DatabaseHelper {

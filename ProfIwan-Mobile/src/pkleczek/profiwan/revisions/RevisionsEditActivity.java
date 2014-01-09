@@ -3,13 +3,15 @@ package pkleczek.profiwan.revisions;
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
 import pkleczek.profiwan.keyboards.RussianKeyboard;
+import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
-import pkleczek.profiwan.utils.DatabaseHelper;
 import android.app.Activity;
 import android.content.Intent;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,7 +40,11 @@ public class RevisionsEditActivity extends Activity {
 		mKeyboardView.setKeyboard(mKeyboard);
 		mKeyboardView.setPreviewEnabled(false);
 		
-		editedPhrase = getIntent().getExtras().getParcelable(RevisionsActivity.EDITED_PHRASE);
+		try {
+			editedPhrase = getIntent().getParcelableExtra(RevisionsActivity.EDITED_PHRASE);
+		} catch (ClassCastException e) {
+			Log.e("REA", e.toString());
+		}
 		
 		TextView enteredText = (TextView) findViewById(R.id.revisions_text_knownLanguage);
 		enteredText.setText(editedPhrase.getLangAText());
