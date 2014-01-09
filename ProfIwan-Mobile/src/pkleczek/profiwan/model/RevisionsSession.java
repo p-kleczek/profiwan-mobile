@@ -85,7 +85,7 @@ public class RevisionsSession {
 	}
 
 	public boolean processTypedWord(String input) {
-		currentRevision = pendingRevisionsIterator.next();
+		currentRevision = getNextWord();//pendingRevisionsIterator.next();
 		enteredCorrectly = isEnteredCorrectly(input);
 
 		RevisionEntry re = revisionEntries.get(currentRevision.getId());
@@ -159,6 +159,15 @@ public class RevisionsSession {
 	}
 
 	public PhraseEntry getNextWord() {
-		return pendingRevisions.get(pendingRevisionsIterator.nextIndex());
+		if (pendingRevisions.isEmpty()) {
+			return null;
+		}
+			
+		if (pendingRevisionsIterator.hasNext()) {
+			return pendingRevisions.get(pendingRevisionsIterator.nextIndex());
+		} else {
+			return pendingRevisions.get(0);
+		}
+		
 	}
 }

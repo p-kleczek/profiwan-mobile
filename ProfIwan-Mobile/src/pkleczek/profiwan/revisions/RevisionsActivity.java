@@ -31,12 +31,6 @@ import android.widget.TextView;
 
 public class RevisionsActivity extends Activity {
 
-	enum State {
-		USER_INPUT, ANSWER
-	}
-
-	private State state = State.USER_INPUT;
-
 	CustomKeyboard mCustomKeyboard;
 	PopupWindow popupWindow = null;
 
@@ -108,8 +102,6 @@ public class RevisionsActivity extends Activity {
 	}
 
 	public void enterPhrase(View view) {
-		state = State.ANSWER;
-
 		EditText editText = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
 		String enteredPhrase = editText.getText().toString();
 
