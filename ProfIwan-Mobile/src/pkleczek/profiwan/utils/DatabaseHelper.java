@@ -32,7 +32,7 @@ public interface DatabaseHelper {
 	String KEY_PHRASE_LABEL = "label";
 	String KEY_PHRASE_IN_REVISION = "in_revision";
 
-	// PHRASE Table - column names
+	// REVISION Table - column names
 	String KEY_REVISION_MISTAKES = "mistakes";
 	String KEY_REVISION_PHRASE_ID = "Phrase_idPhrase";
 

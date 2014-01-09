@@ -32,13 +32,13 @@ public class Debug {
 		dbHelper.createPhrase(e);
 		
 		re = new RevisionEntry();
-		re.setDate(new DateTime(2013, 12, 5, 10, 15, 8));
+		re.setCreatedAt(new DateTime(2013, 12, 5, 10, 15, 8));
 		re.setMistakes(3);
 		e.getRevisions().add(re);
 		dbHelper.createRevision(re, e.getId());
 
 		re = new RevisionEntry();
-		re.setDate(new DateTime(2014, 1, 2, 10, 15, 8));
+		re.setCreatedAt(new DateTime(2014, 1, 2, 10, 15, 8));
 		re.setMistakes(2);
 		e.getRevisions().add(re);
 		dbHelper.createRevision(re, e.getId());

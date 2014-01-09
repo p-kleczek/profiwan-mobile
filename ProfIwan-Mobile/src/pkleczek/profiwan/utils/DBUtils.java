@@ -8,7 +8,7 @@ import java.nio.channels.FileChannel;
 
 import org.joda.time.DateTime;
 
-public class DBUtils {
+public final class DBUtils {
 
 	private DBUtils() {
 	}

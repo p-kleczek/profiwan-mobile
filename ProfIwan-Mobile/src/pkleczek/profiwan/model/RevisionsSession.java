@@ -13,7 +13,7 @@ import pkleczek.profiwan.utils.DatabaseHelper;
 
 public class RevisionsSession {
 
-	private static final String TAG = RevisionsSession.class.getName();
+	private static final String LOG_TAG = RevisionsSession.class.getName();
 
 	/**
 	 * List of pending revisions.
@@ -61,7 +61,7 @@ public class RevisionsSession {
 
 	private RevisionEntry prepareRevisionEntry(PhraseEntry phrase) {
 		RevisionEntry revision = new RevisionEntry();
-		revision.setDate(DateTime.now());
+		revision.setCreatedAt(DateTime.now());
 
 		List<RevisionEntry> revisions = phrase.getRevisions();
 		if (!revisions.isEmpty()) {

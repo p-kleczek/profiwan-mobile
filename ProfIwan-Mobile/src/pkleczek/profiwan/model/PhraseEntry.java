@@ -15,138 +15,90 @@ import org.joda.time.DateTime;
 public class PhraseEntry {
 
 	/**
-	 * Maximum number of days between two consecutive revisions.
+	 * Makes revision frequency vary +/- n% from its initial value to prevent
+	 * the stacking effect of revisions made on the same day.
 	 */
-	public static int MAX_REVISION_INTERVAL = 30;
+	private static double COUNTER_STACKING_FACTOR = 0.1;
 
 	/**
-	 * Minimum number of days between two consecutive revisions.
+	 * Change in revisions' frequency with each correct revision.
 	 */
-	public static int MIN_REVISION_INTERVAL = 1;
+	private static int FREQUENCY_DECAY = 2;
+
+	/**
+	 * Maximum number of days between two consecutive revisions.
+	 */
+	private static int MAX_REVISION_INTERVAL = 30;
 
 	/**
 	 * Numbers of initial consecutive correct revisions before its frequency
 	 * starts to fall.
 	 */
-	public static int MIN_CORRECT_STREAK = 3;
+	private static int MIN_CORRECT_STREAK = 3;
 
 	/**
-	 * Change in revisions' frequency with each correct revision.
+	 * Minimum number of days between two consecutive revisions.
 	 */
-	public static int FREQUENCY_DECAY = 2;
+	private static int MIN_REVISION_INTERVAL = 1;
 
 	/**
 	 * blad => reset postepow we FREQ do podanego ulamka
 	 */
 	private static double MISTAKE_MULTIPLIER = 0.5;
 
-	/**
-	 * Makes revision frequency vary +/- n% from its initial value to prevent
-	 * the stacking effect of revisions made on the same day.
-	 */
-	private static double COUNTER_STACKING_FACTOR = 0.1;
-
-	private long id;
-
-	/**
-	 * ISO code of the first language.
-	 */
-	private String langA = "";
-
-	/**
-	 * ISO code of the second language.
-	 */
-	private String langB = "";
-
-	private String langAText = ""; //$NON-NLS-1$
-	private String langBText = ""; //$NON-NLS-1$
 	private DateTime createdAt = null;
-	private String label = ""; //$NON-NLS-1$
 
-	public DateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(DateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
+	/**
+	 * ID as in database.
+	 */
+	private long id;
 
 	/**
 	 * <code>true</code> if the phrase is currently revised
 	 */
 	private boolean inRevisions = false;
 
+	private String label = ""; //$NON-NLS-1$
+	/**
+	 * ISO code of the first language.
+	 */
+	private String langA = "";
+	private String langAText = ""; //$NON-NLS-1$
+	/**
+	 * ISO code of the second language.
+	 */
+	private String langB = "";
+
+	private String langBText = ""; //$NON-NLS-1$
+
 	private List<RevisionEntry> revisions = new ArrayList<RevisionEntry>();
+
+	public DateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public String getLangA() {
+		return langA;
+	}
 
 	public String getLangAText() {
 		return langAText;
 	}
 
-	public void setLangAText(String text) {
-		this.langAText = text;
+	public String getLangB() {
+		return langB;
 	}
 
 	public String getLangBText() {
 		return langBText;
-	}
-
-	public void setLangBText(String text) {
-		this.langBText = text;
-	}
-
-	public List<RevisionEntry> getRevisions() {
-		return revisions;
-	}
-
-	public void setRevisions(List<RevisionEntry> revisions) {
-		this.revisions = revisions;
-	}
-
-	public boolean isInRevisions() {
-		return inRevisions;
-	}
-
-	public void setInRevisions(boolean inRevisions) {
-		this.inRevisions = inRevisions;
-	}
-
-	public boolean isReviseNow() {
-
-		if (!isInRevisions()) {
-			return false;
-		}
-
-		if (revisions.isEmpty()) {
-			return true;
-		}
-
-		RevisionEntry lastRevision = revisions.get(revisions.size() - 1);
-		if (lastRevision.isToContinue()) {
-			return true;
-		}
-
-		int freq = getRevisionFrequency();
-
-		// Modify frequency to prevent stacking of revisions made on the same
-		// day.
-		freq *= (1.0 - COUNTER_STACKING_FACTOR) + Math.random()
-				* (COUNTER_STACKING_FACTOR / 2.0);
-		freq = Math.max(freq, MIN_REVISION_INTERVAL);
-		freq = Math.min(freq, MAX_REVISION_INTERVAL);
-
-		DateTime nextRevisionDate = lastRevision.getDate().plusDays(freq)
-				.withTimeAtStartOfDay();
-		DateTime todayMidnight = DateTime.now().withTimeAtStartOfDay();
-
-		return !nextRevisionDate.isAfter(todayMidnight);
 	}
 
 	public int getRevisionFrequency() {
@@ -184,12 +136,79 @@ public class PhraseEntry {
 		return freq;
 	}
 
-	public long getId() {
-		return id;
+	public List<RevisionEntry> getRevisions() {
+		return revisions;
+	}
+
+	public boolean isInRevisions() {
+		return inRevisions;
+	}
+
+	public boolean isReviseNow() {
+
+		if (!isInRevisions()) {
+			return false;
+		}
+
+		if (revisions.isEmpty()) {
+			return true;
+		}
+
+		RevisionEntry lastRevision = revisions.get(revisions.size() - 1);
+		if (lastRevision.isToContinue()) {
+			return true;
+		}
+
+		int freq = getRevisionFrequency();
+
+		// Modify frequency to prevent stacking of revisions made on the same
+		// day.
+		freq *= (1.0 - COUNTER_STACKING_FACTOR) + Math.random()
+				* (COUNTER_STACKING_FACTOR / 2.0);
+		freq = Math.max(freq, MIN_REVISION_INTERVAL);
+		freq = Math.min(freq, MAX_REVISION_INTERVAL);
+
+		DateTime nextRevisionDate = lastRevision.getCreatedAt().plusDays(freq)
+				.withTimeAtStartOfDay();
+		DateTime todayMidnight = DateTime.now().withTimeAtStartOfDay();
+
+		return !nextRevisionDate.isAfter(todayMidnight);
+	}
+
+	public void setCreatedAt(DateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public void setInRevisions(boolean inRevisions) {
+		this.inRevisions = inRevisions;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public void setLangA(String langA) {
+		this.langA = langA;
+	}
+
+	public void setLangAText(String text) {
+		this.langAText = text;
+	}
+
+	public void setLangB(String langB) {
+		this.langB = langB;
+	}
+
+	public void setLangBText(String text) {
+		this.langBText = text;
+	}
+
+	public void setRevisions(List<RevisionEntry> revisions) {
+		this.revisions = revisions;
 	}
 
 	@Override
@@ -204,22 +223,6 @@ public class PhraseEntry {
 		}
 
 		return sb.toString();
-	}
-
-	public String getLangA() {
-		return langA;
-	}
-
-	public void setLangA(String langA) {
-		this.langA = langA;
-	}
-
-	public String getLangB() {
-		return langB;
-	}
-
-	public void setLangB(String langB) {
-		this.langB = langB;
 	}
 
 }

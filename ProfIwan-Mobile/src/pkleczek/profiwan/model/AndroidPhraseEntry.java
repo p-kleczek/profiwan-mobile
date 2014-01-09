@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+// Extra class to support parcelling.
 public class AndroidPhraseEntry extends PhraseEntry implements Parcelable {
 	
 	public AndroidPhraseEntry(PhraseEntry pe) {

@@ -155,7 +155,7 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 		values.put(KEY_REVISION_MISTAKES, revision.getMistakes());
 		values.put(KEY_REVISION_PHRASE_ID, phrase_id);
 		values.put(KEY_CREATED_AT,
-				DBUtils.getIntFromDateTime(revision.getDate()));
+				DBUtils.getIntFromDateTime(revision.getCreatedAt()));
 
 		long revision_id = db.insert(TABLE_REVISION, null, values);
 		revision.setId(revision_id);
@@ -197,7 +197,7 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 					re.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 					re.setMistakes(c.getInt(c
 							.getColumnIndex(KEY_REVISION_MISTAKES)));
-					re.setDate(DBUtils.getDateTimeFromInt(c.getInt(c
+					re.setCreatedAt(DBUtils.getDateTimeFromInt(c.getInt(c
 							.getColumnIndex(KEY_CREATED_AT))));
 
 					revisions.add(re);
