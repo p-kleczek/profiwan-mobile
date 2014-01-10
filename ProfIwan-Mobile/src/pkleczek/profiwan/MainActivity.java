@@ -1,6 +1,7 @@
 package pkleczek.profiwan;
 
 import pkleczek.profiwan.debug.Debug;
+import pkleczek.profiwan.model.RevisionsSession;
 import pkleczek.profiwan.revisions.RevisionsActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
@@ -9,25 +10,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends Activity {
 
 	DatabaseHelper dbHelper;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		System.setProperty("org.joda.time.DateTimeZone.Provider", "org.joda.time.tz.UTCProvider");
-		
+
+		System.setProperty("org.joda.time.DateTimeZone.Provider",
+				"org.joda.time.tz.UTCProvider");
+
 		setContentView(R.layout.activity_main);
-		
+
 		dbHelper = DatabaseHelperImpl.getInstance(this);
-		
+
 		// debug
-		((DatabaseHelperImpl) dbHelper).clearDB();
-		Debug.populateDB(dbHelper);
-		startRevisions(null);
+//		((DatabaseHelperImpl) dbHelper).clearDB();
+//		Debug.populateDB(dbHelper);
+
+		// startRevisions(null);
 	}
 
 	@Override
@@ -46,6 +50,14 @@ public class MainActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 	}
-	
-	
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		RevisionsSession revisionsSession = new RevisionsSession(dbHelper);
+		Button btn = (Button) findViewById(R.id.main_btn_revisions);
+		btn.setEnabled(revisionsSession.hasRevisions());
+	}
+
 }

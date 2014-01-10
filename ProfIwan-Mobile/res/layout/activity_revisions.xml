@@ -27,7 +27,6 @@
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/revisions_text" />
-
     </TableRow>
 
     <TableRow
@@ -48,7 +47,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10" />
+            android:ems="10" >
+            <requestFocus />
+        </EditText>
     </TableRow>
 
     <TableRow
@@ -57,13 +58,13 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/revisions_edit_btn_accept"
+            android:id="@+id/main_btn_dictionary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/revisionRow_margin"
             android:layout_weight="1"
-            android:text="Enter"
-            android:onClick="enterPhrase" />
+            android:onClick="enterPhrase"
+            android:text="Enter" />
     </TableRow>
 
     <TableRow
@@ -81,7 +82,6 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:visibility="gone" />
-
     </TableRow>
 
 </TableLayout>

@@ -25,7 +25,7 @@ public class Debug {
 		e.setLangA("pl");
 		e.setLangB("rus");
 		e.setLangAText("a");
-		e.setLangBText("b");
+		e.setLangBText("а");
 		e.setCreatedAt(DateTime.now());
 		e.setLabel("rand");
 		e.setInRevisions(true);

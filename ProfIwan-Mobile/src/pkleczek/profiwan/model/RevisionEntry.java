@@ -47,6 +47,14 @@ public class RevisionEntry {
 	public void setMistakes(int mistakes) {
 		this.mistakes = mistakes;
 	}
+	
+	public void nextMistake() {
+		mistakes--;
+	}
+	
+	public void enteredCorrectly() {
+		mistakes = Math.abs(mistakes);
+	}
 
 	@Override
 	public String toString() {

@@ -7,7 +7,7 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/revisions_edit_btn_accept"
+        android:id="@+id/main_btn_dictionary"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -15,12 +15,12 @@
         android:text="Dictionary" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/main_btn_revisions"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/mainMenu_margin"
-        android:text="Revisions"
-        android:onClick="startRevisions" />
+        android:onClick="startRevisions"
+        android:text="Revisions" />
 
 </LinearLayout>

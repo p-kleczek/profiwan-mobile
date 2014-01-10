@@ -33,6 +33,7 @@ public class RevisionsActivity extends Activity {
 	public static final int EDIT_ACTIVITY = 1;
 
 	private RevisionsSession revisionsSession;
+	private Keyboard mKeyboard;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +43,10 @@ public class RevisionsActivity extends Activity {
 		// Show the Up button in the action bar.
 		// getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		mCustomKeyboard = new RussianKeyboard(this, R.id.revisions_kbd,
-				R.xml.kbd_rus);
-
-		mCustomKeyboard.registerEditText(R.id.revisions_edit_revisedLanguage);
-
-		Keyboard mKeyboard = new Keyboard(this, R.xml.kbd_rus);
-		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.revisions_kbd);
-		mKeyboardView.setKeyboard(mKeyboard);
-		mKeyboardView.setPreviewEnabled(false);
-
+		mKeyboard = new Keyboard(this, R.xml.kbd_rus);
+		
 		revisionsSession = new RevisionsSession(
 				DatabaseHelperImpl.getInstance(this));
-		revisionsSession.prepareRevisions();
 		setupViewsForNextPhrase();
 	}
 
@@ -91,9 +83,18 @@ public class RevisionsActivity extends Activity {
 		TextView tvKnownLanguage = (TextView) findViewById(R.id.revisions_text_knownLanguage);
 		tvKnownLanguage.setText(phrase.getLangAText());
 
+		mCustomKeyboard = new RussianKeyboard(this, R.id.revisions_kbd,
+				R.xml.kbd_rus);
+
+		mCustomKeyboard.registerEditText(R.id.revisions_edit_revisedLanguage);
+		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.revisions_kbd);
+		mKeyboardView.setKeyboard(mKeyboard);
+		mKeyboardView.setPreviewEnabled(false);
+
 		EditText etRevisedLanguage = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
 		etRevisedLanguage.setText("");
 		etRevisedLanguage.requestFocus();
+		etRevisedLanguage.performClick();
 	}
 
 	public void enterPhrase(View view) {
@@ -108,12 +109,18 @@ public class RevisionsActivity extends Activity {
 		tvKnownLanguage.setText(phrase.getLangAText());
 
 		TextView enteredText = (TextView) findViewById(R.id.revisions_entered_text_entered);
-		enteredText.setText(enteredPhrase);
-		enteredText.setPaintFlags(enteredText.getPaintFlags()
-				| Paint.STRIKE_THRU_TEXT_FLAG);
-
 		boolean enteredCorrectly = revisionsSession
 				.processTypedWord(enteredPhrase);
+
+		enteredText.setText(enteredPhrase);
+
+		if (!enteredCorrectly) {
+			enteredText.setPaintFlags(enteredText.getPaintFlags()
+					| Paint.STRIKE_THRU_TEXT_FLAG);
+		} else {
+			enteredText.setPaintFlags(enteredText.getPaintFlags()
+					^ Paint.STRIKE_THRU_TEXT_FLAG);
+		}
 
 		Button btnAccept = (Button) findViewById(R.id.revisions_entered_btn_accept);
 
@@ -125,11 +132,16 @@ public class RevisionsActivity extends Activity {
 			tvCorrect.setText(phrase.getLangBText());
 			btnAccept.setEnabled(true);
 		}
+		
+		if (!revisionsSession.hasRevisions()) {
+			showStats();
+		}
 	}
 
 	public void editPhrase(View view) {
 		Intent intent = new Intent(this, RevisionsEditActivity.class);
-		AndroidPhraseEntry pe = new AndroidPhraseEntry(revisionsSession.getCurrentPhrase());
+		AndroidPhraseEntry pe = new AndroidPhraseEntry(
+				revisionsSession.getCurrentPhrase());
 		intent.putExtra(EDITED_PHRASE, pe);
 		startActivityForResult(intent, EDIT_ACTIVITY);
 	}
@@ -144,10 +156,10 @@ public class RevisionsActivity extends Activity {
 	}
 
 	private void tryNextPhrase() {
-		revisionsSession.nextWord();
 		if (!revisionsSession.hasRevisions()) {
 			showStats();
 		} else {
+			revisionsSession.nextRevision();
 			setContentView(R.layout.activity_revisions);
 			setupViewsForNextPhrase();
 		}
