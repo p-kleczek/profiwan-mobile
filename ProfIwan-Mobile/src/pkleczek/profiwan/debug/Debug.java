@@ -44,15 +44,15 @@ public class Debug {
 		dbHelper.createRevision(re, e.getId());
 		
 
-//		e = new PhraseEntry();
-//		e.setLangA("pl");
-//		e.setLangB("rus");
-//		e.setLangAText("ala");
-//		e.setLangBText("ma");
-//		e.setCreationDate(DateTime.now());
-//		e.setLabel("rand");
-//		e.setInRevisions(true);
-//		dbHelper.createPhrase(e);
+		e = new PhraseEntry();
+		e.setLangA("pl");
+		e.setLangB("rus");
+		e.setLangAText("ala");
+		e.setLangBText("ma");
+		e.setCreatedAt(DateTime.now());
+		e.setLabel("rand");
+		e.setInRevisions(true);
+		dbHelper.createPhrase(e);
 //
 //		e = new PhraseEntry();
 //		e.setLangA("pl");

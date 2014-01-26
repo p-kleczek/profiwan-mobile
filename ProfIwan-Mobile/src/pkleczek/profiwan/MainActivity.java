@@ -27,10 +27,6 @@ public class MainActivity extends Activity {
 
 		dbHelper = DatabaseHelperImpl.getInstance(this);
 
-		// debug
-//		((DatabaseHelperImpl) dbHelper).clearDB();
-//		Debug.populateDB(dbHelper);
-
 		// startRevisions(null);
 	}
 
