@@ -3,6 +3,7 @@ package pkleczek.profiwan;
 import pkleczek.profiwan.debug.Debug;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
+import pkleczek.profiwan.utils.DatabaseHelperImplMock;
 import android.app.Application;
 
 public class ProfIwanApplication extends Application {

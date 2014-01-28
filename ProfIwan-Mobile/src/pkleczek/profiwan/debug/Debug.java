@@ -9,6 +9,7 @@ import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
+import pkleczek.profiwan.utils.DatabaseHelperImplMock;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -101,7 +102,10 @@ public class Debug {
 	}
 
 	public ArrayList<String[]> getDbTableDetails(DatabaseHelper dbHelper) {
-		Cursor c = ((DatabaseHelperImpl) dbHelper).getReadableDatabase().rawQuery(
+		
+		DatabaseHelperImpl dbHelperImpl = (DatabaseHelperImpl) dbHelper;
+		
+		Cursor c = dbHelperImpl.getReadableDatabase().rawQuery(
 				"SELECT name FROM sqlite_master WHERE type='table'", null);
 		ArrayList<String[]> result = new ArrayList<String[]>();
 		int i = 0;

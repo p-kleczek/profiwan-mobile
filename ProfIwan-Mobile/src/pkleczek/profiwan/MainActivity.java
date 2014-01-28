@@ -5,6 +5,7 @@ import pkleczek.profiwan.model.RevisionsSession;
 import pkleczek.profiwan.revisions.RevisionsActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
+import pkleczek.profiwan.utils.DatabaseHelperImplMock;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
