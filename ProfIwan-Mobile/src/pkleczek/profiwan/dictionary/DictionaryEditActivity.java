@@ -1,8 +1,5 @@
 package pkleczek.profiwan.dictionary;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import pkleczek.profiwan.R;
 import android.app.Activity;
 import android.content.Context;
@@ -10,10 +7,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class DictionaryEditActivity extends Activity {
 
@@ -58,21 +56,14 @@ public class DictionaryEditActivity extends Activity {
 		public View getCustomView(int position, View convertView,
 				ViewGroup parent) {
 			LayoutInflater inflater = getLayoutInflater();
-			View mySpinner = inflater.inflate(R.layout.flag_spinner_row,
-					parent, false);
-			// TextView main_text = (TextView) mySpinner
-			// .findViewById(R.id.text_main_seen);
-			// main_text.setText(spinnerValues[position]);
-			//
-			// TextView subSpinner = (TextView) mySpinner
-			// .findViewById(R.id.sub_text_seen);
-			// subSpinner.setText(spinnerSubs[position]);
+			View rowView = inflater.inflate(R.layout.flag_spinner_row, parent,
+					false);
 
-			ImageView left_icon = (ImageView) mySpinner
+			ImageView icon = (ImageView) rowView
 					.findViewById(R.id.flag_spinner_row_icon);
-			left_icon.setImageResource(imageIconDatabase[position]);
+			icon.setImageResource(imageIconDatabase[position]);
 
-			return mySpinner;
+			return rowView;
 		}
 	}
 }

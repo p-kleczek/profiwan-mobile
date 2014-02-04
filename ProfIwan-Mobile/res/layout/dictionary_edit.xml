@@ -15,11 +15,25 @@
         android:id="@+id/dictionary_edit_knownLanguage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="48dp"
+        android:layout_toRightOf="@id/dictionary_spin_knownLanguage"
+        android:layout_alignBottom="@id/dictionary_spin_knownLanguage"
         android:ems="10" />
 
+    <Spinner
+        android:id="@+id/dictionary_spin_revisedLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/dictionary_spin_knownLanguage" />
+
+    <EditText
+        android:id="@+id/dictionary_edit_revisedLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/dictionary_spin_revisedLanguage"
+        android:layout_alignBottom="@id/dictionary_spin_revisedLanguage"
+        android:ems="10" />    
+        
     <android.inputmethodservice.KeyboardView
         android:id="@+id/revisions_kbd"
         android:layout_width="match_parent"
@@ -34,24 +48,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_below="@id/dictionary_spin_revisedLanguage"
         android:layout_margin="@dimen/revisionRow_margin"
         android:onClick="acceptChanges"
         android:text="Accept" />
-
-    <Spinner
-        android:id="@+id/dictionary_spin_revisedLanguage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/dictionary_spin_knownLanguage" />
-
-    <EditText
-        android:id="@+id/dictionary_edit_revisedLanguage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/dictionary_btn_accept"
-        android:layout_marginTop="14dp"
-        android:ems="10" />
 
 </RelativeLayout>
