@@ -9,11 +9,11 @@
         android:targetSdkVersion="17" />
 
     <application
+        android:name="ProfIwanApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name="ProfIwanApplication">
+        android:theme="@style/AppTheme" >
         <activity
             android:name="pkleczek.profiwan.MainActivity"
             android:label="@string/app_name" >
@@ -29,7 +29,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pkleczek.profiwan.MainActivity" />
-        </activity>        
+        </activity>
+        <activity
+            android:name="pkleczek.profiwan.dictionary.DictionaryEditActivity"
+            android:label="@string/title_activity_dictionary_edit" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pkleczek.profiwan.dictionary.DictionaryActivity" />
+        </activity>
         <activity
             android:name="pkleczek.profiwan.revisions.RevisionsActivity"
             android:label="@string/title_activity_revisions" >

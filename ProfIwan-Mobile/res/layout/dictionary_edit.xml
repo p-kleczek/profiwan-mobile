@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/revisions_background"
+    tools:context=".RevisionsEditActivity" >
+
+    <Spinner
+        android:id="@+id/dictionary_spin_knownLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/dictionary_edit_knownLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="48dp"
+        android:ems="10" />
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/revisions_kbd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/dictionary_btn_accept"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/revisionRow_margin"
+        android:onClick="acceptChanges"
+        android:text="Accept" />
+
+    <Spinner
+        android:id="@+id/dictionary_spin_revisedLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/dictionary_spin_knownLanguage" />
+
+    <EditText
+        android:id="@+id/dictionary_edit_revisedLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/dictionary_btn_accept"
+        android:layout_marginTop="14dp"
+        android:ems="10" />
+
+</RelativeLayout>

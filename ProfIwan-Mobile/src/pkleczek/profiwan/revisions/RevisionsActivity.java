@@ -80,7 +80,7 @@ public class RevisionsActivity extends Activity {
 
 		// TODO: set flags
 
-		TextView tvKnownLanguage = (TextView) findViewById(R.id.revisions_text_knownLanguage);
+		TextView tvKnownLanguage = (TextView) findViewById(R.id.dictionary_spin_knownLanguage);
 		tvKnownLanguage.setText(phrase.getLangAText());
 
 		mCustomKeyboard = new RussianKeyboard(this, R.id.revisions_kbd,
@@ -105,7 +105,7 @@ public class RevisionsActivity extends Activity {
 
 		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
 
-		TextView tvKnownLanguage = (TextView) findViewById(R.id.revisions_text_knownLanguage);
+		TextView tvKnownLanguage = (TextView) findViewById(R.id.dictionary_spin_knownLanguage);
 		tvKnownLanguage.setText(phrase.getLangAText());
 
 		TextView enteredText = (TextView) findViewById(R.id.revisions_entered_text_entered);

@@ -9,14 +9,18 @@ import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 public class DictionaryActivity extends ListActivity {
@@ -24,6 +28,8 @@ public class DictionaryActivity extends ListActivity {
 	DatabaseHelper dbHelper;
 
 	AutoCompleteTextView autocompletetextview;
+	EditText edittext;
+	ListActivity listactivity;
 
 	private RussianKeyboard mCustomKeyboard;
 
@@ -33,9 +39,11 @@ public class DictionaryActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dictionary);
+		
+		listactivity = this;
 
 		mKeyboard = new Keyboard(this, R.xml.kbd_rus);
-		
+
 		mCustomKeyboard = new RussianKeyboard(this, R.id.dictionary_kbd,
 				R.xml.kbd_rus);
 
@@ -57,17 +65,45 @@ public class DictionaryActivity extends ListActivity {
 			lookupList.add(pe.getLangAText());
 		}
 
-		autocompletetextview = (AutoCompleteTextView) findViewById(R.id.dictionary_autoPhrase);
-		ArrayAdapter<String> autoAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.select_dialog_item, lookupList);
-		autocompletetextview.setThreshold(1);
-		autocompletetextview.setAdapter(autoAdapter);
-		autocompletetextview.setInputType(autocompletetextview.getInputType()
-				| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+		// autocompletetextview = (AutoCompleteTextView)
+		// findViewById(R.id.dictionary_autoPhrase);
+		// ArrayAdapter<String> autoAdapter = new ArrayAdapter<String>(this,
+		// android.R.layout.select_dialog_item, lookupList);
+		// autocompletetextview.setThreshold(1);
+		// autocompletetextview.setAdapter(autoAdapter);
+		// autocompletetextview.setInputType(autocompletetextview.getInputType()
+		// | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
 		// debug
-		// etRevisedLanguage.requestFocus();
-		autocompletetextview.performClick();
+		edittext = (EditText) findViewById(R.id.dictionary_autoPhrase);
+		edittext.requestFocus();
+		
+		edittext.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				Log.i("profiwan", "text changed: " + s);
+				listactivity.setSelection(1);
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		// autocompletetextview.performClick();
+		mKeyboardView.setVisibility(View.INVISIBLE);
+		
 	}
 
 	@Override
@@ -76,7 +112,8 @@ public class DictionaryActivity extends ListActivity {
 
 		final PhraseEntry item = (PhraseEntry) l.getItemAtPosition(position);
 
-		Log.i("profiwan", item.toString());
+		Intent intent = new Intent(this, DictionaryEditActivity.class);
+		startActivity(intent);
 	}
 
 }

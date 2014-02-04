@@ -26,7 +26,7 @@
                 android:src="@drawable/flag_pl" />
 
             <TextView
-                android:id="@+id/revisions_text_knownLanguage"
+                android:id="@+id/dictionary_spin_knownLanguage"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

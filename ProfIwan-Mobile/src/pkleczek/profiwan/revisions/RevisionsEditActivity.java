@@ -46,7 +46,7 @@ public class RevisionsEditActivity extends Activity {
 			Log.e("REA", e.toString());
 		}
 		
-		TextView enteredText = (TextView) findViewById(R.id.revisions_text_knownLanguage);
+		TextView enteredText = (TextView) findViewById(R.id.dictionary_spin_knownLanguage);
 		enteredText.setText(editedPhrase.getLangAText());
 
 		EditText etRevisedText = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);

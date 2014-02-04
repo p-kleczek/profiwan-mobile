@@ -90,6 +90,7 @@ public abstract class CustomKeyboard {
 				// standard
 				// keyboard
 
+				// XXX: test
 				if (v instanceof AutoCompleteTextView) {
 					edittext.setInputType(InputType.TYPE_NULL); // Disable
 					// standard keyboard

@@ -10,7 +10,7 @@
         android:layout_below="@+id/dictionary_autoPhrase" >
     </ListView>
 
-    <AutoCompleteTextView
+    <EditText
         android:id="@+id/dictionary_autoPhrase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,9 +19,9 @@
         android:layout_toLeftOf="@+id/dictionary_btnAddPhrase"
         android:dropDownHeight="100dp"
         android:ems="10"
+        android:inputType="text|textNoSuggestions"
         android:text="" >
-
-    </AutoCompleteTextView>
+    </EditText>
 
     <Button
         android:id="@+id/dictionary_btnAddPhrase"
