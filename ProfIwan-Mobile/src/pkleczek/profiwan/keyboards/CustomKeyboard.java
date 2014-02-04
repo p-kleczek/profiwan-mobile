@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 public abstract class CustomKeyboard {
@@ -29,10 +30,11 @@ public abstract class CustomKeyboard {
 	public void showCustomKeyboard(View v) {
 		mKeyboardView.setVisibility(View.VISIBLE);
 		mKeyboardView.setEnabled(true);
-		if (v != null)
+		if (v != null) {
 			((InputMethodManager) mHostActivity
 					.getSystemService(Activity.INPUT_METHOD_SERVICE))
 					.hideSoftInputFromWindow(v.getWindowToken(), 0);
+		}
 	}
 
 	/** Make the CustomKeyboard invisible. */
@@ -59,10 +61,11 @@ public abstract class CustomKeyboard {
 			// edit box loses focus
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
-				if (hasFocus)
+				if (hasFocus) {
 					showCustomKeyboard(v);
-				else
+				} else {
 					hideCustomKeyboard();
+				}
 			}
 		});
 		edittext.setOnClickListener(new OnClickListener() {
@@ -83,8 +86,15 @@ public abstract class CustomKeyboard {
 			public boolean onTouch(View v, MotionEvent event) {
 				EditText edittext = (EditText) v;
 				int inType = edittext.getInputType(); // Backup the input type
-//				edittext.setInputType(InputType.TYPE_NULL); // Disable standard
-															// keyboard
+				// edittext.setInputType(InputType.TYPE_NULL); // Disable
+				// standard
+				// keyboard
+
+				if (v instanceof AutoCompleteTextView) {
+					edittext.setInputType(InputType.TYPE_NULL); // Disable
+					// standard keyboard
+				}
+
 				edittext.onTouchEvent(event); // Call native handler
 				edittext.setInputType(inType); // Restore input type
 				return true; // Consume touch event

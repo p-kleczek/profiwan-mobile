@@ -25,7 +25,7 @@ public class Debug {
 		e = new PhraseEntry();
 		e.setLangA("pl");
 		e.setLangB("rus");
-		e.setLangAText("a");
+		e.setLangAText("а");
 		e.setLangBText("а");
 		e.setCreatedAt(DateTime.now());
 		e.setLabel("rand");
@@ -48,7 +48,7 @@ public class Debug {
 		e = new PhraseEntry();
 		e.setLangA("pl");
 		e.setLangB("rus");
-		e.setLangAText("ala");
+		e.setLangAText("ала");
 		e.setLangBText("ma");
 		e.setCreatedAt(DateTime.now());
 		e.setLabel("rand");

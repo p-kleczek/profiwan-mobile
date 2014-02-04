@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dictionary_autoPhrase" >
-
     </ListView>
 
     <AutoCompleteTextView
@@ -18,10 +17,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/dictionary_btnAddPhrase"
+        android:dropDownHeight="100dp"
         android:ems="10"
-        android:text="AutoCompleteTextView" >
+        android:text="" >
 
-        <requestFocus />
     </AutoCompleteTextView>
 
     <Button
@@ -31,5 +30,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="Add" />
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/dictionary_kbd"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

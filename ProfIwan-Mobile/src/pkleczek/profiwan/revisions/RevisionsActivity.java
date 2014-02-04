@@ -8,7 +8,6 @@ import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionsSession;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
-import pkleczek.profiwan.utils.DatabaseHelperImplMock;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

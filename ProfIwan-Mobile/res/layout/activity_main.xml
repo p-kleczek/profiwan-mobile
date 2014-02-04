@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/mainMenu_margin"
+        android:onClick="startDictionary"
         android:text="Dictionary" />
 
     <Button

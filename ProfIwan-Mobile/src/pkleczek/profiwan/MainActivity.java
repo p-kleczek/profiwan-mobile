@@ -48,6 +48,11 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 
+	public void startDictionary(View view) {
+		Intent intent = new Intent(this, DictionaryActivity.class);
+		startActivity(intent);
+	}
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
