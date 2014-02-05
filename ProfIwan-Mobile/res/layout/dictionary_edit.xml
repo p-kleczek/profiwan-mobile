@@ -31,15 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/dictionary_spin_revisedLanguage"
         android:layout_alignBottom="@id/dictionary_spin_revisedLanguage"
-        android:ems="10" />    
-        
-    <android.inputmethodservice.KeyboardView
-        android:id="@+id/revisions_kbd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:visibility="gone" />
+        android:ems="10" />
 
     <Button
         android:id="@+id/dictionary_btn_accept"
@@ -49,7 +41,17 @@
         android:layout_centerVertical="true"
         android:layout_below="@id/dictionary_spin_revisedLanguage"
         android:layout_margin="@dimen/revisionRow_margin"
-        android:onClick="acceptChanges"
+        android:onClick=""
         android:text="Accept" />
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/dictionary_edit_kbd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

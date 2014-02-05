@@ -3,16 +3,19 @@ package pkleczek.profiwan.keyboards;
 import android.app.Activity;
 import android.inputmethodservice.KeyboardView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 public abstract class CustomKeyboard {
+
+	private static final String TAG = "CustomKeyboard";
 
 	/** A link to the KeyboardView that is used to render this CustomKeyboard. */
 	protected KeyboardView mKeyboardView;
@@ -30,10 +33,22 @@ public abstract class CustomKeyboard {
 	public void showCustomKeyboard(View v) {
 		mKeyboardView.setVisibility(View.VISIBLE);
 		mKeyboardView.setEnabled(true);
+
+		InputMethodManager inputManager = (InputMethodManager) mHostActivity
+				.getSystemService(Activity.INPUT_METHOD_SERVICE);
+		if (inputManager != null) {
+			if (mHostActivity == null)
+				return;
+			if (mHostActivity.getCurrentFocus() == null)
+				return;
+			if (mHostActivity.getCurrentFocus().getWindowToken() == null)
+				return;
+			inputManager.hideSoftInputFromWindow(mHostActivity
+					.getCurrentFocus().getWindowToken(), 0);
+		}
+
 		if (v != null) {
-			((InputMethodManager) mHostActivity
-					.getSystemService(Activity.INPUT_METHOD_SERVICE))
-					.hideSoftInputFromWindow(v.getWindowToken(), 0);
+			inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 		}
 	}
 
@@ -52,15 +67,15 @@ public abstract class CustomKeyboard {
 	 *            keyboard.
 	 */
 	public void registerEditText(int resid) {
-		// Find the EditText 'resid'
-		EditText edittext = (EditText) mHostActivity.findViewById(resid);
-		// Make the custom keyboard appear
+		final EditText edittext = (EditText) mHostActivity.findViewById(resid);
+
+		edittext.setOnKeyListener(null);
+		
 		edittext.setOnFocusChangeListener(new OnFocusChangeListener() {
-			// NOTE By setting the on focus listener, we can show the custom
-			// keyboard when the edit box gets focus, but also hide it when the
-			// edit box loses focus
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
+				Log.i(TAG, "onFocusChange() -> " + hasFocus);
+				
 				if (hasFocus) {
 					showCustomKeyboard(v);
 				} else {
@@ -68,41 +83,75 @@ public abstract class CustomKeyboard {
 				}
 			}
 		});
+
 		edittext.setOnClickListener(new OnClickListener() {
-			// NOTE By setting the on click listener, we can show the custom
-			// keyboard again, by tapping on an edit box that already had focus
-			// (but that had the keyboard hidden).
 			@Override
 			public void onClick(View v) {
+				Log.i(TAG, "onClick()");
+
+				InputMethodManager inputManager = (InputMethodManager) mHostActivity
+						.getSystemService(Activity.INPUT_METHOD_SERVICE);
+				if (inputManager != null) {
+					if (mHostActivity == null)
+						return;
+					if (mHostActivity.getCurrentFocus() == null)
+						return;
+					if (mHostActivity.getCurrentFocus().getWindowToken() == null)
+						return;
+					inputManager.hideSoftInputFromWindow(mHostActivity
+							.getCurrentFocus().getWindowToken(), 0);
+					
+					Log.i(TAG, "onClick() [hide]");
+				} else {
+					Log.i(TAG, "onClick() [null]");
+				}
+
 				showCustomKeyboard(v);
 			}
 		});
-		// Disable standard keyboard hard way
-		// NOTE There is also an easy way:
-		// 'edittext.setInputType(InputType.TYPE_NULL)' (but you will not have a
-		// cursor, and no 'edittext.setCursorVisible(true)' doesn't work )
+
 		edittext.setOnTouchListener(new OnTouchListener() {
+
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				EditText edittext = (EditText) v;
-				int inType = edittext.getInputType(); // Backup the input type
-				// edittext.setInputType(InputType.TYPE_NULL); // Disable
-				// standard
-				// keyboard
-
-				// XXX: test
-				if (v instanceof AutoCompleteTextView) {
-					edittext.setInputType(InputType.TYPE_NULL); // Disable
-					// standard keyboard
+			public boolean onTouch(View view, MotionEvent event) {
+//				mHostActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+				
+				InputMethodManager inputManager = (InputMethodManager) mHostActivity
+						.getSystemService(Activity.INPUT_METHOD_SERVICE);
+				if (inputManager != null) {
+					if (mHostActivity == null)
+						return false;
+					if (mHostActivity.getCurrentFocus() == null)
+						return false;
+					if (mHostActivity.getCurrentFocus().getWindowToken() == null)
+						return false;
+					inputManager.hideSoftInputFromWindow(mHostActivity
+							.getCurrentFocus().getWindowToken(), 0);
+					
+					Log.i(TAG, "onTouch() [hide]");
+				} else {
+					Log.i(TAG, "onTouch() [null]");
 				}
-
-				edittext.onTouchEvent(event); // Call native handler
-				edittext.setInputType(inType); // Restore input type
-				return true; // Consume touch event
+				
+				setEditTextFocus(edittext, true);
+				
+				return false;
 			}
 		});
-		// Disable spell check (hex strings look like words to Android)
+
 		edittext.setInputType(edittext.getInputType()
 				| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+	}
+	
+	public void setEditTextFocus(EditText editText, boolean isFocused)
+	{
+		editText.setCursorVisible(isFocused);
+		editText.setFocusable(isFocused);
+		editText.setFocusableInTouchMode(isFocused);
+
+	    if (isFocused)
+	    {
+	    	editText.requestFocus();
+	    }
 	}
 }

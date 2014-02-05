@@ -1,11 +1,15 @@
-package pkleczek.profiwan.dictionary;
+package pkleczek.profiwan.utils;
 
-class Flag {
+import pkleczek.profiwan.R;
+
+public enum Language {
+	PL(R.drawable.flag_pl, "pl"), RUS(R.drawable.flag_rus, "rus");
+
 	private final int flagIconId;
 	private final String languageISOCode;
-
-	public Flag(int flagIconId, String languageISOCode) {
-		super();
+	// TODO: information about keyboard used
+	
+	Language(int flagIconId, String languageISOCode) {
 		this.flagIconId = flagIconId;
 		this.languageISOCode = languageISOCode;
 	}
@@ -17,5 +21,4 @@ class Flag {
 	public String getLanguageISOCode() {
 		return languageISOCode;
 	}
-
 }
