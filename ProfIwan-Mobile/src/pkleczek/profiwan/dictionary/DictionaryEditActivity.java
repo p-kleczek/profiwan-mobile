@@ -3,15 +3,20 @@ package pkleczek.profiwan.dictionary;
 import pkleczek.profiwan.R;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
+import android.widget.TextView.BufferType;
 
 public class DictionaryEditActivity extends Activity {
 
@@ -26,7 +31,7 @@ public class DictionaryEditActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.dictionary_edit);
-
+		
 		configureSpinner(R.id.dictionary_spin_knownLanguage);
 		configureSpinner(R.id.dictionary_spin_revisedLanguage);
 	}
@@ -59,9 +64,15 @@ public class DictionaryEditActivity extends Activity {
 			View rowView = inflater.inflate(R.layout.flag_spinner_row, parent,
 					false);
 
-			ImageView icon = (ImageView) rowView
-					.findViewById(R.id.flag_spinner_row_icon);
-			icon.setImageResource(imageIconDatabase[position]);
+//			ImageView icon = (ImageView) rowView
+//					.findViewById(R.id.flag_spinner_row_icon);
+//			icon.setImageResource(imageIconDatabase[position]);
+			
+			TextView text = (TextView) rowView.findViewById(R.id.flag_spinner_row_text);
+			SpannableStringBuilder ssb = new SpannableStringBuilder(" ");
+			Bitmap smiley = BitmapFactory.decodeResource( getResources(), imageIconDatabase[position] );
+			ssb.setSpan( new ImageSpan( smiley ), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE );	
+			text.setText( ssb, BufferType.SPANNABLE );
 
 			return rowView;
 		}

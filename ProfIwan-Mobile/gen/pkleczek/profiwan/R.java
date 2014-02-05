@@ -39,8 +39,8 @@ public final class R {
         public static final int dictionary_spin_revisedLanguage=0x7f0a001d;
         public static final int dictionary_textViewLangAText=0x7f0a0020;
         public static final int dictionary_textViewLangBText=0x7f0a0021;
-        public static final int flag_spinner_row_icon=0x7f0a0022;
-        public static final int flag_spinner_row_text=0x7f0a0023;
+        public static final int flag_spinner_row_fill=0x7f0a0023;
+        public static final int flag_spinner_row_text=0x7f0a0022;
         public static final int main_btn_dictionary=0x7f0a0001;
         public static final int main_btn_revisions=0x7f0a0002;
         public static final int menu_settings=0x7f0a0024;

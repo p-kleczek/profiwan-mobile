@@ -2,6 +2,7 @@ package pkleczek.profiwan;
 
 import pkleczek.profiwan.debug.Debug;
 import pkleczek.profiwan.dictionary.DictionaryActivity;
+import pkleczek.profiwan.dictionary.DictionaryEditActivity;
 import pkleczek.profiwan.model.RevisionsSession;
 import pkleczek.profiwan.revisions.RevisionsActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
@@ -32,7 +33,7 @@ public class MainActivity extends Activity {
 		// startRevisions(null);
 
 		// debug
-		Intent intent = new Intent(this, DictionaryActivity.class);
+		Intent intent = new Intent(this, DictionaryEditActivity.class);
 		startActivity(intent);
 	}
 

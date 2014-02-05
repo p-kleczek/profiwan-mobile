@@ -30,10 +30,6 @@ public class FlagSpinnerAdapter extends ArrayAdapter<Flag> {
 		View rowView = mInflater.inflate(R.layout.flag_spinner_row, parent,
 				false);
 
-		ImageView icon = (ImageView) rowView
-				.findViewById(R.id.flag_spinner_row_icon);
-
-		icon.setImageResource(objects.get(position).getFlagIconId());
 		return rowView;
 	}
 }
