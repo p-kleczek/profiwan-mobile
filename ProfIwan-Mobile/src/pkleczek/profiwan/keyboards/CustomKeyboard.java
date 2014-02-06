@@ -6,10 +6,10 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -69,13 +69,13 @@ public abstract class CustomKeyboard {
 	public void registerEditText(int resid) {
 		final EditText edittext = (EditText) mHostActivity.findViewById(resid);
 
-		edittext.setOnKeyListener(null);
-		
+		// edittext.setOnKeyListener(null);
+
 		edittext.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				Log.i(TAG, "onFocusChange() -> " + hasFocus);
-				
+
 				if (hasFocus) {
 					showCustomKeyboard(v);
 				} else {
@@ -100,7 +100,7 @@ public abstract class CustomKeyboard {
 						return;
 					inputManager.hideSoftInputFromWindow(mHostActivity
 							.getCurrentFocus().getWindowToken(), 0);
-					
+
 					Log.i(TAG, "onClick() [hide]");
 				} else {
 					Log.i(TAG, "onClick() [null]");
@@ -114,8 +114,8 @@ public abstract class CustomKeyboard {
 
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
-//				mHostActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-				
+				// mHostActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
 				InputMethodManager inputManager = (InputMethodManager) mHostActivity
 						.getSystemService(Activity.INPUT_METHOD_SERVICE);
 				if (inputManager != null) {
@@ -127,14 +127,14 @@ public abstract class CustomKeyboard {
 						return false;
 					inputManager.hideSoftInputFromWindow(mHostActivity
 							.getCurrentFocus().getWindowToken(), 0);
-					
+
 					Log.i(TAG, "onTouch() [hide]");
 				} else {
 					Log.i(TAG, "onTouch() [null]");
 				}
-				
+
 				setEditTextFocus(edittext, true);
-				
+
 				return false;
 			}
 		});
@@ -142,16 +142,44 @@ public abstract class CustomKeyboard {
 		edittext.setInputType(edittext.getInputType()
 				| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 	}
-	
-	public void setEditTextFocus(EditText editText, boolean isFocused)
-	{
+
+	public void setEditTextFocus(EditText editText, boolean isFocused) {
 		editText.setCursorVisible(isFocused);
 		editText.setFocusable(isFocused);
 		editText.setFocusableInTouchMode(isFocused);
 
-	    if (isFocused)
-	    {
-	    	editText.requestFocus();
-	    }
+		if (isFocused) {
+			editText.requestFocus();
+		}
+	}
+
+	public void unregisterEditText(int resid) {
+		final EditText edittext = (EditText) mHostActivity.findViewById(resid);
+
+		edittext.setOnFocusChangeListener(null);
+		edittext.setOnClickListener(null);
+		edittext.setOnTouchListener(null);
+		edittext.setInputType(edittext.getInputType()
+				| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+		
+//		InputMethodManager inputManager = (InputMethodManager) mHostActivity
+//				.getSystemService(Activity.INPUT_METHOD_SERVICE);
+//		if (inputManager != null) {
+//			if (mHostActivity == null)
+//				return;
+//			if (mHostActivity.getCurrentFocus() == null)
+//				return;
+//			if (mHostActivity.getCurrentFocus().getWindowToken() == null)
+//				return;
+//			inputManager.hideSoftInputFromWindow(mHostActivity
+//					.getCurrentFocus().getWindowToken(), 0);
+//		}
+//
+//		if (v != null) {
+//			inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//		}
+//		
+//		mHostActivity.getWindow().setSoftInputMode(
+//				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 	}
 }

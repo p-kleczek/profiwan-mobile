@@ -8,10 +8,8 @@ import android.app.Activity;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Spinner;
 
@@ -24,25 +22,16 @@ public class DictionaryEditActivity extends Activity {
 	// private String[] imageNameDatabase = { "pl", "rus" };
 
 	private Language knowLang = Language.PL;
-	private Language revisedLang = Language.RUS;
+	private Language revisedLang = Language.RU;
 
-	private Keyboard mKeyboard;
-	private CustomKeyboard mCustomKeyboard;
+	private Keyboard mRevisedKeyboard;
+	private CustomKeyboard mRevisedCustomKeyboard;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.dictionary_edit);
-
-		mKeyboard = new Keyboard(this, R.xml.kbd_rus);
-		mCustomKeyboard = new RussianKeyboard(this, R.id.dictionary_edit_kbd,
-				R.xml.kbd_rus);
-
-		mCustomKeyboard.registerEditText(R.id.dictionary_edit_revisedLanguage);
-		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.dictionary_edit_kbd);
-		mKeyboardView.setKeyboard(mKeyboard);
-		mKeyboardView.setPreviewEnabled(false);
 
 		Spinner spnKnownLang = (Spinner) findViewById(R.id.dictionary_spin_knownLanguage);
 		spnKnownLang.setAdapter(new FlagSpinnerAdapter(this));
@@ -52,12 +41,14 @@ public class DictionaryEditActivity extends Activity {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int pos, long id) {
 				knowLang = (Language) parent.getItemAtPosition(pos);
+				changeKeyboard(R.id.dictionary_edit_knownLanguage, knowLang);
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
 			}
 		});
+		spnKnownLang.setSelection(knowLang.ordinal());
 
 		Spinner spnRevisedLang = (Spinner) findViewById(R.id.dictionary_spin_revisedLanguage);
 		spnRevisedLang.setAdapter(new FlagSpinnerAdapter(this));
@@ -67,36 +58,42 @@ public class DictionaryEditActivity extends Activity {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int pos, long id) {
 				revisedLang = (Language) parent.getItemAtPosition(pos);
+				changeKeyboard(R.id.dictionary_edit_revisedLanguage,
+						revisedLang);
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
 			}
 		});
-
-		EditText etRevisedLanguage = (EditText) findViewById(R.id.dictionary_edit_revisedLanguage);
-		// etRevisedLanguage.requestFocus();
-
+		spnRevisedLang.setSelection(revisedLang.ordinal());
 	}
 
 	@Override
 	public void onBackPressed() {
-		if (mCustomKeyboard.isCustomKeyboardVisible()) {
-			mCustomKeyboard.hideCustomKeyboard();
+		if (mRevisedCustomKeyboard.isCustomKeyboardVisible()) {
+			mRevisedCustomKeyboard.hideCustomKeyboard();
 		} else {
 			super.onBackPressed();
 		}
 	}
 
-	// XXX: add similar code to other activities where custom keyboard is being
-	// used
-//	@Override
-//	public boolean onKeyDown(int keyCode, KeyEvent event) {
-//		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-//
-//		}
-//
-//		return super.onKeyDown(keyCode, event);
-//	}
+	private void changeKeyboard(int editTextId, Language lang) {
 
+		if (mRevisedKeyboard != null) {
+			mRevisedCustomKeyboard.unregisterEditText(editTextId);
+		}
+
+		if (lang != Language.PL) {
+			mRevisedKeyboard = new Keyboard(this, lang.getKeyboard());
+			mRevisedCustomKeyboard = new RussianKeyboard(this,
+					R.id.dictionary_edit_kbd, lang.getKeyboard());
+
+			mRevisedCustomKeyboard.registerEditText(editTextId);
+
+			KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.dictionary_edit_kbd);
+			mKeyboardView.setKeyboard(mRevisedKeyboard);
+			mKeyboardView.setPreviewEnabled(false);
+		}
+	}
 }
