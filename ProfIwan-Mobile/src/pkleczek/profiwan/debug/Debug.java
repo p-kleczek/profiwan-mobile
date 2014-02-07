@@ -10,6 +10,7 @@ import pkleczek.profiwan.model.RevisionEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import pkleczek.profiwan.utils.DatabaseHelperImplMock;
+import pkleczek.profiwan.utils.Language;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -23,8 +24,8 @@ public class Debug {
 		RevisionEntry re = null;
 
 		e = new PhraseEntry();
-		e.setLangA("pl");
-		e.setLangB("rus");
+		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangB(Language.RU.getLanguageISOCode());
 		e.setLangAText("а");
 		e.setLangBText("а");
 		e.setCreatedAt(DateTime.now());
@@ -46,10 +47,10 @@ public class Debug {
 		
 
 		e = new PhraseEntry();
-		e.setLangA("pl");
-		e.setLangB("rus");
-		e.setLangAText("ала");
-		e.setLangBText("ma");
+		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangB(Language.RU.getLanguageISOCode());
+		e.setLangAText("ala");
+		e.setLangBText("ала");
 		e.setCreatedAt(DateTime.now());
 		e.setLabel("rand");
 		e.setInRevisions(true);

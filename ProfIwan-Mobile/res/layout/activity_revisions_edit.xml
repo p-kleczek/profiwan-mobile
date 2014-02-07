@@ -20,7 +20,7 @@
             android:src="@drawable/flag_pl" />
 
         <TextView
-            android:id="@+id/dictionary_spin_knownLanguage"
+            android:id="@+id/dictionary_spin_langA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

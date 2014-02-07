@@ -44,7 +44,7 @@ public class RevisionsActivity extends Activity {
 		// getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mKeyboard = new Keyboard(this, R.xml.kbd_rus);
-		
+
 		revisionsSession = new RevisionsSession(
 				DatabaseHelperImpl.getInstance(this));
 		setupViewsForNextPhrase();
@@ -80,7 +80,7 @@ public class RevisionsActivity extends Activity {
 
 		// TODO: set flags
 
-		TextView tvKnownLanguage = (TextView) findViewById(R.id.dictionary_spin_knownLanguage);
+		TextView tvKnownLanguage = (TextView) findViewById(R.id.dictionary_spin_langA);
 		tvKnownLanguage.setText(phrase.getLangAText());
 
 		mCustomKeyboard = new RussianKeyboard(this, R.id.revisions_kbd,
@@ -105,7 +105,7 @@ public class RevisionsActivity extends Activity {
 
 		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
 
-		TextView tvKnownLanguage = (TextView) findViewById(R.id.dictionary_spin_knownLanguage);
+		TextView tvKnownLanguage = (TextView) findViewById(R.id.dictionary_spin_langA);
 		tvKnownLanguage.setText(phrase.getLangAText());
 
 		TextView enteredText = (TextView) findViewById(R.id.revisions_entered_text_entered);
@@ -114,25 +114,23 @@ public class RevisionsActivity extends Activity {
 
 		enteredText.setText(enteredPhrase);
 
-		if (!enteredCorrectly) {
-			enteredText.setPaintFlags(enteredText.getPaintFlags()
-					| Paint.STRIKE_THRU_TEXT_FLAG);
-		} else {
-			enteredText.setPaintFlags(enteredText.getPaintFlags()
-					^ Paint.STRIKE_THRU_TEXT_FLAG);
-		}
-
 		Button btnAccept = (Button) findViewById(R.id.revisions_entered_btn_accept);
-
 		TextView tvCorrect = (TextView) findViewById(R.id.revisions_entered_text_correct);
+
 		if (enteredCorrectly) {
+			enteredText.setPaintFlags(enteredText.getPaintFlags()
+					& ~(Paint.STRIKE_THRU_TEXT_FLAG));
+
 			tvCorrect.setText("Correct!");
 			btnAccept.setEnabled(false);
 		} else {
+			enteredText.setPaintFlags(enteredText.getPaintFlags()
+					| Paint.STRIKE_THRU_TEXT_FLAG);
+
 			tvCorrect.setText(phrase.getLangBText());
 			btnAccept.setEnabled(true);
 		}
-		
+
 		if (!revisionsSession.hasRevisions()) {
 			showStats();
 		}

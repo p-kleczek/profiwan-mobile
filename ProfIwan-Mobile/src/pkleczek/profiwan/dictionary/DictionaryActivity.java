@@ -3,8 +3,11 @@ package pkleczek.profiwan.dictionary;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.keyboards.RussianKeyboard;
+import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
@@ -14,22 +17,23 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ListView;
 
 public class DictionaryActivity extends ListActivity {
 
-	DatabaseHelper dbHelper;
+	public static final String EDITED_PHRASE = "pkleczek.profiwan.dictionary.EDITED_PHRASE";
+	public static final int EDIT_ACTIVITY = 1;
 
-	AutoCompleteTextView autocompletetextview;
-	EditText edittext;
-	ListActivity listactivity;
+	private DatabaseHelper dbHelper;
+
+	private AutoCompleteTextView autocompletetextview;
+	private EditText edittext;
+	private ListActivity listactivity;
 
 	private RussianKeyboard mCustomKeyboard;
 
@@ -39,7 +43,7 @@ public class DictionaryActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dictionary);
-		
+
 		listactivity = this;
 
 		mKeyboard = new Keyboard(this, R.xml.kbd_rus);
@@ -56,9 +60,9 @@ public class DictionaryActivity extends ListActivity {
 		List<PhraseEntry> dictionary = dbHelper.getDictionary();
 
 		// FIXME: refresh lists after an item added/deleted
-		PhraseEntryArrayAdapter adapter = new PhraseEntryArrayAdapter(this,
-				dictionary);
-		setListAdapter(adapter);
+//		PhraseEntryArrayAdapter adapter = new PhraseEntryArrayAdapter(this,
+//				dictionary);
+//		setListAdapter(adapter);
 
 		List<String> lookupList = new ArrayList<String>();
 		for (PhraseEntry pe : dictionary) {
@@ -77,43 +81,64 @@ public class DictionaryActivity extends ListActivity {
 		// debug
 		edittext = (EditText) findViewById(R.id.dictionary_autoPhrase);
 		edittext.requestFocus();
-		
+
 		edittext.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
 				// TODO Auto-generated method stub
 				Log.i("profiwan", "text changed: " + s);
 				listactivity.setSelection(1);
 			}
-			
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
+
 		// autocompletetextview.performClick();
 		mKeyboardView.setVisibility(View.INVISIBLE);
-		
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		List<PhraseEntry> dictionary = dbHelper.getDictionary();
+
+		PhraseEntryArrayAdapter adapter = new PhraseEntryArrayAdapter(this,
+				dictionary);
+		setListAdapter(adapter);
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
-		final PhraseEntry item = (PhraseEntry) l.getItemAtPosition(position);
-
+		PhraseEntry item = (PhraseEntry) l.getItemAtPosition(position);
 		Intent intent = new Intent(this, DictionaryEditActivity.class);
-		startActivity(intent);
+		AndroidPhraseEntry pe = new AndroidPhraseEntry(item);
+		intent.putExtra(EDITED_PHRASE, pe);
+		startActivityForResult(intent, EDIT_ACTIVITY);
 	}
 
+	public void editPhrase(View v) {
+		Intent intent = new Intent(this, DictionaryEditActivity.class);
+		PhraseEntry item = new PhraseEntry();
+		item.setCreatedAt(DateTime.now());
+		AndroidPhraseEntry pe = new AndroidPhraseEntry(item);
+		intent.putExtra(EDITED_PHRASE, pe);
+		startActivityForResult(intent, EDIT_ACTIVITY);
+	}
 }

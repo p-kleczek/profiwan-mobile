@@ -29,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="Add" />
+        android:text="Add"
+        android:onClick="editPhrase" />
 
     <android.inputmethodservice.KeyboardView
         android:id="@+id/dictionary_kbd"

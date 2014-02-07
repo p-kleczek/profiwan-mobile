@@ -6,44 +6,68 @@
     android:background="@color/revisions_background" >
 
     <Spinner
-        android:id="@+id/dictionary_spin_knownLanguage"
+        android:id="@+id/dictionary_spin_langA"
         android:layout_width="110dp"
         android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/dictionary_edit_knownLanguage"
+        android:id="@+id/dictionary_edit_langA"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/dictionary_spin_knownLanguage"
-        android:layout_alignBottom="@id/dictionary_spin_knownLanguage"
+        android:layout_toRightOf="@id/dictionary_spin_langA"
+        android:layout_alignBottom="@id/dictionary_spin_langA"
         android:ems="10" />
 
     <Spinner
-        android:id="@+id/dictionary_spin_revisedLanguage"
+        android:id="@+id/dictionary_spin_langB"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/dictionary_spin_knownLanguage" />
+        android:layout_below="@+id/dictionary_spin_langA" />
 
     <EditText
-        android:id="@+id/dictionary_edit_revisedLanguage"
+        android:id="@+id/dictionary_edit_langB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/dictionary_spin_revisedLanguage"
-        android:layout_alignBottom="@id/dictionary_spin_revisedLanguage"
+        android:layout_toRightOf="@id/dictionary_spin_langB"
+        android:layout_alignBottom="@id/dictionary_spin_langB"
         android:ems="10" />
+
+
+
+    <EditText
+        android:id="@+id/dictionary_edit_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/dictionary_edit_langB"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/dictionary_edit_langB"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/dictionary_edit_label_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/dictionary_edit_label"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/dictionary_edit_label"
+        android:text="Label:"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/revisions_text" />
 
     <Button
         android:id="@+id/dictionary_btn_accept"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_below="@id/dictionary_spin_revisedLanguage"
+        android:layout_below="@+id/dictionary_edit_label"
+        android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/revisionRow_margin"
-        android:onClick=""
-        android:text="Accept" />
-
+        android:text="Accept"
+        android:onClick="savePhrase" />
+    
     <android.inputmethodservice.KeyboardView
         android:id="@+id/dictionary_edit_kbd"
         android:layout_width="match_parent"
@@ -52,6 +76,6 @@
         android:layout_alignParentLeft="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:visibility="gone" />
+        android:visibility="gone" />    
 
 </RelativeLayout>

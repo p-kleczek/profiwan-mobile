@@ -1,13 +1,11 @@
 package pkleczek.profiwan;
 
-import pkleczek.profiwan.debug.Debug;
 import pkleczek.profiwan.dictionary.DictionaryActivity;
 import pkleczek.profiwan.dictionary.DictionaryEditActivity;
 import pkleczek.profiwan.model.RevisionsSession;
 import pkleczek.profiwan.revisions.RevisionsActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
-import pkleczek.profiwan.utils.DatabaseHelperImplMock;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +16,7 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
 	DatabaseHelper dbHelper;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,8 +31,8 @@ public class MainActivity extends Activity {
 		// startRevisions(null);
 
 		// debug
-		Intent intent = new Intent(this, DictionaryEditActivity.class);
-		startActivity(intent);
+//		Intent intent = new Intent(this, DictionaryEditActivity.class);
+//		startActivity(intent);
 	}
 
 	@Override
@@ -67,5 +65,4 @@ public class MainActivity extends Activity {
 		Button btn = (Button) findViewById(R.id.main_btn_revisions);
 		btn.setEnabled(revisionsSession.hasRevisions());
 	}
-
 }
