@@ -10,6 +10,12 @@
         android:layout_below="@+id/dictionary_autoPhrase" >
     </ListView>
 
+    <pkleczek.profiwan.dictionary.SideBar
+        android:id="@+id/sideBar"
+        android:layout_width="22dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true" />
+
     <EditText
         android:id="@+id/dictionary_autoPhrase"
         android:layout_width="wrap_content"
@@ -29,8 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="Add"
-        android:onClick="editPhrase" />
+        android:onClick="editPhrase"
+        android:text="Add" />
 
     <android.inputmethodservice.KeyboardView
         android:id="@+id/dictionary_kbd"

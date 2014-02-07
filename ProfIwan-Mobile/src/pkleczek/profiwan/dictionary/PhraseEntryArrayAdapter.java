@@ -1,22 +1,31 @@
 package pkleczek.profiwan.dictionary;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.model.PhraseEntry;
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.RelativeLayout;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
-		Filterable {
+		Filterable, SectionIndexer {
+
+	// TODO: support other languages
+	// private static String sections = "abcdefghilmnopqrstuvz";
+	private static String sections = "абфлвшухй";
+
 	private final Context context;
 	private final List<PhraseEntry> objects;
 	private List<PhraseEntry> filtered;
@@ -41,10 +50,38 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 		TextView textViewLangBText = (TextView) rowView
 				.findViewById(R.id.dictionary_textViewLangBText);
 
-		textViewLangAText.setText(filtered.get(position).getLangAText());
-		textViewLangBText.setText(filtered.get(position).getLangBText());
+		PhraseEntry selectedPhrase = filtered.get(position);
+		textViewLangAText.setText(selectedPhrase.getLangAText());
+		textViewLangBText.setText(selectedPhrase.getLangBText());
+
+		RelativeLayout header = (RelativeLayout) rowView
+				.findViewById(R.id.dictionary_entry_section);
+		char firstChar = selectedPhrase.getLangBText().toUpperCase().charAt(0);
+		if (position == 0) {
+			setSection(header, selectedPhrase.getLangBText());
+		} else {
+			// XXX: should be "filtered" or "objects"?
+			String preLabel = filtered.get(position - 1).getLangBText();
+			char preFirstChar = preLabel.toUpperCase().charAt(0);
+			if (firstChar != preFirstChar) {
+				setSection(header, selectedPhrase.getLangBText());
+			} else {
+				header.setVisibility(View.GONE);
+			}
+		}
 
 		return rowView;
+	}
+
+	private void setSection(ViewGroup header, String label) {
+		TextView text = new TextView(context);
+		header.setBackgroundColor(0xffaabbcc);
+		text.setTextColor(Color.WHITE);
+		text.setText(label.substring(0, 1).toUpperCase());
+		text.setTextSize(20);
+		text.setPadding(5, 0, 0, 0);
+		text.setGravity(Gravity.CENTER_VERTICAL);
+		header.addView(text);
 	}
 
 	@Override
@@ -114,5 +151,45 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 
 			return result;
 		}
+	}
+
+	@Override
+	public int getPositionForSection(int section) {
+		if (section == 35) {
+			return 0;
+		}
+		for (int i = 0; i < filtered.size(); i++) {
+			PhraseEntry pe = filtered.get(i);
+			char firstChar = pe.getLangBText().toUpperCase().charAt(0);
+			if (firstChar == section) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	// public int getPositionForSection(int sectionIndex) {
+	// Log.d("ListView", "Get position for section");
+	//
+	// for (int i = 0; i < this.getCount(); i++) {
+	// PhraseEntry pe = this.getItem(i);
+	// String item = pe.getLangBText().toLowerCase();
+	// if (item.charAt(0) == sections.charAt(sectionIndex)) {
+	// return i;
+	// }
+	// }
+	// return 0;
+	// }
+
+	@Override
+	public int getSectionForPosition(int position) {
+		Log.d("ListView", "Get section");
+
+		return 0;
+	}
+
+	@Override
+	public Object[] getSections() {
+		return null;
 	}
 }

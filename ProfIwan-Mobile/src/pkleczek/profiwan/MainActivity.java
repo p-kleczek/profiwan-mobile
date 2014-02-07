@@ -31,8 +31,8 @@ public class MainActivity extends Activity {
 		// startRevisions(null);
 
 		// debug
-//		Intent intent = new Intent(this, DictionaryEditActivity.class);
-//		startActivity(intent);
+		Intent intent = new Intent(this, DictionaryActivity.class);
+		startActivity(intent);
 	}
 
 	@Override
