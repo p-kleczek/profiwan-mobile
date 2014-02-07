@@ -6,22 +6,20 @@
     android:padding="6dip" >
 
     <TextView
-        android:id="@+id/dictionary_textViewLangAText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="langA"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold" />
-
-    <TextView
         android:id="@+id/dictionary_textViewLangBText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/dictionary_textViewLangAText"
-        android:text="langB"
+        android:layout_alignParentTop="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dictionary_textViewLangAText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/dictionary_textViewLangBText"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

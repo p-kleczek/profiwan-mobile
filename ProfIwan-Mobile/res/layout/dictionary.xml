@@ -8,16 +8,15 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dictionary_autoPhrase" >
-    </pkleczek.profiwan.dictionary.PhraseListView>
+        android:layout_below="@+id/dictionary_autoPhrase" />
 
     <pkleczek.profiwan.dictionary.SideBar
         android:id="@+id/sideBar"
         android:layout_width="22dp"
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="40dp"
-        android:background="@color/sidebar_background" />
+        android:layout_marginTop="60dp"
+         />
 
     <EditText
         android:id="@+id/dictionary_autoPhrase"

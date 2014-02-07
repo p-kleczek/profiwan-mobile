@@ -5,7 +5,7 @@
     <color name="revisions_text">#ffffff</color>
     <color name="revisions_text_correct">#ff8080</color>
     
-    <color name="sidebar_background">#44ffffff</color>
+    <color name="sidebar_background">#44888888</color>
     <color name="sidebar_font">#ffa6a9aa</color>
     
 </resources>

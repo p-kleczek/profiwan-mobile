@@ -9,9 +9,6 @@ import java.util.Map;
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.model.PhraseEntry;
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +84,7 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 	}
 
 	// TODO: use only one language in dictionary (at the time)?
-	private String[] section;
+	private String[] sections;
 	private final Context context;
 	private PhraseLangBFilter filter;
 	private List<PhraseEntry> filtered;
@@ -121,34 +118,18 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 
 	@Override
 	public int getPositionForSection(int sectionIndex) {
-		Log.d("ListView", "Get position for section");
-
-		return alphaIndexer.get(section[sectionIndex]);
-		
-//		for (int i = 0; i < this.getCount(); i++) {
-//			PhraseEntry pe = this.getItem(i);
-//			String item = pe.getLangBText().toLowerCase();
-//
-//			if (item.startsWith(section[sectionIndex])) {
-//				Log.d("ListView", "position = " + i);
-//				return i;
-//			}
-//		}
-//		Log.d("ListView", "position = 0");
-//		return 0;
+		return alphaIndexer.get(sections[sectionIndex]);
 	}
 
 	@Override
 	public int getSectionForPosition(int position) {
-		Log.d("ListView", "Get section");
-
 		// Iterate over the sections to find the closest index
 		// that is not greater than the position
 		int closestIndex = 0;
 		int latestDelta = Integer.MAX_VALUE;
 
-		for (int i = 0; i < section.length; i++) {
-			int current = alphaIndexer.get(section[i]);
+		for (int i = 0; i < sections.length; i++) {
+			int current = alphaIndexer.get(sections[i]);
 			if (current == position) {
 				// If position matches an index, return it immediately
 				return i;
@@ -167,15 +148,7 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 
 	@Override
 	public Object[] getSections() {
-		// List<String> sections = new ArrayList<String>();
-		//
-		// for (int i = 0; i < section.length(); i++) {
-		// sections.add(section.substring(i, i+1));
-		// }
-		//
-		// return sections.toArray(new String[0]);
-
-		return section;
+		return sections;
 	}
 
 	@Override
@@ -193,37 +166,7 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 		textViewLangAText.setText(selectedPhrase.getLangAText());
 		textViewLangBText.setText(selectedPhrase.getLangBText());
 
-		// RelativeLayout header = (RelativeLayout) rowView
-		// .findViewById(R.id.dictionary_entry_section);
-		// char firstChar =
-		// selectedPhrase.getLangBText().toUpperCase().charAt(0);
-		// if (position == 0) {
-		// setSection(header, selectedPhrase.getLangBText());
-		// } else {
-		// // XXX: should be "filtered" or "objects"?
-		// String preLabel = filtered.get(position - 1).getLangBText();
-		// char preFirstChar = preLabel.toUpperCase().charAt(0);
-		// if (firstChar != preFirstChar) {
-		// setSection(header, selectedPhrase.getLangBText());
-		// } else {
-		// header.setVisibility(View.GONE);
-		// }
-		// }
-
 		return rowView;
-	}
-
-	private void setSection(ViewGroup header, String label) {
-		// TODO: text should disappear, should be centered
-
-		TextView text = new TextView(context);
-		header.setBackgroundColor(0xffaabbcc);
-		text.setTextColor(Color.WHITE);
-		text.setText(label.substring(0, 1).toUpperCase());
-		text.setTextSize(20);
-		text.setPadding(5, 0, 0, 0);
-		text.setGravity(Gravity.CENTER_VERTICAL);
-		header.addView(text);
 	}
 
 	/**
@@ -243,6 +186,6 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 
 		List<String> keys = new ArrayList<String>(alphaIndexer.keySet());
 		Collections.sort(keys);
-		section = keys.toArray(new String[0]);
+		sections = keys.toArray(new String[0]);
 	}
 }

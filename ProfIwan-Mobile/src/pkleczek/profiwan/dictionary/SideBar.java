@@ -36,6 +36,7 @@ public class SideBar extends View {
 	}
 
 	private void init() {
+//		setBackgroundColor(getResources().getColor(R.color.sidebar_background));
 	}
 
 	public void setListView(PhraseListView _list) {
