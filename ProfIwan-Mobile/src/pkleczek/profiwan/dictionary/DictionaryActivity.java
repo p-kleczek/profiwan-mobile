@@ -20,7 +20,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -31,13 +30,14 @@ public class DictionaryActivity extends ListActivity {
 
 	private DatabaseHelper dbHelper;
 
-	private AutoCompleteTextView autocompletetextview;
 	private EditText edittext;
 	private ListActivity listactivity;
 
 	private RussianKeyboard mCustomKeyboard;
 
 	private Keyboard mKeyboard;
+	private PhraseEntryArrayAdapter adapter;
+	private List<PhraseEntry> dictionary;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +57,12 @@ public class DictionaryActivity extends ListActivity {
 		mKeyboardView.setPreviewEnabled(false);
 
 		dbHelper = DatabaseHelperImpl.getInstance(this);
-		List<PhraseEntry> dictionary = dbHelper.getDictionary();
+		dictionary = dbHelper.getDictionary();
 
 		// FIXME: refresh lists after an item added/deleted
-//		PhraseEntryArrayAdapter adapter = new PhraseEntryArrayAdapter(this,
-//				dictionary);
-//		setListAdapter(adapter);
+		// PhraseEntryArrayAdapter adapter = new PhraseEntryArrayAdapter(this,
+		// dictionary);
+		// setListAdapter(adapter);
 
 		List<String> lookupList = new ArrayList<String>();
 		for (PhraseEntry pe : dictionary) {
@@ -89,7 +89,9 @@ public class DictionaryActivity extends ListActivity {
 					int count) {
 				// TODO Auto-generated method stub
 				Log.i("profiwan", "text changed: " + s);
-				listactivity.setSelection(1);
+				// listactivity.setSelection(1);
+
+				adapter.getFilter().filter(s);
 			}
 
 			@Override
@@ -106,20 +108,18 @@ public class DictionaryActivity extends ListActivity {
 			}
 		});
 
-		// autocompletetextview.performClick();
 		mKeyboardView.setVisibility(View.INVISIBLE);
-
+		
+		adapter = new PhraseEntryArrayAdapter(this, dictionary);
+		setListAdapter(adapter);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 
-		List<PhraseEntry> dictionary = dbHelper.getDictionary();
-
-		PhraseEntryArrayAdapter adapter = new PhraseEntryArrayAdapter(this,
-				dictionary);
-		setListAdapter(adapter);
+		dictionary = dbHelper.getDictionary();
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override
