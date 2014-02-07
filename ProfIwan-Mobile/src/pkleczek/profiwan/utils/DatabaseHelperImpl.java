@@ -115,12 +115,6 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 		return phrases;
 	}
 
-	public Cursor getAllPhrasesAsCursor() {
-		String selectQuery = "SELECT  * FROM " + TABLE_PHRASE;
-		SQLiteDatabase db = this.getReadableDatabase();
-		return db.rawQuery(selectQuery, null);
-	}
-
 	public int updatePhrase(PhraseEntry phrase) {
 
 		ContentValues values = new ContentValues();

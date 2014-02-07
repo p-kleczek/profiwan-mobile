@@ -124,7 +124,7 @@ public class DictionaryActivity extends ListActivity {
 		adapter.notifyDataSetChanged();
 		
 		SideBar indexBar = (SideBar) findViewById(R.id.sideBar);  
-        indexBar.setListView(getListView());
+        indexBar.setListView((PhraseListView) getListView());
 	}
 
 	@Override

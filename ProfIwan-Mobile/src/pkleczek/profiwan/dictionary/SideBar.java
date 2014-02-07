@@ -4,19 +4,19 @@ import pkleczek.profiwan.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.SectionIndexer;
 
 public class SideBar extends View {
 	private String[] sections;
 
 	private SectionIndexer sectionIndexer = null;
-	private ListView list;
+	private PhraseListView list;
 
-	private final Paint paint = new Paint();
+	private final Paint _paint = new Paint();
 
 	private int m_nItemHeight;
 
@@ -30,17 +30,15 @@ public class SideBar extends View {
 		init();
 	}
 
-	private void init() {
-//		setBackgroundColor(getResources().getColor(R.color.sidebar_background));
-		setBackgroundColor(0xffffff);
-	}
-
 	public SideBar(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init();
 	}
 
-	public void setListView(ListView _list) {
+	private void init() {
+	}
+
+	public void setListView(PhraseListView _list) {
 		list = _list;
 		sectionIndexer = (SectionIndexer) _list.getAdapter();
 
@@ -60,35 +58,46 @@ public class SideBar extends View {
 
 		if (event.getAction() == MotionEvent.ACTION_DOWN
 				|| event.getAction() == MotionEvent.ACTION_MOVE) {
+
+			Message msg = new Message();
+			msg.what = PhraseListView.MSG_DRAW_ON;
+			msg.obj = (String) sectionIndexer.getSections()[idx];
+			list.getHandler().sendMessage(msg);
+
 			if (sectionIndexer == null) {
 				sectionIndexer = (SectionIndexer) list.getAdapter();
 			}
+
 			int position = sectionIndexer.getPositionForSection(idx);
-			if (position == -1) {
-				return true;
-			}
 			list.setSelection(position);
 		}
+
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			list.getHandler().sendEmptyMessageDelayed(
+					PhraseListView.MSG_DRAW_OFF, 3000);
+		}
+
 		return true;
 	}
 
 	protected void onDraw(Canvas canvas) {
 		m_nItemHeight = getMeasuredHeight() / sections.length;
 
-		paint.setColor(getResources().getColor(R.color.sidebar_font));
+		_paint.setColor(getResources().getColor(R.color.sidebar_font));
 
 		int padding = 4;
 		int textSize = Math.min(getMeasuredWidth(), m_nItemHeight) - padding;
-		paint.setTextSize(textSize);
+		_paint.setTextSize(textSize);
 
-		paint.setTextAlign(Paint.Align.CENTER);
+		_paint.setTextAlign(Paint.Align.CENTER);
 		float widthCenter = getMeasuredWidth() / 2;
 
 		for (int i = 0; i < sections.length; i++) {
-			// TODO: draw in the center of a slot (consider Y-axis!)
 			canvas.drawText(sections[i], widthCenter, m_nItemHeight / 2
-					+ (i * m_nItemHeight), paint);
+					+ (i * m_nItemHeight), _paint);
 		}
+
 		super.onDraw(canvas);
 	}
+
 }

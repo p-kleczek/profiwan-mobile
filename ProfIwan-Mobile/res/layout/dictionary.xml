@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:clipChildren="false" >
 
-    <ListView
+    <pkleczek.profiwan.dictionary.PhraseListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dictionary_autoPhrase" >
-    </ListView>
+    </pkleczek.profiwan.dictionary.PhraseListView>
 
     <pkleczek.profiwan.dictionary.SideBar
         android:id="@+id/sideBar"
-        android:layout_marginTop="40dp"
         android:layout_width="22dp"
         android:layout_height="fill_parent"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="40dp"
+        android:background="@color/sidebar_background" />
 
     <EditText
         android:id="@+id/dictionary_autoPhrase"

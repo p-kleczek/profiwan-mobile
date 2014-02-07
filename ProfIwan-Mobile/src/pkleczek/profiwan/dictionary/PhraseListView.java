@@ -4,159 +4,101 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SectionIndexer;
 
-// XXX: unused - delete
 public class PhraseListView extends ListView {
-	private Context context;
-
-	private static int indWidth = 20;
-	private String[] sections;
-	private float scaledWidth;
-	private float sx;
-	private int indexSize;
-	private String section;
+	public static final int MSG_DRAW_ON = 1;
+	public static final int MSG_DRAW_OFF = 2;
 
 	// helpers
-	private final Paint p = new Paint();
+	// TODO: make it size-independent
+	private static final float rectWidth = 60.0f;
+	private static final float rectPadding = 10.0f;
+	private final Paint rectPaint = new Paint();
 	private final Paint textPaint = new Paint();
+	private final RectF rect = new RectF();
 
-	private boolean showLetter;
+	private boolean showLetter = false;
+	private String section = "";
 
-	private ListHandler listHandler;
+	private ListHandler listHandler = new ListHandler();
 
 	// initialize helpers
 	{
-		// FIXME: initialize "sections"
+		rectPaint.setColor(Color.GRAY);
+		rectPaint.setAlpha(200);
 
-		p.setColor(Color.WHITE);
-		p.setAlpha(100);
-
-		textPaint.setColor(Color.DKGRAY);
-		textPaint.setTextSize(scaledWidth / 2);
+		textPaint.setColor(Color.CYAN);
+		textPaint.setTextSize(rectWidth - rectPadding);
+		textPaint.setTextAlign(Paint.Align.CENTER);
 	}
 
 	public PhraseListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		this.context = context;
-
-		setFastScrollEnabled(true);
+		init();
 	}
 
 	public PhraseListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.context = context;
-		
-		setFastScrollEnabled(true);
+		init();
 	}
 
 	public PhraseListView(Context context, String keyList) {
 		super(context);
-		this.context = context;
+		init();
+	}
 
+	private void init() {
 		setFastScrollEnabled(true);
+		setWillNotDraw(false);
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		scaledWidth = indWidth * getSizeInPixel(context);
-		sx = this.getWidth() - this.getPaddingRight() - scaledWidth;
-
-		canvas.drawRect(sx, this.getPaddingTop(), sx + scaledWidth,
-				this.getHeight() - this.getPaddingBottom(), p);
-
-		indexSize = (this.getHeight() - this.getPaddingTop() - getPaddingBottom())
-				/ sections.length;
-
-		for (int i = 0; i < sections.length; i++) {
-			canvas.drawText(sections[i].toUpperCase(),
-					sx + textPaint.getTextSize() / 2, getPaddingTop()
-							+ indexSize * (i + 1), textPaint);
-		}
-
-		// We draw the letter in the middle
-		if (showLetter & section != null && !section.equals("")) {
-
-			Paint textPaint2 = new Paint();
-			textPaint2.setColor(Color.DKGRAY);
-			textPaint2.setTextSize(2 * indWidth);
-
-			canvas.drawText(section.toUpperCase(), getWidth() / 2,
-					getHeight() / 2, textPaint2);
-		}
-	}
-
-	private static float getSizeInPixel(Context ctx) {
-		return ctx.getResources().getDisplayMetrics().density;
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		float x = event.getX();
+	protected void dispatchDraw(Canvas canvas) {
+		super.dispatchDraw(canvas);
 
-		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN: {
-			if (x < sx) {
-				return super.onTouchEvent(event);
-			} else {
-				// We touched the index bar
-				float y = event.getY() - this.getPaddingTop()
-						- getPaddingBottom();
-				int currentPosition = (int) Math.floor(y / indexSize);
-				section = sections[currentPosition];
-				this.setSelection(((SectionIndexer) getAdapter())
-						.getPositionForSection(currentPosition));
-			}
-			break;
-		}
-		case MotionEvent.ACTION_MOVE: {
-			if (x < sx) {
-				return super.onTouchEvent(event);
-			} else {
-				float y = event.getY();
-				int currentPosition = (int) Math.floor(y / indexSize);
-				section = sections[currentPosition];
-				this.setSelection(((SectionIndexer) getAdapter())
-						.getPositionForSection(currentPosition));
+		float w = getWidth() / 2;
+		float h = getHeight() / 2;
 
-			}
-			break;
-
-		}
-		case MotionEvent.ACTION_UP: {
-
-			listHandler = new ListHandler();
-			listHandler.sendEmptyMessageDelayed(0, 30 * 1000);
-
-			break;
-		}
-		}
-		return super.onTouchEvent(event);
-	}
-
-	@Override
-	public void setAdapter(ListAdapter adapter) {
-		super.setAdapter(adapter);
-		if (adapter instanceof SectionIndexer) {
-			sections = (String[]) ((SectionIndexer) adapter).getSections();
+		if (showLetter) {
+			rect.set(w - rectWidth / 2, h - rectWidth / 2, w + rectWidth / 2, h
+					+ rectWidth / 2);
+			canvas.drawRoundRect(rect, rectWidth * 0.1f, rectWidth * 0.1f,
+					rectPaint);
+			canvas.drawText(section, w, h - textPaint.ascent() / 3, textPaint);
 		}
 	}
 
-	private class ListHandler extends Handler {
+	public ListHandler getHandler() {
+		return listHandler;
+	}
+
+	class ListHandler extends Handler {
 
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			showLetter = false;
-			PhraseListView.this.invalidate();
+
+			if (msg.what == MSG_DRAW_ON) {
+				showLetter = true;
+				section = ((String) msg.obj).toUpperCase();
+			}
+
+			if (msg.what == MSG_DRAW_OFF) {
+				showLetter = false;
+				PhraseListView.this.invalidate();
+			}
+
 		}
 
 	}
