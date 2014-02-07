@@ -15,7 +15,8 @@ public final class R {
         public static final int revisions_text=0x7f050001;
         public static final int revisions_text_correct=0x7f050002;
         public static final int sidebar_background=0x7f050003;
-        public static final int sidebar_font=0x7f050004;
+        public static final int sidebar_font_normal=0x7f050004;
+        public static final int sidebar_font_selected=0x7f050005;
     }
     public static final class dimen {
         public static final int mainMenu_margin=0x7f060000;
@@ -43,8 +44,8 @@ public final class R {
         public static final int dictionary_kbd=0x7f0a001c;
         public static final int dictionary_spin_langA=0x7f0a0006;
         public static final int dictionary_spin_langB=0x7f0a001e;
-        public static final int dictionary_textViewLangAText=0x7f0a0025;
-        public static final int dictionary_textViewLangBText=0x7f0a0026;
+        public static final int dictionary_textViewLangAText=0x7f0a0026;
+        public static final int dictionary_textViewLangBText=0x7f0a0025;
         public static final int flag_spinner_row_fill=0x7f0a0028;
         public static final int flag_spinner_row_text=0x7f0a0027;
         public static final int main_btn_dictionary=0x7f0a0001;

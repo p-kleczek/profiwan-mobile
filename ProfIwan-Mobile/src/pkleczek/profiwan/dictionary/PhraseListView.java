@@ -1,5 +1,6 @@
 package pkleczek.profiwan.dictionary;
 
+import pkleczek.profiwan.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -32,7 +33,8 @@ public class PhraseListView extends ListView {
 		rectPaint.setColor(Color.GRAY);
 		rectPaint.setAlpha(200);
 
-		textPaint.setColor(Color.CYAN);
+		textPaint.setColor(getResources().getColor(
+				R.color.sidebar_font_selected));
 		textPaint.setTextSize(rectWidth - rectPadding);
 		textPaint.setTextAlign(Paint.Align.CENTER);
 	}
