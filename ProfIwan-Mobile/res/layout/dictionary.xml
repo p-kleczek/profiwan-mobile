@@ -12,6 +12,7 @@
 
     <pkleczek.profiwan.dictionary.SideBar
         android:id="@+id/sideBar"
+        android:layout_marginTop="40dp"
         android:layout_width="22dp"
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true" />

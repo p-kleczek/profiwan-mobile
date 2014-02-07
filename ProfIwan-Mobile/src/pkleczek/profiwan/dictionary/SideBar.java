@@ -1,5 +1,6 @@
 package pkleczek.profiwan.dictionary;
 
+import pkleczek.profiwan.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -10,12 +11,14 @@ import android.widget.ListView;
 import android.widget.SectionIndexer;
 
 public class SideBar extends View {
-	private char[] l;
-	private SectionIndexer sectionIndexter = null;
+	private String[] sections;
+
+	private SectionIndexer sectionIndexer = null;
 	private ListView list;
-	private final int m_nItemHeight = 29;
-	
+
 	private final Paint paint = new Paint();
+
+	private int m_nItemHeight;
 
 	public SideBar(Context context) {
 		super(context);
@@ -28,34 +31,8 @@ public class SideBar extends View {
 	}
 
 	private void init() {
-		l = new char[] {
-				'A',
-				'B',
-				'C',
-				'D',
-				'E',
-				'F',
-				'G',
-				'H',
-				'I',
-				'J',
-				'K',
-				'L',
-				'M',
-				'N',
-				'O',
-				'P',
-				'Q',
-				'R',
-				'S',
-				'T',
-				'U',
-				'V',
-				'W',
-				'X',
-				'Y',
-				'Z' };
-		setBackgroundColor(0x44FFFFFF);
+//		setBackgroundColor(getResources().getColor(R.color.sidebar_background));
+		setBackgroundColor(0xffffff);
 	}
 
 	public SideBar(Context context, AttributeSet attrs, int defStyle) {
@@ -65,24 +42,28 @@ public class SideBar extends View {
 
 	public void setListView(ListView _list) {
 		list = _list;
-		sectionIndexter = (SectionIndexer) _list.getAdapter();
+		sectionIndexer = (SectionIndexer) _list.getAdapter();
+
+		sections = (String[]) sectionIndexer.getSections();
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
 		super.onTouchEvent(event);
+
 		int i = (int) event.getY();
 		int idx = i / m_nItemHeight;
-		if (idx >= l.length) {
-			idx = l.length - 1;
+		if (idx >= sections.length) {
+			idx = sections.length - 1;
 		} else if (idx < 0) {
 			idx = 0;
 		}
+
 		if (event.getAction() == MotionEvent.ACTION_DOWN
 				|| event.getAction() == MotionEvent.ACTION_MOVE) {
-			if (sectionIndexter == null) {
-				sectionIndexter = (SectionIndexer) list.getAdapter();
+			if (sectionIndexer == null) {
+				sectionIndexer = (SectionIndexer) list.getAdapter();
 			}
-			int position = sectionIndexter.getPositionForSection(l[idx]);
+			int position = sectionIndexer.getPositionForSection(idx);
 			if (position == -1) {
 				return true;
 			}
@@ -92,12 +73,20 @@ public class SideBar extends View {
 	}
 
 	protected void onDraw(Canvas canvas) {
-		paint.setColor(0xFFA6A9AA);
-		paint.setTextSize(20);
+		m_nItemHeight = getMeasuredHeight() / sections.length;
+
+		paint.setColor(getResources().getColor(R.color.sidebar_font));
+
+		int padding = 4;
+		int textSize = Math.min(getMeasuredWidth(), m_nItemHeight) - padding;
+		paint.setTextSize(textSize);
+
 		paint.setTextAlign(Paint.Align.CENTER);
 		float widthCenter = getMeasuredWidth() / 2;
-		for (int i = 0; i < l.length; i++) {
-			canvas.drawText(String.valueOf(l[i]), widthCenter, m_nItemHeight
+
+		for (int i = 0; i < sections.length; i++) {
+			// TODO: draw in the center of a slot (consider Y-axis!)
+			canvas.drawText(sections[i], widthCenter, m_nItemHeight / 2
 					+ (i * m_nItemHeight), paint);
 		}
 		super.onDraw(canvas);

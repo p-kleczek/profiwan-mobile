@@ -113,8 +113,7 @@ public class DictionaryActivity extends ListActivity {
 		adapter = new PhraseEntryArrayAdapter(this, dictionary);
 		setListAdapter(adapter);
 		
-		SideBar indexBar = (SideBar) findViewById(R.id.sideBar);  
-        indexBar.setListView(getListView());
+		getListView().setFastScrollEnabled(true);
 	}
 
 	@Override
@@ -123,6 +122,9 @@ public class DictionaryActivity extends ListActivity {
 
 		dictionary = dbHelper.getDictionary();
 		adapter.notifyDataSetChanged();
+		
+		SideBar indexBar = (SideBar) findViewById(R.id.sideBar);  
+        indexBar.setListView(getListView());
 	}
 
 	@Override

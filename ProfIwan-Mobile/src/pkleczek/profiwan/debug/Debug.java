@@ -55,6 +55,86 @@ public class Debug {
 		e.setLabel("rand");
 		e.setInRevisions(true);
 		dbHelper.createPhrase(e);
+
+		e = new PhraseEntry();
+		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangB(Language.RU.getLanguageISOCode());
+		e.setLangAText("piotr");
+		e.setLangBText("пиотр");
+		e.setCreatedAt(DateTime.now());
+		e.setLabel("rand");
+		e.setInRevisions(true);
+		dbHelper.createPhrase(e);
+
+		e = new PhraseEntry();
+		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangB(Language.RU.getLanguageISOCode());
+		e.setLangAText("dom");
+		e.setLangBText("дом");
+		e.setCreatedAt(DateTime.now());
+		e.setLabel("rand");
+		e.setInRevisions(true);
+		dbHelper.createPhrase(e);
+
+		e = new PhraseEntry();
+		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangB(Language.RU.getLanguageISOCode());
+		e.setLangAText("nic");
+		e.setLangBText("ниц");
+		e.setCreatedAt(DateTime.now());
+		e.setLabel("rand");
+		e.setInRevisions(true);
+		dbHelper.createPhrase(e);
+
+		e = new PhraseEntry();
+		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangB(Language.RU.getLanguageISOCode());
+		e.setLangAText("ono");
+		e.setLangBText("оно");
+		e.setCreatedAt(DateTime.now());
+		e.setLabel("rand");
+		e.setInRevisions(true);
+		dbHelper.createPhrase(e);
+
+		e = new PhraseEntry();
+		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangB(Language.RU.getLanguageISOCode());
+		e.setLangAText("bol");
+		e.setLangBText("бол");
+		e.setCreatedAt(DateTime.now());
+		e.setLabel("rand");
+		e.setInRevisions(true);
+		dbHelper.createPhrase(e);
+
+		e = new PhraseEntry();
+		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangB(Language.RU.getLanguageISOCode());
+		e.setLangAText("nicx");
+		e.setLangBText("ниц");
+		e.setCreatedAt(DateTime.now());
+		e.setLabel("rand");
+		e.setInRevisions(true);
+		dbHelper.createPhrase(e);
+
+		e = new PhraseEntry();
+		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangB(Language.RU.getLanguageISOCode());
+		e.setLangAText("onox");
+		e.setLangBText("оно");
+		e.setCreatedAt(DateTime.now());
+		e.setLabel("rand");
+		e.setInRevisions(true);
+		dbHelper.createPhrase(e);
+
+		e = new PhraseEntry();
+		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangB(Language.RU.getLanguageISOCode());
+		e.setLangAText("bolx");
+		e.setLangBText("бол");
+		e.setCreatedAt(DateTime.now());
+		e.setLabel("rand");
+		e.setInRevisions(true);
+		dbHelper.createPhrase(e);		
 //
 //		e = new PhraseEntry();
 //		e.setLangA("pl");

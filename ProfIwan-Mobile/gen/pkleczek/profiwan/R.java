@@ -14,6 +14,8 @@ public final class R {
         public static final int revisions_background=0x7f050000;
         public static final int revisions_text=0x7f050001;
         public static final int revisions_text_correct=0x7f050002;
+        public static final int sidebar_background=0x7f050003;
+        public static final int sidebar_font=0x7f050004;
     }
     public static final class dimen {
         public static final int mainMenu_margin=0x7f060000;
