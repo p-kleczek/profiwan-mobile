@@ -1,9 +1,10 @@
 package pkleczek.profiwan.dictionary;
 
+import java.lang.ref.WeakReference;
+
 import pkleczek.profiwan.R;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Handler;
@@ -26,18 +27,7 @@ public class PhraseListView extends ListView {
 	private boolean showLetter = false;
 	private String section = "";
 
-	private ListHandler listHandler = new ListHandler();
-
-	// initialize helpers
-	{
-		rectPaint.setColor(Color.GRAY);
-		rectPaint.setAlpha(200);
-
-		textPaint.setColor(getResources().getColor(
-				R.color.sidebar_font_selected));
-		textPaint.setTextSize(rectWidth - rectPadding);
-		textPaint.setTextAlign(Paint.Align.CENTER);
-	}
+	private ListHandler listHandler = new ListHandler(this);
 
 	public PhraseListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -57,6 +47,13 @@ public class PhraseListView extends ListView {
 	private void init() {
 		setFastScrollEnabled(true);
 		setWillNotDraw(false);
+
+		rectPaint.setColor(getResources().getColor(R.color.sidebar_rect));
+
+		textPaint.setColor(getResources().getColor(
+				R.color.sidebar_font_selected));
+		textPaint.setTextSize(rectWidth - rectPadding);
+		textPaint.setTextAlign(Paint.Align.CENTER);
 	}
 
 	@Override
@@ -85,22 +82,34 @@ public class PhraseListView extends ListView {
 		return listHandler;
 	}
 
-	class ListHandler extends Handler {
+	public void handleMessage(Message msg) {
+		if (msg.what == MSG_DRAW_ON) {
+			showLetter = true;
+			section = ((String) msg.obj);
+		}
+
+		if (msg.what == MSG_DRAW_OFF) {
+			showLetter = false;
+			invalidate();
+		}
+	}
+
+	static class ListHandler extends Handler {
+		private final WeakReference<PhraseListView> mService;
+
+		ListHandler(PhraseListView service) {
+			mService = new WeakReference<PhraseListView>(service);
+		}
 
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 
-			if (msg.what == MSG_DRAW_ON) {
-				showLetter = true;
-				section = ((String) msg.obj).toUpperCase();
-			}
+			PhraseListView plv = mService.get();
 
-			if (msg.what == MSG_DRAW_OFF) {
-				showLetter = false;
-				PhraseListView.this.invalidate();
+			if (plv != null) {
+				plv.handleMessage(msg);
 			}
-
 		}
 
 	}

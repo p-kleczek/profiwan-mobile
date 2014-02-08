@@ -18,20 +18,18 @@ import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
 public class DictionaryActivity extends ListActivity {
 
 	public static final String EDITED_PHRASE = "pkleczek.profiwan.dictionary.EDITED_PHRASE";
-	public static final int EDIT_ACTIVITY = 1;
 
 	private DatabaseHelper dbHelper;
 
 	private EditText edittext;
-	private ListActivity listactivity;
 
 	private RussianKeyboard mCustomKeyboard;
 
@@ -43,8 +41,6 @@ public class DictionaryActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dictionary);
-
-		listactivity = this;
 
 		mKeyboard = new Keyboard(this, R.xml.kbd_rus);
 
@@ -59,24 +55,10 @@ public class DictionaryActivity extends ListActivity {
 		dbHelper = DatabaseHelperImpl.getInstance(this);
 		dictionary = dbHelper.getDictionary();
 
-		// FIXME: refresh lists after an item added/deleted
-		// PhraseEntryArrayAdapter adapter = new PhraseEntryArrayAdapter(this,
-		// dictionary);
-		// setListAdapter(adapter);
-
 		List<String> lookupList = new ArrayList<String>();
 		for (PhraseEntry pe : dictionary) {
 			lookupList.add(pe.getLangAText());
 		}
-
-		// autocompletetextview = (AutoCompleteTextView)
-		// findViewById(R.id.dictionary_autoPhrase);
-		// ArrayAdapter<String> autoAdapter = new ArrayAdapter<String>(this,
-		// android.R.layout.select_dialog_item, lookupList);
-		// autocompletetextview.setThreshold(1);
-		// autocompletetextview.setAdapter(autoAdapter);
-		// autocompletetextview.setInputType(autocompletetextview.getInputType()
-		// | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
 		// debug
 		edittext = (EditText) findViewById(R.id.dictionary_autoPhrase);
@@ -87,24 +69,16 @@ public class DictionaryActivity extends ListActivity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
-				Log.i("profiwan", "text changed: " + s);
-				// listactivity.setSelection(1);
-
 				adapter.getFilter().filter(s);
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-
 			}
 		});
 
@@ -126,6 +100,16 @@ public class DictionaryActivity extends ListActivity {
 		SideBar indexBar = (SideBar) findViewById(R.id.sideBar);  
         indexBar.setListView((PhraseListView) getListView());
 	}
+	
+	@Override
+	public void onBackPressed() {
+		if (mCustomKeyboard.isCustomKeyboardVisible()) {
+			mCustomKeyboard.hideCustomKeyboard();
+		} else {
+			super.onBackPressed();
+		}
+	}
+	
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -135,7 +119,7 @@ public class DictionaryActivity extends ListActivity {
 		Intent intent = new Intent(this, DictionaryEditActivity.class);
 		AndroidPhraseEntry pe = new AndroidPhraseEntry(item);
 		intent.putExtra(EDITED_PHRASE, pe);
-		startActivityForResult(intent, EDIT_ACTIVITY);
+		startActivity(intent);
 	}
 
 	public void editPhrase(View v) {
@@ -144,6 +128,14 @@ public class DictionaryActivity extends ListActivity {
 		item.setCreatedAt(DateTime.now());
 		AndroidPhraseEntry pe = new AndroidPhraseEntry(item);
 		intent.putExtra(EDITED_PHRASE, pe);
-		startActivityForResult(intent, EDIT_ACTIVITY);
+		startActivity(intent);
+	}
+	
+	public void inRevisionsClick(View v) {
+		PhraseEntry pe = (PhraseEntry) v.getTag();
+		CheckBox cbx = (CheckBox) v;
+		
+		pe.setInRevisions(cbx.isChecked());
+		dbHelper.updatePhrase(pe);
 	}
 }

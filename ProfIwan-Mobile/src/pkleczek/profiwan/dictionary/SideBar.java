@@ -3,7 +3,6 @@ package pkleczek.profiwan.dictionary;
 import pkleczek.profiwan.R;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -11,17 +10,30 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SectionIndexer;
 
+/**
+ * A search bar used to quickly navigate through a list of phrases (like in
+ * Android's contacts).
+ * 
+ * @author Paweł Kłeczek
+ * 
+ */
 public class SideBar extends View {
+	/**
+	 * An array of all sections to be drawn.
+	 */
 	private String[] sections;
 
-	private SectionIndexer sectionIndexer = null;
-	private PhraseListView list;
+	private String selectedSection = "";
 
-	String section = "";
+	private SectionIndexer sectionIndexer = null;
+	private PhraseListView phraseList;
 
 	private final Paint _paint = new Paint();
 
-	private int m_nItemHeight;
+	/**
+	 * Height of one item in a bar.
+	 */
+	private int itemHeight;
 
 	public SideBar(Context context) {
 		super(context);
@@ -39,12 +51,13 @@ public class SideBar extends View {
 	}
 
 	private void init() {
+		// TODO : set background
 		// setBackgroundColor(getResources().getColor(R.color.sidebar_background));
 	}
 
-	public void setListView(PhraseListView _list) {
-		list = _list;
-		sectionIndexer = (SectionIndexer) _list.getAdapter();
+	public void setListView(PhraseListView listView) {
+		phraseList = listView;
+		sectionIndexer = (SectionIndexer) listView.getAdapter();
 
 		sections = (String[]) sectionIndexer.getSections();
 	}
@@ -52,39 +65,46 @@ public class SideBar extends View {
 	public boolean onTouchEvent(MotionEvent event) {
 		super.onTouchEvent(event);
 
-		int i = (int) event.getY();
-		int idx = i / m_nItemHeight;
-		if (idx >= sections.length) {
-			idx = sections.length - 1;
-		} else if (idx < 0) {
-			idx = 0;
-		}
+		int idx = getTouchedItemIndex(event.getY());
 
 		if (event.getAction() == MotionEvent.ACTION_DOWN
 				|| event.getAction() == MotionEvent.ACTION_MOVE) {
 
 			if (sectionIndexer == null) {
-				sectionIndexer = (SectionIndexer) list.getAdapter();
+				sectionIndexer = (SectionIndexer) phraseList.getAdapter();
 			}
 
-			section = (String) sectionIndexer.getSections()[idx];
+			selectedSection = (String) sectionIndexer.getSections()[idx];
 
-			Message msg = new Message();
-			msg.what = PhraseListView.MSG_DRAW_ON;
-			msg.obj = section;
-			list.getHandler().sendMessage(msg);
+			sendDrawOnMessage();
 
 			int position = sectionIndexer.getPositionForSection(idx);
-			list.setSelection(position);
+			phraseList.setSelection(position);
 		}
 
 		if (event.getAction() == MotionEvent.ACTION_UP) {
-			section = "";
-			list.getHandler().sendEmptyMessageDelayed(
+			selectedSection = "";
+			phraseList.getHandler().sendEmptyMessageDelayed(
 					PhraseListView.MSG_DRAW_OFF, 100);
 		}
 
 		return true;
+	}
+
+	private void sendDrawOnMessage() {
+		Message msg = new Message();
+		msg.what = PhraseListView.MSG_DRAW_ON;
+		msg.obj = selectedSection;
+		phraseList.getHandler().sendMessage(msg);
+	}
+
+	private int getTouchedItemIndex(float eventY) {
+		int idx = (int) (eventY / itemHeight);
+
+		idx = Math.max(idx, 0);
+		idx = Math.min(idx, sections.length - 1);
+
+		return idx;
 	}
 
 	protected void onDraw(Canvas canvas) {
@@ -97,22 +117,22 @@ public class SideBar extends View {
 
 		final int padding = 4;
 
-		m_nItemHeight = getMeasuredHeight() / sections.length;
+		itemHeight = getMeasuredHeight() / sections.length;
 
-		int textSize = Math.min(getMeasuredWidth(), m_nItemHeight) - padding;
+		int textSize = Math.min(getMeasuredWidth(), itemHeight) - padding;
 		_paint.setTextSize(textSize);
 		_paint.setTextAlign(Paint.Align.CENTER);
 		float widthCenter = getMeasuredWidth() / 2;
 
 		for (int i = 0; i < sections.length; i++) {
-			if (sections[i].equals(section)) {
+			if (sections[i].equals(selectedSection)) {
 				_paint.setColor(selectedFontColor);
 			} else {
 				_paint.setColor(normalFontColor);
 			}
 
-			canvas.drawText(sections[i], widthCenter, m_nItemHeight / 2
-					+ (i * m_nItemHeight), _paint);
+			canvas.drawText(sections[i], widthCenter, itemHeight / 2
+					+ (i * itemHeight), _paint);
 		}
 	}
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import pkleczek.profiwan.R;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.SectionIndexer;
@@ -20,6 +22,8 @@ import android.widget.TextView;
 
 class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 		Filterable, SectionIndexer {
+
+	private final Locale locale;
 
 	/**
 	 * Filters for phrases which "language B" text starts with the given string.
@@ -30,34 +34,33 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 	private class PhraseLangBFilter extends Filter {
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
-			// TODO: locale = language set as revised
-			constraint = constraint.toString().toLowerCase();
-			FilterResults result = new FilterResults();
+			constraint = constraint.toString().toLowerCase(locale);
+			FilterResults results = new FilterResults();
 
 			if (constraint != null && constraint.length() > 0) {
 				List<PhraseEntry> filt = new ArrayList<PhraseEntry>();
-				List<PhraseEntry> lItems = new ArrayList<PhraseEntry>();
+				List<PhraseEntry> items = new ArrayList<PhraseEntry>();
 
 				synchronized (this) {
-					lItems.addAll(objects);
+					items.addAll(objects);
 				}
 
-				for (PhraseEntry pe : lItems) {
+				for (PhraseEntry pe : items) {
 					if (pe.getLangBText().startsWith(constraint.toString())) {
 						filt.add(pe);
 					}
 				}
 
-				result.count = filt.size();
-				result.values = filt;
+				results.count = filt.size();
+				results.values = filt;
 			} else {
 				synchronized (this) {
-					result.count = objects.size();
-					result.values = objects;
+					results.count = objects.size();
+					results.values = objects;
 				}
 			}
 
-			return result;
+			return results;
 		}
 
 		@SuppressWarnings("unchecked")
@@ -104,6 +107,12 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 		Collections.sort(this.objects);
 		filtered = new ArrayList<PhraseEntry>(this.objects);
 
+		if (!objects.isEmpty()) {
+			locale = new Locale(objects.get(0).getLangB());
+		} else {
+			locale = null;
+		}
+
 		updateIndexer();
 	}
 
@@ -131,10 +140,8 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 		for (int i = 0; i < sections.length; i++) {
 			int current = alphaIndexer.get(sections[i]);
 			if (current == position) {
-				// If position matches an index, return it immediately
 				return i;
 			} else if (current < position) {
-				// Check if this is closer than the last index we inspected
 				int delta = position - current;
 				if (delta < latestDelta) {
 					closestIndex = i;
@@ -161,10 +168,15 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 				.findViewById(R.id.dictionary_textViewLangAText);
 		TextView textViewLangBText = (TextView) rowView
 				.findViewById(R.id.dictionary_textViewLangBText);
+		CheckBox inRevisionsCbx = (CheckBox) rowView
+				.findViewById(R.id.dictionary_entry_cbx);
 
 		PhraseEntry selectedPhrase = filtered.get(position);
 		textViewLangAText.setText(selectedPhrase.getLangAText());
 		textViewLangBText.setText(selectedPhrase.getLangBText());
+
+		inRevisionsCbx.setChecked(selectedPhrase.isInRevisions());
+		inRevisionsCbx.setTag(selectedPhrase);
 
 		return rowView;
 	}
@@ -174,10 +186,10 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 	 */
 	private void updateIndexer() {
 		alphaIndexer.clear();
-		
+
 		for (int i = 0; i < filtered.size(); i++) {
 			PhraseEntry pe = filtered.get(i);
-			String start = pe.getLangBText().substring(0, 1).toLowerCase();
+			String start = pe.getLangBText().substring(0, 1).toUpperCase(locale);
 
 			if (!alphaIndexer.containsKey(start)) {
 				alphaIndexer.put(start, i);

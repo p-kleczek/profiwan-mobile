@@ -8,5 +8,6 @@
     <color name="sidebar_background">#44888888</color>
     <color name="sidebar_font_normal">#a6a9aa</color>
     <color name="sidebar_font_selected">#00ffff</color>
+    <color name="sidebar_rect">#c8d3d3d3</color>
     
 </resources>

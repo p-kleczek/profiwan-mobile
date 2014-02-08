@@ -1,6 +1,7 @@
 package pkleczek.profiwan.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import pkleczek.profiwan.model.PhraseEntry;
@@ -111,7 +112,9 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 			closeCursor(c);
 			closeDB();
 		}
-
+		
+		Collections.sort(phrases);
+		
 		return phrases;
 	}
 
@@ -123,7 +126,6 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 		values.put(KEY_PHRASE_LANG1_TEXT, phrase.getLangAText());
 		values.put(KEY_PHRASE_LANG2_TEXT, phrase.getLangBText());
 		values.put(KEY_PHRASE_LABEL, phrase.getLabel());
-		// int inRevisions = phrase.isInRevisions() ? 1 : 0;
 		values.put(KEY_PHRASE_IN_REVISION, phrase.isInRevisions());
 
 		int ret = 0;

@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dictionary_entry_section"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="6dip" >
+    android:padding="6dp" >
 
     <TextView
         android:id="@+id/dictionary_textViewLangBText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@+id/dictionary_entry_cbx"
+        android:text="[langB]"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
+
+    <CheckBox
+        android:id="@+id/dictionary_entry_cbx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold" />
+        android:layout_marginRight="10dp"
+        android:onClick="inRevisionsClick" />
 
     <TextView
         android:id="@+id/dictionary_textViewLangAText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/dictionary_textViewLangBText"
         android:layout_below="@+id/dictionary_textViewLangBText"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_marginTop="4dp"
+        android:text="[langA]"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        tools:ignore="HardcodedText" />
 
 </RelativeLayout>

@@ -17,6 +17,7 @@ public final class R {
         public static final int sidebar_background=0x7f050003;
         public static final int sidebar_font_normal=0x7f050004;
         public static final int sidebar_font_selected=0x7f050005;
+        public static final int sidebar_rect=0x7f050006;
     }
     public static final class dimen {
         public static final int mainMenu_margin=0x7f060000;
@@ -40,17 +41,18 @@ public final class R {
         public static final int dictionary_edit_label_text=0x7f0a0021;
         public static final int dictionary_edit_langA=0x7f0a001d;
         public static final int dictionary_edit_langB=0x7f0a001f;
+        public static final int dictionary_entry_cbx=0x7f0a0026;
         public static final int dictionary_entry_section=0x7f0a0024;
         public static final int dictionary_kbd=0x7f0a001c;
         public static final int dictionary_spin_langA=0x7f0a0006;
         public static final int dictionary_spin_langB=0x7f0a001e;
-        public static final int dictionary_textViewLangAText=0x7f0a0026;
+        public static final int dictionary_textViewLangAText=0x7f0a0027;
         public static final int dictionary_textViewLangBText=0x7f0a0025;
-        public static final int flag_spinner_row_fill=0x7f0a0028;
-        public static final int flag_spinner_row_text=0x7f0a0027;
+        public static final int flag_spinner_row_fill=0x7f0a0029;
+        public static final int flag_spinner_row_text=0x7f0a0028;
         public static final int main_btn_dictionary=0x7f0a0001;
         public static final int main_btn_revisions=0x7f0a0002;
-        public static final int menu_settings=0x7f0a0029;
+        public static final int menu_settings=0x7f0a002a;
         public static final int popup_element=0x7f0a0014;
         public static final int revisions_edit_btn_next=0x7f0a0011;
         public static final int revisions_edit_revisedLanguage=0x7f0a0009;
