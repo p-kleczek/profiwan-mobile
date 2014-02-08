@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
 		// startRevisions(null);
 
 		// debug
-		Intent intent = new Intent(this, DictionaryActivity.class);
+		Intent intent = new Intent(this, RevisionsActivity.class);
 		startActivity(intent);
 	}
 

@@ -105,7 +105,7 @@ public class RevisionsActivity extends Activity {
 
 		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
 
-		TextView tvKnownLanguage = (TextView) findViewById(R.id.revisions_knownLangText);
+		TextView tvKnownLanguage = (TextView) findViewById(R.id.revisions_entered_knownLangText);
 		tvKnownLanguage.setText(phrase.getLangAText());
 
 		TextView enteredText = (TextView) findViewById(R.id.revisions_entered_text_entered);

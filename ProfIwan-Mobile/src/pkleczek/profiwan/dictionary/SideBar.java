@@ -58,8 +58,6 @@ public class SideBar extends View {
 	public void setListView(PhraseListView listView) {
 		phraseList = listView;
 		sectionIndexer = (SectionIndexer) listView.getAdapter();
-
-		sections = (String[]) sectionIndexer.getSections();
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
@@ -109,6 +107,8 @@ public class SideBar extends View {
 
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+
+		sections = (String[]) sectionIndexer.getSections();
 
 		final int normalFontColor = getResources().getColor(
 				R.color.sidebar_font_normal);
