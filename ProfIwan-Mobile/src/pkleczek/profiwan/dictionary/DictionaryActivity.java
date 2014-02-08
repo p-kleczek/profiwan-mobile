@@ -1,6 +1,5 @@
 package pkleczek.profiwan.dictionary;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -55,11 +54,6 @@ public class DictionaryActivity extends ListActivity {
 		dbHelper = DatabaseHelperImpl.getInstance(this);
 		dictionary = dbHelper.getDictionary();
 
-		List<String> lookupList = new ArrayList<String>();
-		for (PhraseEntry pe : dictionary) {
-			lookupList.add(pe.getLangAText());
-		}
-
 		// debug
 		edittext = (EditText) findViewById(R.id.dictionary_autoPhrase);
 		edittext.requestFocus();
@@ -83,10 +77,10 @@ public class DictionaryActivity extends ListActivity {
 		});
 
 		mKeyboardView.setVisibility(View.INVISIBLE);
-		
+
 		adapter = new PhraseEntryArrayAdapter(this, dictionary);
 		setListAdapter(adapter);
-		
+
 		getListView().setFastScrollEnabled(true);
 	}
 
@@ -94,13 +88,16 @@ public class DictionaryActivity extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 
-		dictionary = dbHelper.getDictionary();
-		adapter.notifyDataSetChanged();
-		
-		SideBar indexBar = (SideBar) findViewById(R.id.sideBar);  
-        indexBar.setListView((PhraseListView) getListView());
+		// TODO: make it smarter - don't reload whole list
+
+		dictionary.clear();
+		dictionary.addAll(dbHelper.getDictionary());
+		adapter.notifyPhraseListChanged();
+
+		SideBar indexBar = (SideBar) findViewById(R.id.sideBar);
+		indexBar.setListView((PhraseListView) getListView());
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		if (mCustomKeyboard.isCustomKeyboardVisible()) {
@@ -109,7 +106,6 @@ public class DictionaryActivity extends ListActivity {
 			super.onBackPressed();
 		}
 	}
-	
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -130,11 +126,11 @@ public class DictionaryActivity extends ListActivity {
 		intent.putExtra(EDITED_PHRASE, pe);
 		startActivity(intent);
 	}
-	
+
 	public void inRevisionsClick(View v) {
 		PhraseEntry pe = (PhraseEntry) v.getTag();
 		CheckBox cbx = (CheckBox) v;
-		
+
 		pe.setInRevisions(cbx.isChecked());
 		dbHelper.updatePhrase(pe);
 	}

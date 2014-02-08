@@ -6,7 +6,6 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
@@ -74,8 +73,6 @@ public abstract class CustomKeyboard {
 		edittext.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
-				Log.i(TAG, "onFocusChange() -> " + hasFocus);
-
 				if (hasFocus) {
 					showCustomKeyboard(v);
 				} else {
@@ -87,8 +84,6 @@ public abstract class CustomKeyboard {
 		edittext.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.i(TAG, "onClick()");
-
 				InputMethodManager inputManager = (InputMethodManager) mHostActivity
 						.getSystemService(Activity.INPUT_METHOD_SERVICE);
 				if (inputManager != null) {
@@ -100,8 +95,6 @@ public abstract class CustomKeyboard {
 						return;
 					inputManager.hideSoftInputFromWindow(mHostActivity
 							.getCurrentFocus().getWindowToken(), 0);
-
-					Log.i(TAG, "onClick() [hide]");
 				} else {
 					Log.i(TAG, "onClick() [null]");
 				}
@@ -127,8 +120,6 @@ public abstract class CustomKeyboard {
 						return false;
 					inputManager.hideSoftInputFromWindow(mHostActivity
 							.getCurrentFocus().getWindowToken(), 0);
-
-					Log.i(TAG, "onTouch() [hide]");
 				} else {
 					Log.i(TAG, "onTouch() [null]");
 				}
@@ -161,25 +152,5 @@ public abstract class CustomKeyboard {
 		edittext.setOnTouchListener(null);
 		edittext.setInputType(edittext.getInputType()
 				| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-		
-//		InputMethodManager inputManager = (InputMethodManager) mHostActivity
-//				.getSystemService(Activity.INPUT_METHOD_SERVICE);
-//		if (inputManager != null) {
-//			if (mHostActivity == null)
-//				return;
-//			if (mHostActivity.getCurrentFocus() == null)
-//				return;
-//			if (mHostActivity.getCurrentFocus().getWindowToken() == null)
-//				return;
-//			inputManager.hideSoftInputFromWindow(mHostActivity
-//					.getCurrentFocus().getWindowToken(), 0);
-//		}
-//
-//		if (v != null) {
-//			inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
-//		}
-//		
-//		mHostActivity.getWindow().setSoftInputMode(
-//				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 	}
 }

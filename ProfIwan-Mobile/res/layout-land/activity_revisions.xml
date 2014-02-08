@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/revisions_background"
@@ -13,7 +12,6 @@
         android:layout_toLeftOf="@+id/main_btn_dictionary" >
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/revisionRow_margin" >
@@ -26,7 +24,7 @@
                 android:src="@drawable/flag_pl" />
 
             <TextView
-                android:id="@+id/dictionary_spin_langA"
+                android:id="@+id/revisions_knownLangText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -35,12 +33,12 @@
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/revisions_text"
-                android:textSize="@dimen/revisions_dim_knownLanguageText" />
+                android:textSize="@dimen/revisions_dim_knownLanguageText"
+                tools:ignore="HardcodedText" />
 
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/revisionRow_margin" >

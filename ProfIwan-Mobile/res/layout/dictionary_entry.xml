@@ -25,6 +25,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="10dp"
+        android:clickable="false"
+        android:focusable="false"
         android:onClick="inRevisionsClick" />
 
     <TextView

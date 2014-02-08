@@ -27,14 +27,15 @@
         android:src="@drawable/flag_rus" />
 
     <TextView
-        android:id="@+id/dictionary_spin_langA"
+        android:id="@+id/revisions_entered_knownLangText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/revisions_imgview_knownLanguageFlag"
         android:layout_toRightOf="@+id/revisions_imgview_knownLanguageFlag"
-        android:text="Medium Text"
+        android:text="[Medium Text]"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/revisions_text" />
+        android:textColor="@color/revisions_text"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/revisions_entered_text_entered"
@@ -42,9 +43,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/revisions_imgview_revisedLanguageFlag"
         android:layout_toRightOf="@+id/revisions_imgview_revisedLanguageFlag"
-        android:text="-entered-"
+        android:text="[-entered-]"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/revisions_text" />
+        android:textColor="@color/revisions_text"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/revisions_entered_text_correct"
@@ -53,7 +55,7 @@
         android:layout_alignLeft="@+id/revisions_entered_text_entered"
         android:layout_below="@+id/revisions_imgview_revisedLanguageFlag"
         android:layout_marginBottom="@dimen/revisionRow_margin"
-        android:text="-correct-"
+        android:text="Correct!"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/revisions_text_correct" />
 

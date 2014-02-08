@@ -7,7 +7,7 @@ import android.os.Parcelable;
 
 // Extra class to support parcelling.
 public class AndroidPhraseEntry extends PhraseEntry implements Parcelable {
-	
+
 	public AndroidPhraseEntry(PhraseEntry pe) {
 		this.setId(pe.getId());
 		this.setLangA(pe.getLangA());
@@ -16,8 +16,9 @@ public class AndroidPhraseEntry extends PhraseEntry implements Parcelable {
 		this.setLangBText(pe.getLangBText());
 		this.setLabel(pe.getLabel());
 		this.setCreatedAt(pe.getCreatedAt());
+		this.setInRevisions(pe.isInRevisions());
 	}
-	
+
 	public static final Parcelable.Creator<AndroidPhraseEntry> CREATOR = new Parcelable.Creator<AndroidPhraseEntry>() {
 		public AndroidPhraseEntry createFromParcel(Parcel in) {
 			AndroidPhraseEntry pe = new AndroidPhraseEntry(new PhraseEntry());
@@ -28,6 +29,7 @@ public class AndroidPhraseEntry extends PhraseEntry implements Parcelable {
 			pe.setLangBText(in.readString());
 			pe.setLabel(in.readString());
 			pe.setCreatedAt(new DateTime(in.readLong()));
+			pe.setInRevisions(Boolean.valueOf(in.readString()));
 
 			return pe;
 		}
@@ -51,6 +53,7 @@ public class AndroidPhraseEntry extends PhraseEntry implements Parcelable {
 		dest.writeString(getLangBText());
 		dest.writeString(getLabel());
 		dest.writeLong(getCreatedAt().getMillis());
+		dest.writeString(Boolean.valueOf(isInRevisions()).toString());
 	}
 
 }
