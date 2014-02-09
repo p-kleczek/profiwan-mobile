@@ -1,9 +1,12 @@
-package pkleczek.profiwan;
+package pkleczek.profiwan.revisions;
 
+import pkleczek.profiwan.R;
+import pkleczek.profiwan.R.id;
+import pkleczek.profiwan.R.layout;
+import pkleczek.profiwan.R.menu;
+import pkleczek.profiwan.R.string;
 import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
-import pkleczek.profiwan.revisions.RevisionsActivity;
-import pkleczek.profiwan.revisions.RevisionsEditActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import pkleczek.profiwan.utils.Language;

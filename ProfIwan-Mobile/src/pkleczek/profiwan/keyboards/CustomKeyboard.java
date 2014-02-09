@@ -190,7 +190,7 @@ public abstract class CustomKeyboard {
 			customKeyboard = null;
 		}
 
-		if (lang != Language.PL) {
+		if (lang == Language.RU) {
 			Keyboard keyboard = new Keyboard(activity, lang.getKeyboard());
 			customKeyboard = new RussianKeyboard(activity, kbdId,
 					lang.getKeyboard());
@@ -202,6 +202,8 @@ public abstract class CustomKeyboard {
 			mKeyboardView.setKeyboard(keyboard);
 			mKeyboardView.setPreviewEnabled(false);
 		}
+		
+		// TODO: what with other languages?
 
 		return customKeyboard;
 	}

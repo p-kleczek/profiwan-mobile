@@ -5,7 +5,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import pkleczek.profiwan.R;
-import pkleczek.profiwan.keyboards.RussianKeyboard;
+import pkleczek.profiwan.keyboards.CustomKeyboard;
 import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
@@ -13,8 +13,6 @@ import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import pkleczek.profiwan.utils.Language;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -31,10 +29,9 @@ public class DictionaryActivity extends ListActivity {
 
 	private EditText edittext;
 
-	// TODO: set language for the session
-	private RussianKeyboard mCustomKeyboard;
+	private Language sessionLanguage = Language.RU;
+	private CustomKeyboard kbd;
 
-	private Keyboard mKeyboard;
 	private PhraseEntryArrayAdapter adapter;
 	private List<PhraseEntry> dictionary;
 
@@ -43,15 +40,9 @@ public class DictionaryActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dictionary);
 
-		mKeyboard = new Keyboard(this, R.xml.kbd_rus);
-
-		mCustomKeyboard = new RussianKeyboard(this, R.id.dictionary_kbd,
-				R.xml.kbd_rus);
-
-		mCustomKeyboard.registerEditText(R.id.dictionary_autoPhrase);
-		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.dictionary_kbd);
-		mKeyboardView.setKeyboard(mKeyboard);
-		mKeyboardView.setPreviewEnabled(false);
+		kbd = CustomKeyboard.changeKeyboard(this, kbd,
+				R.id.dictionary_autoPhrase, R.id.dictionary_kbd,
+				sessionLanguage);
 
 		dbHelper = DatabaseHelperImpl.getInstance(this);
 		dictionary = dbHelper.getDictionary();
@@ -78,7 +69,8 @@ public class DictionaryActivity extends ListActivity {
 			}
 		});
 
-		mKeyboardView.setVisibility(View.INVISIBLE);
+		// XXX : ok?
+		// mKeyboardView.setVisibility(View.INVISIBLE);
 
 		adapter = new PhraseEntryArrayAdapter(this, dictionary);
 		setListAdapter(adapter);
@@ -102,8 +94,8 @@ public class DictionaryActivity extends ListActivity {
 
 	@Override
 	public void onBackPressed() {
-		if (mCustomKeyboard.isCustomKeyboardVisible()) {
-			mCustomKeyboard.hideCustomKeyboard();
+		if (kbd.isCustomKeyboardVisible()) {
+			kbd.hideCustomKeyboard();
 		} else {
 			super.onBackPressed();
 		}
@@ -131,11 +123,11 @@ public class DictionaryActivity extends ListActivity {
 	private PhraseEntry createDefaultPhrase() {
 		PhraseEntry item = new PhraseEntry();
 		item.setCreatedAt(DateTime.now());
-		
+
 		// TODO: do it with (default) settings
 		item.setLangA(Language.PL.getLanguageISOCode());
 		item.setLangB(Language.PL.getLanguageISOCode());
-		
+
 		return item;
 	}
 

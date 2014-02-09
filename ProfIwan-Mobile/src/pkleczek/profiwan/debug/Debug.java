@@ -24,9 +24,9 @@ public class Debug {
 
 		e = new PhraseEntry();
 		e.setLangA(Language.PL.getLanguageISOCode());
-		e.setLangB(Language.PL.getLanguageISOCode());
-		e.setLangAText("а");
-		e.setLangBText("aPL");
+		e.setLangB(Language.RU.getLanguageISOCode());
+		e.setLangAText("аRU");
+		e.setLangBText("а");
 		e.setCreatedAt(DateTime.now());
 		e.setLabel("rand");
 		e.setInRevisions(true);
@@ -45,15 +45,15 @@ public class Debug {
 //		dbHelper.createRevision(re, e.getId());
 //		
 //
-//		e = new PhraseEntry();
-//		e.setLangA(Language.PL.getLanguageISOCode());
-//		e.setLangB(Language.PL.getLanguageISOCode());
-//		e.setLangAText("ala");
-//		e.setLangBText("alaPL");
-//		e.setCreatedAt(DateTime.now());
-//		e.setLabel("rand");
-//		e.setInRevisions(true);
-//		dbHelper.createPhrase(e);
+		e = new PhraseEntry();
+		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangB(Language.PL.getLanguageISOCode());
+		e.setLangAText("aPL");
+		e.setLangBText("a");
+		e.setCreatedAt(DateTime.now());
+		e.setLabel("rand");
+		e.setInRevisions(true);
+		dbHelper.createPhrase(e);
 //
 //		e = new PhraseEntry();
 //		e.setLangA(Language.PL.getLanguageISOCode());

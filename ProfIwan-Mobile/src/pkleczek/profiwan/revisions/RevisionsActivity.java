@@ -1,7 +1,6 @@
 package pkleczek.profiwan.revisions;
 
 import pkleczek.profiwan.R;
-import pkleczek.profiwan.RevisionsEnteredActivity;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
 import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
@@ -129,10 +128,13 @@ public class RevisionsActivity extends Activity {
 
 		switch (requestCode) {
 		case (ENTERED_ACTIVITY_REQ): {
+			if (resultCode == Activity.RESULT_CANCELED) {
+				showStats();
+				break;
+			}
+
 			if (resultCode == RevisionsEnteredActivity.RESULT_ACCEPTED) {
 				revisionsSession.acceptRevision();
-			} else if (resultCode == RevisionsEnteredActivity.RESULT_NEXT) {
-				// TODO ...
 			}
 
 			if (resultCode == RevisionsEnteredActivity.RESULT_ACCEPTED
@@ -149,17 +151,22 @@ public class RevisionsActivity extends Activity {
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		showStats();
+		// super.onBackPressed();
+	}
+
 	private void showStats() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
 		// set title
 		alertDialogBuilder.setTitle("Stats");
 
-		String message = String
-				.format("words                = %4d\ncorrect words    = %4d\ntotal revisions   = %4d",
-						revisionsSession.getWordsNumber(),
-						revisionsSession.getCorrectWordsNumber(),
-						revisionsSession.getRevisionsNumber());
+		String message = getResources().getString(R.string.revision_stats,
+				revisionsSession.getWordsNumber(),
+				revisionsSession.getCorrectWordsNumber(),
+				revisionsSession.getRevisionsNumber());
 
 		// set dialog message
 		alertDialogBuilder.setMessage(message).setCancelable(false)

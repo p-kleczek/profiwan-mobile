@@ -54,13 +54,14 @@
         </activity>
         <activity
             android:name="pkleczek.profiwan.revisions.RevisionsEditActivity"
-            android:label="@string/title_activity_revisions_edit" >
+            android:label="@string/title_activity_revisions_edit"
+            android:windowSoftInputMode="stateVisible|adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pkleczek.profiwan.revisions.RevisionsEnteredActivity" />
         </activity>
         <activity
-            android:name="pkleczek.profiwan.RevisionsEnteredActivity"
+            android:name="pkleczek.profiwan.revisions.RevisionsEnteredActivity"
             android:label="@string/title_activity_revisions" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
