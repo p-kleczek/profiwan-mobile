@@ -31,7 +31,7 @@ public class RevisionsEditActivity extends Activity {
 		mCustomKeyboard = new RussianKeyboard(this, R.id.revisions_kbd,
 				R.xml.kbd_rus);
 
-		mCustomKeyboard.registerEditText(R.id.revisions_edit_revisedLanguage);
+		mCustomKeyboard.registerEditText(R.id.revisions_edit_edit_revisedLanguage);
 
 		Keyboard mKeyboard = new Keyboard(this, R.xml.kbd_rus);
 		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.revisions_kbd);
@@ -47,7 +47,7 @@ public class RevisionsEditActivity extends Activity {
 		TextView enteredText = (TextView) findViewById(R.id.revisions_edit_knownLangText);
 		enteredText.setText(editedPhrase.getLangAText());
 
-		EditText etRevisedText = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
+		EditText etRevisedText = (EditText) findViewById(R.id.revisions_edit_edit_revisedLanguage);
 		etRevisedText.setText(editedPhrase.getLangBText());
 	}
 
@@ -76,7 +76,7 @@ public class RevisionsEditActivity extends Activity {
 	}
 
 	public void acceptChanges(View view) {
-		EditText etRevisedText = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
+		EditText etRevisedText = (EditText) findViewById(R.id.revisions_edit_edit_revisedLanguage);
 		String newText = etRevisedText.getText().toString();
 		
 		Intent resultIntent = new Intent();

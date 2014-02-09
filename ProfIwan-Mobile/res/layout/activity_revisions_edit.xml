@@ -41,11 +41,12 @@
             android:src="@drawable/flag_rus" />
 
         <EditText
-            android:id="@+id/revisions_edit_revisedLanguage"
+            android:id="@+id/revisions_edit_edit_revisedLanguage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10" />
+            android:ems="10"
+            android:inputType="text|textNoSuggestions" />
     </TableRow>
 
     <TableRow

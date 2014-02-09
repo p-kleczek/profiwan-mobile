@@ -10,6 +10,7 @@ import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
+import pkleczek.profiwan.utils.Language;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.inputmethodservice.Keyboard;
@@ -121,11 +122,21 @@ public class DictionaryActivity extends ListActivity {
 
 	public void editPhrase(View v) {
 		Intent intent = new Intent(this, DictionaryEditActivity.class);
-		PhraseEntry item = new PhraseEntry();
-		item.setCreatedAt(DateTime.now());
+		PhraseEntry item = createDefaultPhrase();
 		AndroidPhraseEntry pe = new AndroidPhraseEntry(item);
 		intent.putExtra(EDITED_PHRASE, pe);
 		startActivity(intent);
+	}
+
+	private PhraseEntry createDefaultPhrase() {
+		PhraseEntry item = new PhraseEntry();
+		item.setCreatedAt(DateTime.now());
+		
+		// TODO: do it with (default) settings
+		item.setLangA(Language.PL.getLanguageISOCode());
+		item.setLangB(Language.PL.getLanguageISOCode());
+		
+		return item;
 	}
 
 	public void inRevisionsClick(View v) {

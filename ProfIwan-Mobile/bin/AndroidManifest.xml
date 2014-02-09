@@ -39,6 +39,7 @@
         </activity>
         <activity
             android:name="pkleczek.profiwan.revisions.RevisionsActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan"
             android:label="@string/title_activity_revisions" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

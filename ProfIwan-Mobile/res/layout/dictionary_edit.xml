@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/dictionary_spin_langB"
         android:layout_alignBottom="@id/dictionary_spin_langB"
+        android:inputType="text|textNoSuggestions"
         android:ems="10" />
 
 

@@ -70,19 +70,20 @@ public class RevisionsActivity extends Activity {
 		setupUniversalElements();
 		enableKeyboard();
 
-		kbd = CustomKeyboard.changeKeyboard(this, kbd,
-				R.id.revisions_edit_revisedLanguage, R.id.revisions_kbd, langB);
+//		kbd = CustomKeyboard.changeKeyboard(this, kbd,
+//				R.id.revisions_edit_revisedLanguage, R.id.revisions_kbd, langB);
 
 		revisedEditText.setInputType(revisedEditText.getInputType()
 				| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 		revisedEditText.setText("");
+		revisedEditText.clearFocus();
 		revisedEditText.requestFocus();
 		revisedEditText.performClick();
 	}
 
 	private void enableKeyboard() {
-		InputMethodManager inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-		inputManager.showSoftInput(revisedEditText, InputMethodManager.SHOW_IMPLICIT);
+//		InputMethodManager inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+//		inputManager.showSoftInput(revisedEditText, InputMethodManager.SHOW_IMPLICIT);
 	}
 
 	private void setupUniversalElements() {
@@ -143,9 +144,9 @@ public class RevisionsActivity extends Activity {
 	}
 
 	private void hideKeyboard() {
-		InputMethodManager inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-		inputManager.hideSoftInputFromWindow(revisedEditText.getWindowToken(),
-				0);
+//		InputMethodManager inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+//		inputManager.hideSoftInputFromWindow(revisedEditText.getWindowToken(),
+//				0);
 	}
 
 	public void editPhrase(View view) {

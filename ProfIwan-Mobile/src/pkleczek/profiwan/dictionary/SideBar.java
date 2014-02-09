@@ -117,7 +117,8 @@ public class SideBar extends View {
 
 		final int padding = 4;
 
-		itemHeight = getMeasuredHeight() / sections.length;
+		itemHeight = (sections.length == 0) ? 0 : getMeasuredHeight()
+				/ sections.length;
 
 		int textSize = Math.min(getMeasuredWidth(), itemHeight) - padding;
 		_paint.setTextSize(textSize);
