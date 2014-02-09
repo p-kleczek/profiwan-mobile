@@ -9,7 +9,6 @@ import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
-import pkleczek.profiwan.utils.DatabaseHelperImplMock;
 import pkleczek.profiwan.utils.Language;
 import android.database.Cursor;
 import android.util.Log;
@@ -25,145 +24,116 @@ public class Debug {
 
 		e = new PhraseEntry();
 		e.setLangA(Language.PL.getLanguageISOCode());
-		e.setLangB(Language.RU.getLanguageISOCode());
+		e.setLangB(Language.PL.getLanguageISOCode());
 		e.setLangAText("а");
-		e.setLangBText("а");
+		e.setLangBText("aPL");
 		e.setCreatedAt(DateTime.now());
 		e.setLabel("rand");
 		e.setInRevisions(true);
 		dbHelper.createPhrase(e);
 		
-		re = new RevisionEntry();
-		re.setCreatedAt(new DateTime(2013, 12, 5, 10, 15, 8));
-		re.setMistakes(3);
-		e.getRevisions().add(re);
-		dbHelper.createRevision(re, e.getId());
-
-		re = new RevisionEntry();
-		re.setCreatedAt(new DateTime(2014, 1, 2, 10, 15, 8));
-		re.setMistakes(2);
-		e.getRevisions().add(re);
-		dbHelper.createRevision(re, e.getId());
-		
-
-		e = new PhraseEntry();
-		e.setLangA(Language.PL.getLanguageISOCode());
-		e.setLangB(Language.RU.getLanguageISOCode());
-		e.setLangAText("ala");
-		e.setLangBText("ала");
-		e.setCreatedAt(DateTime.now());
-		e.setLabel("rand");
-		e.setInRevisions(true);
-		dbHelper.createPhrase(e);
-
-		e = new PhraseEntry();
-		e.setLangA(Language.PL.getLanguageISOCode());
-		e.setLangB(Language.RU.getLanguageISOCode());
-		e.setLangAText("piotr");
-		e.setLangBText("пиотр");
-		e.setCreatedAt(DateTime.now());
-		e.setLabel("rand");
-		e.setInRevisions(true);
-		dbHelper.createPhrase(e);
-
-		e = new PhraseEntry();
-		e.setLangA(Language.PL.getLanguageISOCode());
-		e.setLangB(Language.RU.getLanguageISOCode());
-		e.setLangAText("dom");
-		e.setLangBText("дом");
-		e.setCreatedAt(DateTime.now());
-		e.setLabel("rand");
-		e.setInRevisions(true);
-		dbHelper.createPhrase(e);
-
-		e = new PhraseEntry();
-		e.setLangA(Language.PL.getLanguageISOCode());
-		e.setLangB(Language.RU.getLanguageISOCode());
-		e.setLangAText("nic");
-		e.setLangBText("ниц");
-		e.setCreatedAt(DateTime.now());
-		e.setLabel("rand");
-		e.setInRevisions(true);
-		dbHelper.createPhrase(e);
-
-		e = new PhraseEntry();
-		e.setLangA(Language.PL.getLanguageISOCode());
-		e.setLangB(Language.RU.getLanguageISOCode());
-		e.setLangAText("ono");
-		e.setLangBText("оно");
-		e.setCreatedAt(DateTime.now());
-		e.setLabel("rand");
-		e.setInRevisions(true);
-		dbHelper.createPhrase(e);
-
-		e = new PhraseEntry();
-		e.setLangA(Language.PL.getLanguageISOCode());
-		e.setLangB(Language.RU.getLanguageISOCode());
-		e.setLangAText("bol");
-		e.setLangBText("бол");
-		e.setCreatedAt(DateTime.now());
-		e.setLabel("rand");
-		e.setInRevisions(true);
-		dbHelper.createPhrase(e);
-
-		e = new PhraseEntry();
-		e.setLangA(Language.PL.getLanguageISOCode());
-		e.setLangB(Language.RU.getLanguageISOCode());
-		e.setLangAText("nicx");
-		e.setLangBText("ниц");
-		e.setCreatedAt(DateTime.now());
-		e.setLabel("rand");
-		e.setInRevisions(true);
-		dbHelper.createPhrase(e);
-
-		e = new PhraseEntry();
-		e.setLangA(Language.PL.getLanguageISOCode());
-		e.setLangB(Language.RU.getLanguageISOCode());
-		e.setLangAText("onox");
-		e.setLangBText("оно");
-		e.setCreatedAt(DateTime.now());
-		e.setLabel("rand");
-		e.setInRevisions(true);
-		dbHelper.createPhrase(e);
-
-		e = new PhraseEntry();
-		e.setLangA(Language.PL.getLanguageISOCode());
-		e.setLangB(Language.RU.getLanguageISOCode());
-		e.setLangAText("bolx");
-		e.setLangBText("бол");
-		e.setCreatedAt(DateTime.now());
-		e.setLabel("rand");
-		e.setInRevisions(true);
-		dbHelper.createPhrase(e);		
+//		re = new RevisionEntry();
+//		re.setCreatedAt(new DateTime(2013, 12, 5, 10, 15, 8));
+//		re.setMistakes(3);
+//		e.getRevisions().add(re);
+//		dbHelper.createRevision(re, e.getId());
+//
+//		re = new RevisionEntry();
+//		re.setCreatedAt(new DateTime(2014, 1, 2, 10, 15, 8));
+//		re.setMistakes(2);
+//		e.getRevisions().add(re);
+//		dbHelper.createRevision(re, e.getId());
+//		
 //
 //		e = new PhraseEntry();
-//		e.setLangA("pl");
-//		e.setLangB("rus");
-//		e.setLangAText("x");
-//		e.setLangBText("y");
-//		e.setCreationDate(DateTime.now());
+//		e.setLangA(Language.PL.getLanguageISOCode());
+//		e.setLangB(Language.PL.getLanguageISOCode());
+//		e.setLangAText("ala");
+//		e.setLangBText("alaPL");
+//		e.setCreatedAt(DateTime.now());
 //		e.setLabel("rand");
 //		e.setInRevisions(true);
 //		dbHelper.createPhrase(e);
 //
-//		e.setLangAText("-x-"); //$NON-NLS-1$
-//		dbHelper.updatePhrase(e);
+//		e = new PhraseEntry();
+//		e.setLangA(Language.PL.getLanguageISOCode());
+//		e.setLangB(Language.RU.getLanguageISOCode());
+//		e.setLangAText("piotr");
+//		e.setLangBText("пиотр");
+//		e.setCreatedAt(DateTime.now());
+//		e.setLabel("rand");
+//		e.setInRevisions(true);
+//		dbHelper.createPhrase(e);
 
-
-		//
-		// re = new RevisionEntry();
-		// cal.set(2013, 12, 15);
-		// re.date = cal.getTime();
-		// re.mistakes = 2;
-		// e.getRevisions().add(re);
-		// re.insertDBEntry(1);
-		//
-		// re = new RevisionEntry();
-		// cal = Calendar.getInstance();
-		// re.date = cal.getTime();
-		// re.mistakes = 2;
-		// e.getRevisions().add(re);
-		// re.insertDBEntry(1);
+//		e = new PhraseEntry();
+//		e.setLangA(Language.PL.getLanguageISOCode());
+//		e.setLangB(Language.RU.getLanguageISOCode());
+//		e.setLangAText("dom");
+//		e.setLangBText("дом");
+//		e.setCreatedAt(DateTime.now());
+//		e.setLabel("rand");
+//		e.setInRevisions(true);
+//		dbHelper.createPhrase(e);
+//
+//		e = new PhraseEntry();
+//		e.setLangA(Language.PL.getLanguageISOCode());
+//		e.setLangB(Language.RU.getLanguageISOCode());
+//		e.setLangAText("nic");
+//		e.setLangBText("ниц");
+//		e.setCreatedAt(DateTime.now());
+//		e.setLabel("rand");
+//		e.setInRevisions(true);
+//		dbHelper.createPhrase(e);
+//
+//		e = new PhraseEntry();
+//		e.setLangA(Language.PL.getLanguageISOCode());
+//		e.setLangB(Language.RU.getLanguageISOCode());
+//		e.setLangAText("ono");
+//		e.setLangBText("оно");
+//		e.setCreatedAt(DateTime.now());
+//		e.setLabel("rand");
+//		e.setInRevisions(true);
+//		dbHelper.createPhrase(e);
+//
+//		e = new PhraseEntry();
+//		e.setLangA(Language.PL.getLanguageISOCode());
+//		e.setLangB(Language.RU.getLanguageISOCode());
+//		e.setLangAText("bol");
+//		e.setLangBText("бол");
+//		e.setCreatedAt(DateTime.now());
+//		e.setLabel("rand");
+//		e.setInRevisions(true);
+//		dbHelper.createPhrase(e);
+//
+//		e = new PhraseEntry();
+//		e.setLangA(Language.PL.getLanguageISOCode());
+//		e.setLangB(Language.RU.getLanguageISOCode());
+//		e.setLangAText("nicx");
+//		e.setLangBText("ниц");
+//		e.setCreatedAt(DateTime.now());
+//		e.setLabel("rand");
+//		e.setInRevisions(true);
+//		dbHelper.createPhrase(e);
+//
+//		e = new PhraseEntry();
+//		e.setLangA(Language.PL.getLanguageISOCode());
+//		e.setLangB(Language.RU.getLanguageISOCode());
+//		e.setLangAText("onox");
+//		e.setLangBText("оно");
+//		e.setCreatedAt(DateTime.now());
+//		e.setLabel("rand");
+//		e.setInRevisions(true);
+//		dbHelper.createPhrase(e);
+//
+//		e = new PhraseEntry();
+//		e.setLangA(Language.PL.getLanguageISOCode());
+//		e.setLangB(Language.RU.getLanguageISOCode());
+//		e.setLangAText("bolx");
+//		e.setLangBText("бол");
+//		e.setCreatedAt(DateTime.now());
+//		e.setLabel("rand");
+//		e.setInRevisions(true);
+//		dbHelper.createPhrase(e);		
 
 		Debug.printDict(dbHelper, "init"); //$NON-NLS-1$
 	}

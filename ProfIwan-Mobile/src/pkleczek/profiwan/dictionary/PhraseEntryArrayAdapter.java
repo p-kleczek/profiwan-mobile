@@ -220,8 +220,6 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 		List<String> keys = new ArrayList<String>(alphaIndexer.keySet());
 		Collections.sort(keys);
 		sections = keys.toArray(new String[0]);
-		
-		// FIXME: notify side bar
 	}
 	
 	public void notifyPhraseListChanged() {

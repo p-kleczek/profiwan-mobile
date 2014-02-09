@@ -4,14 +4,11 @@ import org.joda.time.DateTime;
 
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
-import pkleczek.profiwan.keyboards.RussianKeyboard;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import pkleczek.profiwan.utils.Language;
 import android.app.Activity;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,15 +23,16 @@ public class DictionaryEditActivity extends Activity {
 	private Language langA = Language.PL;
 	private Language langB = Language.RU;
 
-	// XXX: rename
-	private Keyboard mRevisedKeyboard;
-	private CustomKeyboard mRevisedCustomKeyboard;
+	private CustomKeyboard kbdLangA;
+	private CustomKeyboard kbdLangB;
 
 	private PhraseEntry editedPhrase;
 
 	private EditText langAEditText;
 	private EditText langBEditText;
 	private EditText labelEditText;
+
+	private final DictionaryEditActivity instance = this;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +52,8 @@ public class DictionaryEditActivity extends Activity {
 			finish();
 		}
 
+		initializeFieldsValues();
+
 		Spinner spnLangA = (Spinner) findViewById(R.id.dictionary_spin_langA);
 		spnLangA.setAdapter(new FlagSpinnerAdapter(this));
 		spnLangA.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -62,7 +62,10 @@ public class DictionaryEditActivity extends Activity {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int pos, long id) {
 				langA = (Language) parent.getItemAtPosition(pos);
-				changeKeyboard(R.id.dictionary_edit_langA, langA);
+
+				kbdLangA = CustomKeyboard.changeKeyboard(instance, kbdLangA,
+						R.id.dictionary_edit_langA, R.id.dictionary_edit_kbd,
+						langA);
 			}
 
 			@Override
@@ -79,7 +82,9 @@ public class DictionaryEditActivity extends Activity {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int pos, long id) {
 				langB = (Language) parent.getItemAtPosition(pos);
-				changeKeyboard(R.id.dictionary_edit_langB,
+
+				kbdLangB = CustomKeyboard.changeKeyboard(instance, kbdLangB,
+						R.id.dictionary_edit_langB, R.id.dictionary_edit_kbd,
 						langB);
 			}
 
@@ -88,12 +93,11 @@ public class DictionaryEditActivity extends Activity {
 			}
 		});
 		spnLangB.setSelection(langB.ordinal());
-
-		initializeFieldsValues();
 	}
 
 	private void initializeFieldsValues() {
-		// TODO: restore flags' values
+		langA = Language.getLanguageByCode(editedPhrase.getLangA());
+		langB = Language.getLanguageByCode(editedPhrase.getLangB());
 
 		langAEditText.setText(editedPhrase.getLangAText());
 		langBEditText.setText(editedPhrase.getLangBText());
@@ -102,29 +106,12 @@ public class DictionaryEditActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		if (mRevisedCustomKeyboard.isCustomKeyboardVisible()) {
-			mRevisedCustomKeyboard.hideCustomKeyboard();
+		if (kbdLangA != null && kbdLangA.isCustomKeyboardVisible()) {
+			kbdLangA.hideCustomKeyboard();
+		} else if (kbdLangB != null && kbdLangB.isCustomKeyboardVisible()) {
+			kbdLangB.hideCustomKeyboard();
 		} else {
 			super.onBackPressed();
-		}
-	}
-
-	private void changeKeyboard(int editTextId, Language lang) {
-
-		if (mRevisedKeyboard != null) {
-			mRevisedCustomKeyboard.unregisterEditText(editTextId);
-		}
-
-		if (lang != Language.PL) {
-			mRevisedKeyboard = new Keyboard(this, lang.getKeyboard());
-			mRevisedCustomKeyboard = new RussianKeyboard(this,
-					R.id.dictionary_edit_kbd, lang.getKeyboard());
-
-			mRevisedCustomKeyboard.registerEditText(editTextId);
-
-			KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.dictionary_edit_kbd);
-			mKeyboardView.setKeyboard(mRevisedKeyboard);
-			mKeyboardView.setPreviewEnabled(false);
 		}
 	}
 

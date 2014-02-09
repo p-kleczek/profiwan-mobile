@@ -2,48 +2,46 @@ package pkleczek.profiwan.revisions;
 
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
-import pkleczek.profiwan.keyboards.RussianKeyboard;
 import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionsSession;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
+import pkleczek.profiwan.utils.Language;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 public class RevisionsActivity extends Activity {
 
-	CustomKeyboard mCustomKeyboard;
+	private CustomKeyboard kbd;
 	PopupWindow popupWindow = null;
 
 	public static final String EDITED_PHRASE = "pkleczek.profiwan.revisions.EDITED_PHRASE";
 	public static final int EDIT_ACTIVITY = 1;
 
 	private RevisionsSession revisionsSession;
-	private Keyboard mKeyboard;
+
+	private EditText revisedEditText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_revisions);
-		// Show the Up button in the action bar.
-		// getActionBar().setDisplayHomeAsUpEnabled(true);
-
-		mKeyboard = new Keyboard(this, R.xml.kbd_rus);
 
 		revisionsSession = new RevisionsSession(
 				DatabaseHelperImpl.getInstance(this));
@@ -59,65 +57,67 @@ public class RevisionsActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// switch (item.getItemId()) {
-		// case android.R.id.home:
-		// // This ID represents the Home or Up button. In the case of this
-		// // activity, the Up button is shown. Use NavUtils to allow users
-		// // to navigate up one level in the application structure. For
-		// // more details, see the Navigation pattern on Android Design:
-		// //
-		// //
-		// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-		// //
-		// NavUtils.navigateUpFromSameTask(this);
-		// return true;
-		// }
 		return super.onOptionsItemSelected(item);
 	}
 
 	private void setupViewsForNextPhrase() {
 		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
-		
-		String title = getResources().getString(R.string.title_activity_revisions);
-		setTitle(String.format(title, revisionsSession.getCorrectWordsNumber(), revisionsSession.getWordsNumber()));
+		Language langA = Language.getLanguageByCode(phrase.getLangA());
+		Language langB = Language.getLanguageByCode(phrase.getLangB());
 
-		// TODO: set language flags
+		revisedEditText = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
+
+		setupUniversalElements();
+		enableKeyboard();
+
+		kbd = CustomKeyboard.changeKeyboard(this, kbd,
+				R.id.revisions_edit_revisedLanguage, R.id.revisions_kbd, langB);
+
+		revisedEditText.setInputType(revisedEditText.getInputType()
+				| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+		revisedEditText.setText("");
+		revisedEditText.requestFocus();
+		revisedEditText.performClick();
+	}
+
+	private void enableKeyboard() {
+		InputMethodManager inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+		inputManager.showSoftInput(revisedEditText, InputMethodManager.SHOW_IMPLICIT);
+	}
+
+	private void setupUniversalElements() {
+		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
+		Language langA = Language.getLanguageByCode(phrase.getLangA());
+		Language langB = Language.getLanguageByCode(phrase.getLangB());
+
+		String title = getResources().getString(
+				R.string.title_activity_revisions);
+		setTitle(String.format(title, revisionsSession.getCorrectWordsNumber(),
+				revisionsSession.getWordsNumber()));
+
+		ImageView imvA = (ImageView) findViewById(R.id.revisions_imgview_knownLanguageFlag);
+		imvA.setImageResource(langA.getFlagIconId());
+		ImageView imvB = (ImageView) findViewById(R.id.revisions_imgview_revisedLanguageFlag);
+		imvB.setImageResource(langB.getFlagIconId());
 
 		TextView tvKnownLanguage = (TextView) findViewById(R.id.revisions_knownLangText);
 		tvKnownLanguage.setText(phrase.getLangAText());
-
-		mCustomKeyboard = new RussianKeyboard(this, R.id.revisions_kbd,
-				R.xml.kbd_rus);
-
-		mCustomKeyboard.registerEditText(R.id.revisions_edit_revisedLanguage);
-		KeyboardView mKeyboardView = (KeyboardView) findViewById(R.id.revisions_kbd);
-		mKeyboardView.setKeyboard(mKeyboard);
-		mKeyboardView.setPreviewEnabled(false);
-
-		EditText etRevisedLanguage = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
-		etRevisedLanguage.setText("");
-		etRevisedLanguage.requestFocus();
-		etRevisedLanguage.performClick();
 	}
 
 	public void enterPhrase(View view) {
-		EditText editText = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
-		String enteredPhrase = editText.getText().toString();
+		String enteredPhrase = revisedEditText.getText().toString();
 
 		setContentView(R.layout.activity_revisions_entered);
 
-		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
+		setupUniversalElements();
+		hideKeyboard();
 
-		TextView tvKnownLanguage = (TextView) findViewById(R.id.revisions_entered_knownLangText);
-		tvKnownLanguage.setText(phrase.getLangAText());
+		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
 
 		TextView enteredText = (TextView) findViewById(R.id.revisions_entered_text_entered);
 		boolean enteredCorrectly = revisionsSession
 				.processTypedWord(enteredPhrase);
 
-		String title = getResources().getString(R.string.title_activity_revisions);
-		setTitle(String.format(title, revisionsSession.getCorrectWordsNumber(), revisionsSession.getWordsNumber()));
-		
 		enteredText.setText(enteredPhrase);
 
 		Button btnAccept = (Button) findViewById(R.id.revisions_entered_btn_accept);
@@ -140,6 +140,12 @@ public class RevisionsActivity extends Activity {
 		if (!revisionsSession.hasRevisions()) {
 			showStats();
 		}
+	}
+
+	private void hideKeyboard() {
+		InputMethodManager inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+		inputManager.hideSoftInputFromWindow(revisedEditText.getWindowToken(),
+				0);
 	}
 
 	public void editPhrase(View view) {

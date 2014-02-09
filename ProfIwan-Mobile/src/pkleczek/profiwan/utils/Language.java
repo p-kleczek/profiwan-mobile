@@ -12,8 +12,6 @@ public enum Language {
 	private final String languageISOCode;
 	private final int keyboard;
 
-	// TODO: information about keyboard used
-
 	Language(int flagIconId, String languageISOCode, int keyboard) {
 		this.flagIconId = flagIconId;
 		this.languageISOCode = languageISOCode;
@@ -32,4 +30,13 @@ public enum Language {
 		return keyboard;
 	}
 
+	public static Language getLanguageByCode(String code) {
+		for (Language lang : Language.values()) {
+			if (lang.getLanguageISOCode().equals(code)) {
+				return lang;
+			}
+		}
+
+		throw new IllegalArgumentException("No such language code: " + code);
+	}
 }

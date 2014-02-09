@@ -1,6 +1,8 @@
 package pkleczek.profiwan.keyboards;
 
+import pkleczek.profiwan.utils.Language;
 import android.app.Activity;
+import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.text.InputType;
 import android.util.Log;
@@ -51,6 +53,15 @@ public abstract class CustomKeyboard {
 		}
 	}
 
+	/**
+	 * Make the CustomKeyboard visible, and hide the system keyboard for view v.
+	 */
+	private void showSoftKeyboard(View v) {
+		InputMethodManager inputManager = (InputMethodManager) mHostActivity
+				.getSystemService(Activity.INPUT_METHOD_SERVICE);
+		inputManager.showSoftInput(v, 0);
+	}
+
 	/** Make the CustomKeyboard invisible. */
 	public void hideCustomKeyboard() {
 		mKeyboardView.setVisibility(View.GONE);
@@ -68,15 +79,17 @@ public abstract class CustomKeyboard {
 	public void registerEditText(int resid) {
 		final EditText edittext = (EditText) mHostActivity.findViewById(resid);
 
-		// edittext.setOnKeyListener(null);
-
+		edittext.setTag(Boolean.TRUE);
 		edittext.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
-				if (hasFocus) {
-					showCustomKeyboard(v);
-				} else {
-					hideCustomKeyboard();
+				Boolean modeTag = (Boolean) v.getTag();
+				if (modeTag != null && modeTag == Boolean.TRUE) {
+					if (hasFocus) {
+						showCustomKeyboard(v);
+					} else {
+						hideCustomKeyboard();
+					}
 				}
 			}
 		});
@@ -84,22 +97,25 @@ public abstract class CustomKeyboard {
 		edittext.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				InputMethodManager inputManager = (InputMethodManager) mHostActivity
-						.getSystemService(Activity.INPUT_METHOD_SERVICE);
-				if (inputManager != null) {
-					if (mHostActivity == null)
-						return;
-					if (mHostActivity.getCurrentFocus() == null)
-						return;
-					if (mHostActivity.getCurrentFocus().getWindowToken() == null)
-						return;
-					inputManager.hideSoftInputFromWindow(mHostActivity
-							.getCurrentFocus().getWindowToken(), 0);
-				} else {
-					Log.i(TAG, "onClick() [null]");
-				}
+				Boolean modeTag = (Boolean) v.getTag();
+				if (modeTag != null && modeTag == Boolean.TRUE) {
+					InputMethodManager inputManager = (InputMethodManager) mHostActivity
+							.getSystemService(Activity.INPUT_METHOD_SERVICE);
+					if (inputManager != null) {
+						if (mHostActivity == null)
+							return;
+						if (mHostActivity.getCurrentFocus() == null)
+							return;
+						if (mHostActivity.getCurrentFocus().getWindowToken() == null)
+							return;
+						inputManager.hideSoftInputFromWindow(mHostActivity
+								.getCurrentFocus().getWindowToken(), 0);
+					} else {
+						Log.i(TAG, "onClick() [null]");
+					}
 
-				showCustomKeyboard(v);
+					showCustomKeyboard(v);
+				}
 			}
 		});
 
@@ -107,24 +123,25 @@ public abstract class CustomKeyboard {
 
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
-				// mHostActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+				Boolean modeTag = (Boolean) view.getTag();
+				if (modeTag != null && modeTag == Boolean.TRUE) {
+					InputMethodManager inputManager = (InputMethodManager) mHostActivity
+							.getSystemService(Activity.INPUT_METHOD_SERVICE);
+					if (inputManager != null) {
+						if (mHostActivity == null)
+							return false;
+						if (mHostActivity.getCurrentFocus() == null)
+							return false;
+						if (mHostActivity.getCurrentFocus().getWindowToken() == null)
+							return false;
+						inputManager.hideSoftInputFromWindow(mHostActivity
+								.getCurrentFocus().getWindowToken(), 0);
+					} else {
+						Log.i(TAG, "onTouch() [null]");
+					}
 
-				InputMethodManager inputManager = (InputMethodManager) mHostActivity
-						.getSystemService(Activity.INPUT_METHOD_SERVICE);
-				if (inputManager != null) {
-					if (mHostActivity == null)
-						return false;
-					if (mHostActivity.getCurrentFocus() == null)
-						return false;
-					if (mHostActivity.getCurrentFocus().getWindowToken() == null)
-						return false;
-					inputManager.hideSoftInputFromWindow(mHostActivity
-							.getCurrentFocus().getWindowToken(), 0);
-				} else {
-					Log.i(TAG, "onTouch() [null]");
+					setEditTextFocus(edittext, true);
 				}
-
-				setEditTextFocus(edittext, true);
 
 				return false;
 			}
@@ -147,10 +164,45 @@ public abstract class CustomKeyboard {
 	public void unregisterEditText(int resid) {
 		final EditText edittext = (EditText) mHostActivity.findViewById(resid);
 
-		edittext.setOnFocusChangeListener(null);
-		edittext.setOnClickListener(null);
-		edittext.setOnTouchListener(null);
-		edittext.setInputType(edittext.getInputType()
-				| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+		edittext.setTag(Boolean.FALSE);
+		// FIXME: normal listeners
+		// edittext.setOnFocusChangeListener((OnFocusChangeListener)
+		// edittext.getTag());
+		// edittext.setOnClickListener(null);
+		// edittext.setOnTouchListener(null);
+	}
+
+	public static CustomKeyboard changeKeyboard(Activity activity,
+			CustomKeyboard customKeyboard, int editTextId, int kbdId,
+			Language lang) {
+
+		if (customKeyboard != null) {
+			customKeyboard.unregisterEditText(editTextId);
+
+			View editTextView = activity.findViewById(editTextId);
+
+			if (customKeyboard.isCustomKeyboardVisible()) {
+				customKeyboard.hideCustomKeyboard();
+				customKeyboard.showSoftKeyboard(editTextView);
+			}
+
+			customKeyboard.showSoftKeyboard(editTextView);
+			customKeyboard = null;
+		}
+
+		if (lang != Language.PL) {
+			Keyboard keyboard = new Keyboard(activity, lang.getKeyboard());
+			customKeyboard = new RussianKeyboard(activity, kbdId,
+					lang.getKeyboard());
+
+			customKeyboard.registerEditText(editTextId);
+
+			KeyboardView mKeyboardView = (KeyboardView) activity
+					.findViewById(kbdId);
+			mKeyboardView.setKeyboard(keyboard);
+			mKeyboardView.setPreviewEnabled(false);
+		}
+
+		return customKeyboard;
 	}
 }

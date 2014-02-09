@@ -7,5 +7,6 @@
     <string name="title_activity_dictionary_edit">Edit phrase</string>
     <string name="title_activity_revisions">Revisions ( %1$d / %2$d )</string>
     <string name="title_activity_revisions_edit">Edit Revision</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

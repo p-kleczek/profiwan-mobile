@@ -30,6 +30,7 @@ public class DictionaryActivity extends ListActivity {
 
 	private EditText edittext;
 
+	// TODO: set language for the session
 	private RussianKeyboard mCustomKeyboard;
 
 	private Keyboard mKeyboard;
