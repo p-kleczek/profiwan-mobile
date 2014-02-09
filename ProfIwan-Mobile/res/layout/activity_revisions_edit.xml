@@ -17,7 +17,6 @@
             android:layout_gravity="center"
             android:src="@drawable/flag_pl" />
 
-        <!--  FIXME: id? -->
         <TextView
             android:id="@+id/revisions_edit_knownLangText"
             android:layout_width="wrap_content"
@@ -25,8 +24,8 @@
             android:layout_weight="1"
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/revisions_text" />
-
+            android:textColor="@color/revisions_text"
+            tools:ignore="HardcodedText" />
     </TableRow>
 
     <TableRow
@@ -61,7 +60,6 @@
             android:layout_weight="1"
             android:onClick="acceptChanges"
             android:text="Accept" />
-
     </TableRow>
 
     <TableRow
@@ -78,7 +76,6 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:visibility="gone" />
-
     </TableRow>
 
 </TableLayout>

@@ -77,8 +77,11 @@ public class RevisionsActivity extends Activity {
 
 	private void setupViewsForNextPhrase() {
 		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
+		
+		String title = getResources().getString(R.string.title_activity_revisions);
+		setTitle(String.format(title, revisionsSession.getCorrectWordsNumber(), revisionsSession.getWordsNumber()));
 
-		// TODO: set flags
+		// TODO: set language flags
 
 		TextView tvKnownLanguage = (TextView) findViewById(R.id.revisions_knownLangText);
 		tvKnownLanguage.setText(phrase.getLangAText());
@@ -112,6 +115,9 @@ public class RevisionsActivity extends Activity {
 		boolean enteredCorrectly = revisionsSession
 				.processTypedWord(enteredPhrase);
 
+		String title = getResources().getString(R.string.title_activity_revisions);
+		setTitle(String.format(title, revisionsSession.getCorrectWordsNumber(), revisionsSession.getWordsNumber()));
+		
 		enteredText.setText(enteredPhrase);
 
 		Button btnAccept = (Button) findViewById(R.id.revisions_entered_btn_accept);

@@ -46,7 +46,7 @@
         </activity>
         <activity
             android:name="pkleczek.profiwan.revisions.RevisionsEnteredActivity"
-            android:label="@string/title_activity_revisions_entered" >
+            android:label="@string/title_activity_revisions" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pkleczek.profiwan.MainActivity" />
