@@ -1,6 +1,7 @@
 package pkleczek.profiwan.revisions;
 
 import pkleczek.profiwan.R;
+import pkleczek.profiwan.RevisionsEnteredActivity;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
 import pkleczek.profiwan.keyboards.RussianKeyboard;
 import pkleczek.profiwan.model.PhraseEntry;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 public class RevisionsEditActivity extends Activity {
 
+	// FIXME: custom keyboard, flags etc.
 	CustomKeyboard mCustomKeyboard;
 	private PhraseEntry editedPhrase;
 	
@@ -39,7 +41,7 @@ public class RevisionsEditActivity extends Activity {
 		mKeyboardView.setPreviewEnabled(false);
 		
 		try {
-			editedPhrase = getIntent().getParcelableExtra(RevisionsActivity.EDITED_PHRASE);
+			editedPhrase = getIntent().getParcelableExtra(RevisionsEnteredActivity.EDITED_PHRASE);
 		} catch (ClassCastException e) {
 			Log.e("REA", e.toString());
 		}
@@ -80,9 +82,9 @@ public class RevisionsEditActivity extends Activity {
 		String newText = etRevisedText.getText().toString();
 		
 		Intent resultIntent = new Intent();
-		resultIntent.putExtra(RevisionsActivity.EDITED_PHRASE, newText);
+		resultIntent.putExtra(RevisionsEnteredActivity.EDITED_PHRASE, newText);
 		setResult(Activity.RESULT_OK, resultIntent);
 		
-		this.finish();
+		finish();
 	}
 }

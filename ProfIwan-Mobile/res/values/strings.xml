@@ -8,5 +8,6 @@
     <string name="title_activity_revisions">Revisions ( %1$d / %2$d )</string>
     <string name="title_activity_revisions_edit">Edit Revision</string>
     <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

@@ -1,37 +1,37 @@
 package pkleczek.profiwan.revisions;
 
 import pkleczek.profiwan.R;
+import pkleczek.profiwan.RevisionsEnteredActivity;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
 import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionsSession;
-import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import pkleczek.profiwan.utils.Language;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 public class RevisionsActivity extends Activity {
 
 	private CustomKeyboard kbd;
-	PopupWindow popupWindow = null;
 
-	public static final String EDITED_PHRASE = "pkleczek.profiwan.revisions.EDITED_PHRASE";
-	public static final int EDIT_ACTIVITY = 1;
+	public static final String REVISED_PHRASE_EXTRA = "pkleczek.profiwan.revisions.REVISED_PHRASE_EXTRA";
+	public static final String CORRECT_WORDS_EXTRA = "pkleczek.profiwan.revisions.CORRECT_WORDS_EXTRA";
+	public static final String TOTAL_WORDS_EXTRA = "pkleczek.profiwan.revisions.TOTAL_WORDS_EXTRA";
+	public static final String ENTERED_PHRASE_EXTRA = "pkleczek.profiwan.revisions.ENTERED_PHRASE_EXTRA";
+	public static final String WAS_CORRECT_EXTRA = "pkleczek.profiwan.revisions.WAS_CORRECT_EXTRA";
+
+	public static final int ENTERED_ACTIVITY_REQ = 1;
 
 	private RevisionsSession revisionsSession;
 
@@ -67,30 +67,6 @@ public class RevisionsActivity extends Activity {
 
 		revisedEditText = (EditText) findViewById(R.id.revisions_edit_revisedLanguage);
 
-		setupUniversalElements();
-		enableKeyboard();
-
-//		kbd = CustomKeyboard.changeKeyboard(this, kbd,
-//				R.id.revisions_edit_revisedLanguage, R.id.revisions_kbd, langB);
-
-		revisedEditText.setInputType(revisedEditText.getInputType()
-				| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-		revisedEditText.setText("");
-		revisedEditText.clearFocus();
-		revisedEditText.requestFocus();
-		revisedEditText.performClick();
-	}
-
-	private void enableKeyboard() {
-//		InputMethodManager inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-//		inputManager.showSoftInput(revisedEditText, InputMethodManager.SHOW_IMPLICIT);
-	}
-
-	private void setupUniversalElements() {
-		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
-		Language langA = Language.getLanguageByCode(phrase.getLangA());
-		Language langB = Language.getLanguageByCode(phrase.getLangB());
-
 		String title = getResources().getString(
 				R.string.title_activity_revisions);
 		setTitle(String.format(title, revisionsSession.getCorrectWordsNumber(),
@@ -103,67 +79,39 @@ public class RevisionsActivity extends Activity {
 
 		TextView tvKnownLanguage = (TextView) findViewById(R.id.revisions_knownLangText);
 		tvKnownLanguage.setText(phrase.getLangAText());
+
+		kbd = CustomKeyboard.changeKeyboard(this, kbd,
+				R.id.revisions_edit_revisedLanguage, R.id.revisions_kbd, langB);
+
+		revisedEditText.setInputType(revisedEditText.getInputType()
+				| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+		revisedEditText.setText("");
+		revisedEditText.clearFocus();
+		revisedEditText.requestFocus();
+		revisedEditText.performClick();
 	}
 
 	public void enterPhrase(View view) {
-		String enteredPhrase = revisedEditText.getText().toString();
 
-		setContentView(R.layout.activity_revisions_entered);
-
-		setupUniversalElements();
-		hideKeyboard();
-
+		Intent intent = new Intent(this, RevisionsEnteredActivity.class);
 		PhraseEntry phrase = revisionsSession.getCurrentPhrase();
-
-		TextView enteredText = (TextView) findViewById(R.id.revisions_entered_text_entered);
+		AndroidPhraseEntry pe = new AndroidPhraseEntry(phrase);
+		String enteredPhrase = revisedEditText.getText().toString();
 		boolean enteredCorrectly = revisionsSession
 				.processTypedWord(enteredPhrase);
 
-		enteredText.setText(enteredPhrase);
+		intent.putExtra(REVISED_PHRASE_EXTRA, pe);
+		intent.putExtra(CORRECT_WORDS_EXTRA,
+				revisionsSession.getCorrectWordsNumber());
+		intent.putExtra(TOTAL_WORDS_EXTRA, revisionsSession.getWordsNumber());
+		intent.putExtra(ENTERED_PHRASE_EXTRA, enteredPhrase);
+		intent.putExtra(WAS_CORRECT_EXTRA, enteredCorrectly);
 
-		Button btnAccept = (Button) findViewById(R.id.revisions_entered_btn_accept);
-		TextView tvCorrect = (TextView) findViewById(R.id.revisions_entered_text_correct);
-
-		if (enteredCorrectly) {
-			enteredText.setPaintFlags(enteredText.getPaintFlags()
-					& ~(Paint.STRIKE_THRU_TEXT_FLAG));
-
-			tvCorrect.setText("Correct!");
-			btnAccept.setEnabled(false);
-		} else {
-			enteredText.setPaintFlags(enteredText.getPaintFlags()
-					| Paint.STRIKE_THRU_TEXT_FLAG);
-
-			tvCorrect.setText(phrase.getLangBText());
-			btnAccept.setEnabled(true);
-		}
+		startActivityForResult(intent, ENTERED_ACTIVITY_REQ);
 
 		if (!revisionsSession.hasRevisions()) {
 			showStats();
 		}
-	}
-
-	private void hideKeyboard() {
-//		InputMethodManager inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-//		inputManager.hideSoftInputFromWindow(revisedEditText.getWindowToken(),
-//				0);
-	}
-
-	public void editPhrase(View view) {
-		Intent intent = new Intent(this, RevisionsEditActivity.class);
-		AndroidPhraseEntry pe = new AndroidPhraseEntry(
-				revisionsSession.getCurrentPhrase());
-		intent.putExtra(EDITED_PHRASE, pe);
-		startActivityForResult(intent, EDIT_ACTIVITY);
-	}
-
-	public void nextPhrase(View view) {
-		tryNextPhrase();
-	}
-
-	public void acceptPhrase(View view) {
-		revisionsSession.acceptRevision();
-		tryNextPhrase();
 	}
 
 	private void tryNextPhrase() {
@@ -171,7 +119,6 @@ public class RevisionsActivity extends Activity {
 			showStats();
 		} else {
 			revisionsSession.nextRevision();
-			setContentView(R.layout.activity_revisions);
 			setupViewsForNextPhrase();
 		}
 	}
@@ -181,23 +128,22 @@ public class RevisionsActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		switch (requestCode) {
-		case (EDIT_ACTIVITY): {
-			if (resultCode == Activity.RESULT_OK) {
-				String newText = data.getStringExtra(EDITED_PHRASE);
+		case (ENTERED_ACTIVITY_REQ): {
+			if (resultCode == RevisionsEnteredActivity.RESULT_ACCEPTED) {
+				revisionsSession.acceptRevision();
+			} else if (resultCode == RevisionsEnteredActivity.RESULT_NEXT) {
+				// TODO ...
+			}
 
+			if (resultCode == RevisionsEnteredActivity.RESULT_ACCEPTED
+					|| resultCode == RevisionsEnteredActivity.RESULT_NEXT) {
+				String newText = data
+						.getStringExtra(RevisionsEnteredActivity.CORRECTED_PHRASE_EXTRA);
 				revisionsSession.getCurrentPhrase().setLangBText(newText);
 
-				TextView enteredText = (TextView) findViewById(R.id.revisions_entered_text_entered);
-				if (revisionsSession.isEnteredCorrectly(enteredText.getText())) {
-					enteredText.setText(newText);
-				} else {
-					TextView correctText = (TextView) findViewById(R.id.revisions_entered_text_correct);
-					correctText.setText(newText);
-				}
-
-				DatabaseHelper dbHelper = DatabaseHelperImpl.getInstance(this);
-				dbHelper.updatePhrase(revisionsSession.getCurrentPhrase());
+				tryNextPhrase();
 			}
+
 			break;
 		}
 		}
