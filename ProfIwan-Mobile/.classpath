@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="libs/joda-time-2.3.jar"/>
 	<classpathentry kind="lib" path="libs/guava-15.0.jar"/>
 	<classpathentry kind="lib" path="D:/android-sdk/sources/android-18"/>
+	<classpathentry kind="lib" path="libs/android-support-v13.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -1,6 +1,6 @@
 package pkleczek.profiwan.keyboards;
 
-import pkleczek.profiwan.utils.Language;
+import pkleczek.profiwan.utils.lang.Language;
 import android.app.Activity;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;

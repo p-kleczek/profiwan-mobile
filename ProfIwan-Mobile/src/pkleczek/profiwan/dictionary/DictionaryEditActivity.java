@@ -4,12 +4,18 @@ import org.joda.time.DateTime;
 
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
+import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
+import pkleczek.profiwan.revisions.RevisionsEnteredActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
-import pkleczek.profiwan.utils.Language;
+import pkleczek.profiwan.utils.lang.FlagSpinnerAdapter;
+import pkleczek.profiwan.utils.lang.Language;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,8 +26,8 @@ import android.widget.Toast;
 
 public class DictionaryEditActivity extends Activity {
 
-	private Language langA = Language.PL;
-	private Language langB = Language.RU;
+	private Language langA;
+	private Language langB;
 
 	private CustomKeyboard kbdLangA;
 	private CustomKeyboard kbdLangB;
@@ -39,7 +45,7 @@ public class DictionaryEditActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.dictionary_edit);
-
+		
 		langAEditText = (EditText) findViewById(R.id.dictionary_edit_langA);
 		langBEditText = (EditText) findViewById(R.id.dictionary_edit_langB);
 		labelEditText = (EditText) findViewById(R.id.dictionary_edit_label);
@@ -137,12 +143,17 @@ public class DictionaryEditActivity extends Activity {
 		if (editedPhrase.getId() == 0) {
 			editedPhrase.setInRevisions(true);
 			editedPhrase.setCreatedAt(DateTime.now());
-
-			dbHelper.createPhrase(editedPhrase);
+//			This operations are performed in DictionaryActivity
+//			dbHelper.createPhrase(editedPhrase);
 		} else {
-			dbHelper.updatePhrase(editedPhrase);
+//			dbHelper.updatePhrase(editedPhrase);
 		}
 
+		Intent resultIntent = new Intent();
+		AndroidPhraseEntry ape = new AndroidPhraseEntry(editedPhrase);
+		resultIntent.putExtra(DictionaryActivity.EDITED_PHRASE, ape);
+		setResult(Activity.RESULT_OK, resultIntent);
+		
 		finish();
 	}
 }

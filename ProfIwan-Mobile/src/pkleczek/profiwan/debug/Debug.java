@@ -9,7 +9,7 @@ import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
-import pkleczek.profiwan.utils.Language;
+import pkleczek.profiwan.utils.lang.Language;
 import android.database.Cursor;
 import android.util.Log;
 

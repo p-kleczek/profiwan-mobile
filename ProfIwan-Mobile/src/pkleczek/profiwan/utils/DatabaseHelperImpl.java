@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import pkleczek.profiwan.ProfIwanApplication;
+import pkleczek.profiwan.ProfIwanApplication.RunningMode;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionEntry;
 import android.content.ContentValues;
@@ -16,7 +18,8 @@ import android.util.Log;
 public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 		DatabaseHelper {
 
-	private static int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 1;
+	private static final String TEST_DATABASE_NAME = "profiwan_test";
 
 	private static DatabaseHelper instance;
 
@@ -28,7 +31,9 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 	}
 
 	private DatabaseHelperImpl(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		super(context,
+				(ProfIwanApplication.runningMode == RunningMode.TEST) ? null
+						: DATABASE_NAME, null, DATABASE_VERSION);
 
 		// XXX: debug!
 		// clearDB();
@@ -112,9 +117,9 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 			closeCursor(c);
 			closeDB();
 		}
-		
+
 		Collections.sort(phrases);
-		
+
 		return phrases;
 	}
 
@@ -233,7 +238,9 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 	private void closeDB() {
 		SQLiteDatabase db = this.getReadableDatabase();
 		if (db != null && db.isOpen()) {
-			db.close();
+			if (ProfIwanApplication.runningMode != RunningMode.TEST) {
+				db.close();
+			}
 		}
 	}
 

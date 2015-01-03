@@ -1,7 +1,9 @@
 package pkleczek.profiwan;
 
+import pkleczek.profiwan.ProfIwanApplication.RunningMode;
 import pkleczek.profiwan.dictionary.DictionaryActivity;
 import pkleczek.profiwan.model.RevisionsSession;
+import pkleczek.profiwan.prefs.Settings;
 import pkleczek.profiwan.revisions.RevisionsActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
@@ -9,13 +11,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends Activity {
 
 	DatabaseHelper dbHelper;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -28,14 +32,31 @@ public class MainActivity extends Activity {
 		dbHelper = DatabaseHelperImpl.getInstance(this);
 
 		// debug
-		Intent intent = new Intent(this, DictionaryActivity.class);
-		startActivity(intent);
+		if (ProfIwanApplication.runningMode == RunningMode.DEBUG) {
+			Intent intent = new Intent(this, DictionaryActivity.class);
+			startActivity(intent);
+		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.activity_main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.action_app_settings:
+			Intent intent = new Intent(this, Settings.class);
+			startActivity(intent);
+			break;
+		default:
+			break;
+		}
+
 		return true;
 	}
 

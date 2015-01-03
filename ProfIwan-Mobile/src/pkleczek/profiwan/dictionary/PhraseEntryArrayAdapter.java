@@ -9,7 +9,9 @@ import java.util.Map;
 
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.model.PhraseEntry;
+import pkleczek.profiwan.utils.lang.Language;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +22,25 @@ import android.widget.Filterable;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
-		Filterable, SectionIndexer {
+public class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry>
+		implements Filterable, SectionIndexer {
+
+	private final Object lock = new Object();
+
+	private final Object filterLock = new Object();
+	boolean isFiltered = false;
+
+	private Language sessionLanguage = null;
+
+	public Language getSessionLanguage() {
+		return sessionLanguage;
+	}
+
+	public void setSessionLanguage(Language sessionLanguage) {
+		Log.d("test", "filtLang = " + sessionLanguage.getLanguageISOCode());
+		this.sessionLanguage = sessionLanguage;
+		getFilter().filter(lastFilterSeq);
+	}
 
 	/**
 	 * Filters for phrases which "language B" text starts with the given string.
@@ -32,33 +51,42 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 	private class PhraseLangBFilter extends Filter {
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
+			Log.d("test", "started filtering");
+
 			constraint = constraint.toString().toLowerCase(locale);
 			lastFilterSeq = constraint;
 			FilterResults results = new FilterResults();
 
-			if (constraint != null && constraint.length() > 0) {
-				List<PhraseEntry> filt = new ArrayList<PhraseEntry>();
-				List<PhraseEntry> items = new ArrayList<PhraseEntry>();
+			List<PhraseEntry> filt = new ArrayList<PhraseEntry>();
+			List<PhraseEntry> items = new ArrayList<PhraseEntry>();
 
-				synchronized (this) {
-					items.addAll(objects);
-				}
+			synchronized (lock) {
+				items.addAll(objects);
+			}
 
-				for (PhraseEntry pe : items) {
-					String langBText = pe.getLangBText().toLowerCase(locale);
-					if (langBText.startsWith(constraint.toString())) {
-						filt.add(pe);
-					}
-				}
+			for (PhraseEntry pe : items) {
+				Language phraseLang = Language.getLanguageByCode(pe.getLangB());
+				boolean isLanguageOk = phraseLang.equals(sessionLanguage);
 
-				results.count = filt.size();
-				results.values = filt;
-			} else {
-				synchronized (this) {
-					results.count = objects.size();
-					results.values = objects;
+				boolean isConstraintEmpty = constraint == null
+						|| constraint.length() == 0;
+
+				String langBText = pe.getLangBText().toLowerCase(locale);
+				boolean isConstraintOk = !isConstraintEmpty
+						&& langBText.startsWith(constraint.toString());
+
+				if (isLanguageOk && (isConstraintEmpty || isConstraintOk)) {
+					filt.add(pe);
 				}
 			}
+
+			Log.d("test", "n_filtered = " + filt.size());
+			Log.d("test", String.format("filt [%s, %s] = %s",
+					sessionLanguage.getLanguageISOCode(), constraint,
+					filt.toString()));
+
+			results.count = filt.size();
+			results.values = filt;
 
 			return results;
 		}
@@ -70,9 +98,9 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 
 			clear();
 
-//			if (results.count == 0) {
-//				notifyDataSetInvalidated();
-//			} else {
+			// if (results.count > 0) {
+			Log.d("test", "nFiltered = " + results.count);
+			synchronized (lock) {
 				filtered = (List<PhraseEntry>) results.values;
 
 				for (PhraseEntry pe : filtered) {
@@ -80,9 +108,14 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 				}
 
 				updateIndexer();
+			}
 
-				notifyDataSetChanged();
-//			}
+			notifyDataSetChanged();
+
+			synchronized (filterLock) {
+				isFiltered = true;
+				filterLock.notify();
+			}
 		}
 	}
 
@@ -102,12 +135,15 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 	private String[] sections;
 
 	private CharSequence lastFilterSeq = "";
-	
-	public PhraseEntryArrayAdapter(Context context, List<PhraseEntry> objects) {
+
+	private SideBar sideBar;
+
+	public PhraseEntryArrayAdapter(Context context, List<PhraseEntry> objects,
+			SideBar sidebar) {
 		super(context, R.layout.dictionary_entry, objects);
-		
+
 		this.context = context;
-		
+
 		modelList = objects;
 		this.objects = new ArrayList<PhraseEntry>(objects);
 		filtered = new ArrayList<PhraseEntry>(objects);
@@ -119,16 +155,22 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 		}
 
 		updateIndexer();
+
+		this.sideBar = sidebar;
 	}
 
 	@Override
 	public int getCount() {
-		return filtered.size();
+		synchronized (lock) {
+			return filtered.size();
+		}
 	}
 
 	@Override
 	public PhraseEntry getItem(int position) {
-		return filtered.get(position);
+		synchronized (lock) {
+			return filtered.get(position);
+		}
 	}
 
 	@Override
@@ -191,7 +233,10 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 		CheckBox inRevisionsCbx = (CheckBox) rowView
 				.findViewById(R.id.dictionary_entry_cbx);
 
-		PhraseEntry selectedPhrase = filtered.get(position);
+		PhraseEntry selectedPhrase;
+		synchronized (lock) {
+			selectedPhrase = filtered.get(position);
+		}
 		textViewLangAText.setText(selectedPhrase.getLangAText());
 		textViewLangBText.setText(selectedPhrase.getLangBText());
 
@@ -221,12 +266,37 @@ class PhraseEntryArrayAdapter extends ArrayAdapter<PhraseEntry> implements
 		Collections.sort(keys);
 		sections = keys.toArray(new String[0]);
 	}
-	
+
 	public void notifyPhraseListChanged() {
 		objects.clear();
 		objects.addAll(modelList);
-		
-		getFilter().filter(lastFilterSeq );
+
+		// isFiltered = false;
+		getFilter().filter(lastFilterSeq);
+		// synchronized (filterLock) {
+		// while (!isFiltered) {
+		// try {
+		// filterLock.wait();
+		// } catch (InterruptedException e) {
+		// }
+		// }
+		// }
+	}
+
+	@Override
+	public void notifyDataSetChanged() {
+		super.notifyDataSetChanged();
+
+		adjustSidebarVisibility();
+	}
+
+	private void adjustSidebarVisibility() {
+		boolean isAdapterEmpty = getCount() == 0;
+		int visibility = isAdapterEmpty ? View.INVISIBLE : View.VISIBLE;
+
+		if (sideBar != null) {
+			sideBar.setVisibility(visibility);
+		}
 	}
 
 }

@@ -1,7 +1,6 @@
-package pkleczek.profiwan.dictionary;
+package pkleczek.profiwan.utils.lang;
 
 import pkleczek.profiwan.R;
-import pkleczek.profiwan.utils.Language;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

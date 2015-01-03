@@ -1,4 +1,4 @@
-package pkleczek.profiwan.utils;
+package pkleczek.profiwan.utils.lang;
 
 import pkleczek.profiwan.R;
 
@@ -10,12 +10,12 @@ public enum Language {
 
 	private final int flagIconId;
 	private final String languageISOCode;
-	private final int keyboard;
+	private final int keyboardXml;
 
 	Language(int flagIconId, String languageISOCode, int keyboard) {
 		this.flagIconId = flagIconId;
 		this.languageISOCode = languageISOCode;
-		this.keyboard = keyboard;
+		this.keyboardXml = keyboard;
 	}
 
 	public int getFlagIconId() {
@@ -27,7 +27,7 @@ public enum Language {
 	}
 
 	public int getKeyboard() {
-		return keyboard;
+		return keyboardXml;
 	}
 
 	public static Language getLanguageByCode(String code) {

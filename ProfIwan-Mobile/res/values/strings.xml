@@ -9,5 +9,21 @@
     <string name="title_activity_revisions_edit">Edit Revision</string>
     <string name="action_settings">Settings</string>
     <string name="revision_stats">words = %1$d\ncorrect words = %2$d\ntotal revisions = %3$d</string>
+    <string name="title_activity_settings">Settigs</string>
+
+    <!-- Keys for preferences -->
+    <string name="pref_key_known_language">pref_key_known_language</string>
+    <string name="pref_key_revised_language">pref_key_revised_language</string>
+
+    <!-- Default values for preferences -->
+    <string name="known_language_default">pl</string>
+    <string name="revised_language_default">ru</string>
+
+    <!-- Preferences' titles -->
+    <string name="pref_title_known_language">Default known language</string>
+    <string name="pref_title_revised_language">Default revised language</string>
+    
+    <!-- Dictionary context menu -->
+    <string name="dict_menu_delete">Delete</string>
 
 </resources>

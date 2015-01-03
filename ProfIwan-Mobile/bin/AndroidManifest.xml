@@ -61,12 +61,12 @@
                 android:value="pkleczek.profiwan.revisions.RevisionsEnteredActivity" />
         </activity>
         <activity
-            android:name="pkleczek.profiwan.revisions.RevisionsEnteredActivity"
-            android:label="@string/title_activity_revisions" >
+            android:name="pkleczek.profiwan.prefs.Settings"
+            android:label="@string/title_activity_settings" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pkleczek.profiwan.MainActivity" />
-        </activity>
+        </activity>        
     </application>
 
 </manifest>

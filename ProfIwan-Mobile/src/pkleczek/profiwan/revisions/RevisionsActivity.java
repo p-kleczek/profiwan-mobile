@@ -6,13 +6,14 @@ import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionsSession;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
-import pkleczek.profiwan.utils.Language;
+import pkleczek.profiwan.utils.lang.Language;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -141,6 +142,7 @@ public class RevisionsActivity extends Activity {
 					|| resultCode == RevisionsEnteredActivity.RESULT_NEXT) {
 				String newText = data
 						.getStringExtra(RevisionsEnteredActivity.CORRECTED_PHRASE_EXTRA);
+				Log.d("XXX", newText);
 				revisionsSession.getCurrentPhrase().setLangBText(newText);
 
 				tryNextPhrase();

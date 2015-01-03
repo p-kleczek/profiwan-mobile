@@ -9,7 +9,7 @@ import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
-import pkleczek.profiwan.utils.Language;
+import pkleczek.profiwan.utils.lang.Language;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -31,8 +31,8 @@ public class RevisionsEnteredActivity extends Activity {
 	 */
 	public static final String CORRECTED_PHRASE_EXTRA = "pkleczek.profiwan.revisions.CORRECTED_PHRASE_EXTRA";
 
-	public static final int RESULT_NEXT = 0;
-	public static final int RESULT_ACCEPTED = 1;
+	public static final int RESULT_NEXT = 1000;
+	public static final int RESULT_ACCEPTED = 1001;
 
 	private PhraseEntry phrase;
 	private Boolean wasCorrect = null;

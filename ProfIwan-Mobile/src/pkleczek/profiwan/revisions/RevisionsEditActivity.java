@@ -3,7 +3,7 @@ package pkleczek.profiwan.revisions;
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
 import pkleczek.profiwan.model.PhraseEntry;
-import pkleczek.profiwan.utils.Language;
+import pkleczek.profiwan.utils.lang.Language;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
