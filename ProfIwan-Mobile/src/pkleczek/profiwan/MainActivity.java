@@ -3,10 +3,12 @@ package pkleczek.profiwan;
 import pkleczek.profiwan.ProfIwanApplication.RunningMode;
 import pkleczek.profiwan.dictionary.DictionaryActivity;
 import pkleczek.profiwan.model.RevisionsSession;
+import pkleczek.profiwan.model.Timepoint.TimepointType;
 import pkleczek.profiwan.prefs.Settings;
 import pkleczek.profiwan.revisions.RevisionsActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
+import pkleczek.profiwan.utils.Logging;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,6 +38,8 @@ public class MainActivity extends Activity {
 			Intent intent = new Intent(this, DictionaryActivity.class);
 			startActivity(intent);
 		}
+		
+//		Logging.logEvent(DatabaseHelperImpl.getInstance(this), TimepointType.SESSION_STARTED);
 	}
 
 	@Override
@@ -73,6 +77,8 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+
+//		Logging.logEvent(DatabaseHelperImpl.getInstance(this), TimepointType.SESSION_FINISHED);
 	}
 
 	@Override

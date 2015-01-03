@@ -1,11 +1,20 @@
 package pkleczek.profiwan.revisions;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.joda.time.DateTime;
+
+import pkleczek.profiwan.ProfIwanApplication;
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.keyboards.CustomKeyboard;
 import pkleczek.profiwan.model.AndroidPhraseEntry;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionsSession;
+import pkleczek.profiwan.model.Timepoint;
+import pkleczek.profiwan.model.Timepoint.TimepointType;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
+import pkleczek.profiwan.utils.Logging;
 import pkleczek.profiwan.utils.lang.Language;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +46,7 @@ public class RevisionsActivity extends Activity {
 	private RevisionsSession revisionsSession;
 
 	private EditText revisedEditText;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,7 +56,17 @@ public class RevisionsActivity extends Activity {
 		revisionsSession = new RevisionsSession(
 				DatabaseHelperImpl.getInstance(this));
 		setupViewsForNextPhrase();
+		
+		ProfIwanApplication.isDuringRevisionSession = true;
 	}
+	
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ProfIwanApplication.isDuringRevisionSession = false;
+	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -142,7 +162,6 @@ public class RevisionsActivity extends Activity {
 					|| resultCode == RevisionsEnteredActivity.RESULT_NEXT) {
 				String newText = data
 						.getStringExtra(RevisionsEnteredActivity.CORRECTED_PHRASE_EXTRA);
-				Log.d("XXX", newText);
 				revisionsSession.getCurrentPhrase().setLangBText(newText);
 
 				tryNextPhrase();
@@ -182,5 +201,4 @@ public class RevisionsActivity extends Activity {
 
 		alertDialog.show();
 	}
-
 }

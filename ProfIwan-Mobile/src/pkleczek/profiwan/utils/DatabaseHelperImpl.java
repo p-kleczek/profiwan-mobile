@@ -8,6 +8,8 @@ import pkleczek.profiwan.ProfIwanApplication;
 import pkleczek.profiwan.ProfIwanApplication.RunningMode;
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionEntry;
+import pkleczek.profiwan.model.Timepoint;
+import pkleczek.profiwan.model.Timepoint.TimepointType;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,7 +20,7 @@ import android.util.Log;
 public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 		DatabaseHelper {
 
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private static final String TEST_DATABASE_NAME = "profiwan_test";
 
 	private static DatabaseHelper instance;
@@ -43,12 +45,14 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_TABLE_PHRASE);
 		db.execSQL(CREATE_TABLE_REVISION);
+		db.execSQL(CREATE_TABLE_TIMEPOINT);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_PHRASE);
-		db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_REVISION);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHRASE);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_REVISION);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_TIMEPOINT);
 
 		onCreate(db);
 	}
@@ -250,8 +254,55 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements
 		try {
 			db.delete(TABLE_PHRASE, null, null);
 			db.delete(TABLE_REVISION, null, null);
+			db.delete(TABLE_TIMEPOINT, null, null);
 		} finally {
 			closeDB();
 		}
+	}
+
+	@Override
+	public long createTimepoint(Timepoint timepoint) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_TIMEPOINT_TYPE, timepoint.getType().name());
+		values.put(KEY_CREATED_AT,
+				DBUtils.getIntFromDateTime(timepoint.getCreatedAt()));
+
+		long timepoint_id = db.insert(TABLE_TIMEPOINT, null, values);
+		timepoint.setId(timepoint_id);
+
+		return timepoint_id;
+	}
+
+	@Override
+	public List<Timepoint> getAllTimepoints() {
+		List<Timepoint> timepoints = new ArrayList<Timepoint>();
+		String selectQuery = "SELECT  * FROM " + TABLE_TIMEPOINT;
+		
+		Cursor c = null;
+		try {
+			SQLiteDatabase db = this.getReadableDatabase();
+			c = db.rawQuery(selectQuery, null);
+
+			if (c.moveToFirst()) {
+				do {
+					Timepoint t = new Timepoint();
+
+					t.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+					t.setCreatedAt(DBUtils.getDateTimeFromInt(c.getInt(c
+							.getColumnIndex(KEY_CREATED_AT))));
+					t.setType(TimepointType.valueOf(c.getString(c.getColumnIndex(KEY_TIMEPOINT_TYPE))));
+					timepoints.add(t);
+				} while (c.moveToNext());
+			}
+		} finally {
+			closeCursor(c);
+			closeDB();
+		}
+
+		Collections.sort(timepoints);
+
+		return timepoints;
 	}
 }
