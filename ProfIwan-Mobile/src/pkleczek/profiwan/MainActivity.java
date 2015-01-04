@@ -3,20 +3,14 @@ package pkleczek.profiwan;
 import pkleczek.profiwan.ProfIwanApplication.RunningMode;
 import pkleczek.profiwan.dictionary.DictionaryActivity;
 import pkleczek.profiwan.model.RevisionsSession;
-import pkleczek.profiwan.model.Timepoint.TimepointType;
 import pkleczek.profiwan.prefs.Settings;
 import pkleczek.profiwan.revisions.RevisionsActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
-import pkleczek.profiwan.utils.Logging;
 import pkleczek.profiwan.utils.Notifications;
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,7 +39,7 @@ public class MainActivity extends Activity {
 		}
 		
 //		Logging.logEvent(DatabaseHelperImpl.getInstance(this), TimepointType.SESSION_STARTED);
-		Notifications.notify(this);
+		Notifications.setAlarm(this.getApplicationContext());
 	}
 
 	@Override
