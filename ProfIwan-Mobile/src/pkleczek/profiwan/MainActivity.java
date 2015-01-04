@@ -9,6 +9,7 @@ import pkleczek.profiwan.revisions.RevisionsActivity;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import pkleczek.profiwan.utils.Logging;
+import pkleczek.profiwan.utils.Notifications;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -44,41 +45,7 @@ public class MainActivity extends Activity {
 		}
 		
 //		Logging.logEvent(DatabaseHelperImpl.getInstance(this), TimepointType.SESSION_STARTED);
-		
-		//
-		// --- NOTIFICATION ---
-		//
-		
-		NotificationCompat.Builder mBuilder =
-			    new NotificationCompat.Builder(this)
-			    .setSmallIcon(R.drawable.speech_icon)
-			    .setContentTitle(this.getString(R.string.revisions_notification_title))
-			    .setContentText(this.getString(R.string.revision_notification_content));
-		
-		Intent notifyIntent = new Intent(this, MainActivity.class);
-		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		
-		PendingIntent resultPendingIntent =
-		    PendingIntent.getActivity(
-		    this,
-		    0,
-		    notifyIntent,
-		    PendingIntent.FLAG_UPDATE_CURRENT
-		);
-		
-		mBuilder.setContentIntent(resultPendingIntent);
-		
-		int mNotificationId = 001;
-		NotificationManager mNotifyMgr = 
-		        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		
-		Notification notification = mBuilder.build();
-		notification.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
-		// Hide notification after it's clicked by a user.
-		notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-
-		
-		mNotifyMgr.notify(mNotificationId, notification);
+		Notifications.notify(this);
 	}
 
 	@Override
