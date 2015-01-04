@@ -33,6 +33,7 @@ public final class R {
         public static final int flag_pl=0x7f020000;
         public static final int flag_rus=0x7f020001;
         public static final int ic_launcher=0x7f020002;
+        public static final int speech_icon=0x7f020003;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f0b0004;
@@ -120,7 +121,9 @@ public final class R {
         public static final int pref_title_known_language=0x7f08000d;
         public static final int pref_title_revised_language=0x7f08000e;
         public static final int revised_language_default=0x7f08000c;
+        public static final int revision_notification_content=0x7f080011;
         public static final int revision_stats=0x7f080007;
+        public static final int revisions_notification_title=0x7f080010;
         public static final int title_activity_dictionary=0x7f080002;
         public static final int title_activity_dictionary_edit=0x7f080003;
         public static final int title_activity_revisions=0x7f080004;

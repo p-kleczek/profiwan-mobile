@@ -25,5 +25,7 @@
     
     <!-- Dictionary context menu -->
     <string name="dict_menu_delete">Delete</string>
+    <string name="revisions_notification_title">Do your homework!</string>
+    <string name="revision_notification_content">It\'s time to make another revision session...</string>
 
 </resources>
