@@ -3,6 +3,8 @@ package pkleczek.profiwan.utils;
 import java.util.Calendar;
 
 import pkleczek.profiwan.MainActivity;
+import pkleczek.profiwan.ProfIwanApplication;
+import pkleczek.profiwan.ProfIwanApplication.RunningMode;
 import pkleczek.profiwan.R;
 import pkleczek.profiwan.revisions.NotificationAlarmReceiver;
 import android.app.AlarmManager;
@@ -20,7 +22,8 @@ public class Notifications {
 			    new NotificationCompat.Builder(context)
 			    .setSmallIcon(R.drawable.speech_icon)
 			    .setContentTitle(context.getString(R.string.revisions_notification_title))
-			    .setContentText(context.getString(R.string.revision_notification_content));
+			    .setContentText(context.getString(R.string.revision_notification_content))
+			    .setAutoCancel(true);
 		
 		Intent notifyIntent = new Intent(context, MainActivity.class);
 		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -40,10 +43,7 @@ public class Notifications {
 		        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		Notification notification = mBuilder.build();
-		notification.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
-		// Hide notification after it's clicked by a user.
-		notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-
+//		notification.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 		
 		mNotifyMgr.notify(mNotificationId, notification);		
 	}
@@ -57,10 +57,12 @@ public class Notifications {
 
 		// Set the alarm to start (almost) now and repeat every 5 minutes.
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis() + 5000);
+		calendar.setTimeInMillis(System.currentTimeMillis() + 5000);  // XXX: powinno być 5 MINUT
 		final long MILLIS_PER_MINUTE = 1000 * 60;
 		long interval = MILLIS_PER_MINUTE * 5;
-		interval = 10 * 1000;
+		if (ProfIwanApplication.runningMode != RunningMode.NORMAL) {
+			interval = 10 * 1000;
+		}
 		alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
 				interval, alarmIntent);		
 	}

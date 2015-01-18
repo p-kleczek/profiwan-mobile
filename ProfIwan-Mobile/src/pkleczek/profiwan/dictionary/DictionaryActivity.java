@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -67,6 +68,7 @@ public class DictionaryActivity extends ListActivity {
 		String langPref = prefs.getString(
 				getString(R.string.pref_key_revised_language), null);
 		sessionLanguage = Language.getLanguageByCode(langPref);
+		setActivityTitle();
 
 		kbd = CustomKeyboard.changeKeyboard(this, kbd,
 				R.id.dictionary_autoPhrase, R.id.dictionary_kbd,
@@ -232,6 +234,12 @@ public class DictionaryActivity extends ListActivity {
 
 		return true;
 	}
+	
+	private void setActivityTitle() {
+		String base = this.getString(R.string.title_activity_dictionary);
+		String title = String.format("%s (%s)", base, sessionLanguage.name());
+		setTitle(title);
+	}
 
 	private void showLanguageChooser() {
 		AlertDialog.Builder b = new Builder(this);
@@ -247,6 +255,11 @@ public class DictionaryActivity extends ListActivity {
 						Language chosenLanguage = Language.values()[which];
 						sessionLanguage = chosenLanguage;
 						adapter.setSessionLanguage(sessionLanguage);
+						setActivityTitle();
+						
+						// TODO: this causes performance issues... 
+						dictionary.clear();
+						dictionary.addAll(dbHelper.getDictionary());
 					}
 
 				});
@@ -261,13 +274,17 @@ public class DictionaryActivity extends ListActivity {
 			PhraseEntry pe = data.getParcelableExtra(EDITED_PHRASE);
 
 			if (pe.getId() == 0) {
-				dictionary.add(pe);
+//				dictionary.add(pe);
 				dbHelper.createPhrase(pe);
 			} else {
 				editedPhrase.copyData(pe);
 				dbHelper.updatePhrase(editedPhrase);
 			}
 
+			// TODO: this causes performance issues... 
+			dictionary.clear();
+			dictionary.addAll(dbHelper.getDictionary());
+			
 			adapter.notifyPhraseListChanged();
 		}
 	}

@@ -138,7 +138,7 @@ public class DictionaryEditActivity extends Activity {
 		editedPhrase.setLangBText(revisedText);
 		editedPhrase.setLabel(labelText);
 
-		DatabaseHelper dbHelper = DatabaseHelperImpl.getInstance(this);
+//		DatabaseHelper dbHelper = DatabaseHelperImpl.getInstance(this);
 
 		if (editedPhrase.getId() == 0) {
 			editedPhrase.setInRevisions(true);

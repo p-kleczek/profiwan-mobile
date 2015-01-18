@@ -1,5 +1,11 @@
 package pkleczek.profiwan;
 
+import java.util.List;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import pkleczek.profiwan.ProfIwanApplication.RunningMode;
 import pkleczek.profiwan.dictionary.DictionaryActivity;
 import pkleczek.profiwan.model.RevisionsSession;
@@ -16,10 +22,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
 	DatabaseHelper dbHelper;
+	
+	private static TextView tvRevisionTimes;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +38,7 @@ public class MainActivity extends Activity {
 				"org.joda.time.tz.UTCProvider");
 
 		setContentView(R.layout.activity_main);
-
+		
 		dbHelper = DatabaseHelperImpl.getInstance(this);
 
 		// debug
@@ -40,6 +49,22 @@ public class MainActivity extends Activity {
 		
 //		Logging.logEvent(DatabaseHelperImpl.getInstance(this), TimepointType.SESSION_STARTED);
 		Notifications.setAlarm(this.getApplicationContext());
+		
+		tvRevisionTimes = (TextView) findViewById(R.id.main_tv_revision_times);
+	}
+	
+	public static void setRevisionTimes(List<DateTime> times) {
+		if (tvRevisionTimes == null) {
+			return;
+		}
+
+		String text = "Revision times:\n";
+		String indent = "   ";
+		DateTimeFormatter dtf = DateTimeFormat.forPattern("HH:mm:ss");
+		for (DateTime t : times) {
+			text += indent + "- " + dtf.print(t) + "\n";
+		}
+		tvRevisionTimes.setText(text);
 	}
 
 	@Override

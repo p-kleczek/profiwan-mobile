@@ -23,5 +23,11 @@
         android:layout_margin="@dimen/mainMenu_margin"
         android:onClick="startRevisions"
         android:text="Revisions" />
+    
+	<TextView 
+	    android:id="@+id/main_tv_revision_times"
+        android:layout_margin="@dimen/mainMenu_margin"
+	    android:layout_width="fill_parent"
+	    android:layout_height="100px" />    
 
 </LinearLayout>

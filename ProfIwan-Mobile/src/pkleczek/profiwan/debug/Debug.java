@@ -2,11 +2,14 @@ package pkleczek.profiwan.debug;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.joda.time.DateTime;
 
 import pkleczek.profiwan.model.PhraseEntry;
 import pkleczek.profiwan.model.RevisionEntry;
+import pkleczek.profiwan.model.Timepoint;
+import pkleczek.profiwan.model.Timepoint.TimepointType;
 import pkleczek.profiwan.utils.DatabaseHelper;
 import pkleczek.profiwan.utils.DatabaseHelperImpl;
 import pkleczek.profiwan.utils.lang.Language;
@@ -19,14 +22,16 @@ public class Debug {
 
 	public static void populateDB(DatabaseHelper dbHelper) {
 
+		addTimepoints(dbHelper);
+		
 		PhraseEntry e = null;
 		RevisionEntry re = null;
 
 		e = new PhraseEntry();
 		e.setLangA(Language.PL.getLanguageISOCode());
 		e.setLangB(Language.RU.getLanguageISOCode());
-		e.setLangAText("аRU");
-		e.setLangBText("а");
+		e.setLangAText("liczydło");
+		e.setLangBText("абак");
 		e.setCreatedAt(DateTime.now());
 		e.setLabel("rand");
 		e.setInRevisions(true);
@@ -46,10 +51,10 @@ public class Debug {
 //		
 //
 		e = new PhraseEntry();
-		e.setLangA(Language.PL.getLanguageISOCode());
+		e.setLangA(Language.RU.getLanguageISOCode());
 		e.setLangB(Language.PL.getLanguageISOCode());
-		e.setLangAText("aPL");
-		e.setLangBText("a");
+		e.setLangAText("парта");
+		e.setLangBText("ławka szkolna");
 		e.setCreatedAt(DateTime.now());
 		e.setLabel("rand");
 		e.setInRevisions(true);
@@ -137,6 +142,35 @@ public class Debug {
 
 		Debug.printDict(dbHelper, "init"); //$NON-NLS-1$
 	}
+	
+	private static void addTimepoints(DatabaseHelper dbHelper) {
+		DateTime t = DateTime.now().minusMinutes(5);
+		
+		dbHelper.createTimepoint(createTimepoint(t));
+	}
+	
+	private static Timepoint createTimepoint(int dayOfWeek) {
+		Timepoint t = new Timepoint();
+		t.setType(TimepointType.REVISION_STARTED);
+		t.setCreatedAt(createDateTime(dayOfWeek));
+		return t;
+	}
+	
+	private static Timepoint createTimepoint(DateTime time) {
+		Timepoint t = new Timepoint();
+		t.setType(TimepointType.REVISION_STARTED);
+		t.setCreatedAt(new DateTime(time));
+		return t;
+	}
+	
+	private static DateTime createDateTime(int dayOfWeek) {
+		Random random = new Random();
+		DateTime time = new DateTime(random.nextLong()).withMillisOfSecond(0);
+		time = time.withYear(2014);
+		time = time.withDayOfWeek(dayOfWeek);
+		return time;
+	}
+	
 
 	public static void printDict(DatabaseHelper dbhHelper, String operation) {
 		List<PhraseEntry> dict = dbhHelper.getDictionary();
